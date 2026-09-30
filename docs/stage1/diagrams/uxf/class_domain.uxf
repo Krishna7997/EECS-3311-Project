@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>440</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Class diagram (1/6): Domain model (Composite: net worth)</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>300</x>
+      <y>70</y>
+      <w>300</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+*AssetComponent*
+--
++getName(): String
++getValue(): Money
++getChildren(): List&lt;AssetComponent&gt;</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>260</y>
+      <w>300</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>*Account*
+--
+-id: String
+-name: String
+-type: AccountType
+-institution: String
+-balance: Money
+--
++getValue(): Money
++isLiability(): boolean
++updateBalance(balance: Money): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>480</x>
+      <y>260</y>
+      <w>270</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>*AccountGroup*
+--
+-name: String
+-children: List&lt;AssetComponent&gt;
+--
++add(c: AssetComponent): void
++remove(c: AssetComponent): void
++getValue(): Money</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>560</y>
+      <w>140</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+*AccountType*
+--
+CHEQUING
+SAVINGS
+CREDIT_CARD
+TFSA
+RRSP
+FHSA
+NON_REGISTERED
+LOAN</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>320</x>
+      <y>880</y>
+      <w>210</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;value object&gt;&gt;
+*Money*
+--
+-amount: BigDecimal
+-currency: String
+--
++plus(m: Money): Money
++minus(m: Money): Money
++times(f: double): Money
++isNegative(): boolean</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>620</x>
+      <y>520</y>
+      <w>260</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>*Transaction*
+--
+-id: String
+-date: LocalDate
+-description: String
+-merchant: String
+-amount: Money
+-category: Category
+-categorySource: CategorySource
+-accountId: String
+--
++fingerprint(): String
++isExpense(): boolean</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>620</x>
+      <y>880</y>
+      <w>140</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+*Category*
+--
+GROCERIES
+DINING
+TRANSPORT
+GAS
+RENT
+UTILITIES
+SUBSCRIPTIONS
+SHOPPING
+TRAVEL
+INCOME
+TRANSFER
+OTHER
+UNCATEGORIZED</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1060</x>
+      <y>560</y>
+      <w>170</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>*Budget*
+--
+-category: Category
+-month: YearMonth
+-limit: Money</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1060</x>
+      <y>260</y>
+      <w>200</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>*BudgetStatus*
+--
+-budget: Budget
+-spent: Money
+--
++remaining(): Money
++percentUsed(): double
++isExceeded(): boolean</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1400</x>
+      <y>70</y>
+      <w>180</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>*SavingsGoal*
+--
+-id: String
+-name: String
+-target: Money
+-saved: Money
+-deadline: LocalDate
+--
++progress(): double</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1400</x>
+      <y>290</y>
+      <w>170</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>*Debt*
+--
+-id: String
+-name: String
+-balance: Money
+-apr: double
+-minPayment: Money</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1400</x>
+      <y>480</y>
+      <w>240</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>*RecurringCharge*
+--
+-merchant: String
+-averageAmount: Money
+-frequency: Frequency
+-nextExpectedDate: LocalDate
+-priceIncreased: boolean</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>800</y>
+      <w>220</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>*ContributionRecord*
+--
+-accountType: AccountType
+-date: LocalDate
+-amount: Money
+-kind: ContributionKind</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>990</y>
+      <w>230</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>*UserProfile*
+--
+-birthYear: int
+-province: String
+-residentSinceYear: int
+-annualIncome: Money
+-rrspDeductionLimit: Money
+-fhsaOpenedYear: Integer</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>287</x>
+      <y>170</y>
+      <w>111</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>101.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>485</x>
+      <y>170</y>
+      <w>86</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;76.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>485</x>
+      <y>170</y>
+      <w>86</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=0..*
+children</panel_attributes>
+    <additional_attributes>76.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>125</x>
+      <y>440</y>
+      <w>50</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>40.0;10.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>330</x>
+      <y>419</y>
+      <w>300</w>
+      <h>157</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=0..*
+holds</panel_attributes>
+    <additional_attributes>10.0;10.0;290.0;147.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>702</x>
+      <y>730</y>
+      <w>41</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>31.0;10.0;10.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>497</x>
+      <y>730</y>
+      <w>156</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>146.0;10.0;10.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>750</x>
+      <y>640</y>
+      <w>356</w>
+      <h>326</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>346.0;10.0;10.0;316.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1137</x>
+      <y>380</y>
+      <w>30</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>20.0;10.0;10.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>141</x>
+      <y>900</y>
+      <w>22</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=0..*
+makes</panel_attributes>
+    <additional_attributes>12.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>119</x>
+      <y>740</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>20.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>

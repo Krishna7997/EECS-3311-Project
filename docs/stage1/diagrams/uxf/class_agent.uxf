@@ -1,0 +1,649 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>650</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Class diagram (5/6): Agent layer (Adapter, Factory Method, Template Method, Command)</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>780</y>
+      <w>390</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>*CfoAgent*
+--
+-llm: LlmClient
+-tools: ToolRegistry
+-memory: ConversationMemory
+-promptBuilder: PromptBuilder
+-validator: ResponseValidator
+-pendingActions: PendingActionStore
+-maxSteps: int = 6
+--
++handle(userMessage: String): AgentResponse
+-runLoop(msgs: List&lt;ChatMessage&gt;): AgentResponse</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>740</x>
+      <y>70</y>
+      <w>290</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>*ConversationMemory*
+--
+-messages: List&lt;ChatMessage&gt;
+-maxTurns: int
+--
++add(m: ChatMessage): void
++recent(n: int): List&lt;ChatMessage&gt;
++compactOlderTurns(): void
++clear(): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>600</x>
+      <y>360</y>
+      <w>580</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>*PromptBuilder*
+--
++buildSystemPrompt(p: UserProfile): String
++buildMessages(m: ConversationMemory, userMsg: String): List&lt;ChatMessage&gt;
++buildCategorizationPrompt(t: Transaction): String
++buildSummaryPrompt(r: MonthlyReport): String</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>600</x>
+      <y>610</y>
+      <w>570</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>*ResponseValidator*
+--
++validate(answer: String, evidence: List&lt;ToolResult&gt;): ValidationReport
+-extractAmounts(text: String): List&lt;Money&gt;
++appendDisclaimer(answer: String): String</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1460</x>
+      <y>90</y>
+      <w>230</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>*ChatMessage*
+--
+-role: Role
+-content: String
+-toolCalls: List&lt;ToolCall&gt;
+-toolCallId: String</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>610</x>
+      <y>850</y>
+      <w>550</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+*LlmClient*
+--
++chat(msgs: List&lt;ChatMessage&gt;, tools: List&lt;ToolSchema&gt;): LlmResponse
++modelName(): String</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1300</x>
+      <y>470</y>
+      <w>550</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*ClaudeClientAdapter*
+--
+-httpClient: HttpClient
+-apiKey: String
+-model: String
+--
++chat(msgs: List&lt;ChatMessage&gt;, tools: List&lt;ToolSchema&gt;): LlmResponse</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1300</x>
+      <y>700</y>
+      <w>550</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*MockLlmClient*
+--
+-scriptedResponses: Queue&lt;LlmResponse&gt;
+--
++chat(msgs: List&lt;ChatMessage&gt;, tools: List&lt;ToolSchema&gt;): LlmResponse</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>90</x>
+      <y>560</y>
+      <w>290</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*LlmClientFactory*
+--
+_+create(cfg: AppConfig): LlmClient_
+_-hasApiKey(cfg: AppConfig): boolean_</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1460</x>
+      <y>1290</y>
+      <w>230</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*LlmResponse*
+--
+-text: String
+-toolCalls: List&lt;ToolCall&gt;
+-stopReason: String
+--
++hasToolCalls(): boolean</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>740</x>
+      <y>1410</y>
+      <w>300</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*ToolRegistry*
+--
+-tools: Map&lt;String, FinanceTool&gt;
+--
++register(t: FinanceTool): void
++schemas(): List&lt;ToolSchema&gt;
++execute(call: ToolCall): ToolResult</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1420</x>
+      <y>950</y>
+      <w>320</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+*FinanceTool*
+--
++name(): String
++description(): String
++schema(): ToolSchema
++execute(args: JsonObject): ToolResult</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1970</x>
+      <y>970</y>
+      <w>370</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>/AbstractFinanceTool/
+--
++execute(args: JsonObject): ToolResult
+#validateArgs(args: JsonObject): List&lt;String&gt;
+/#doExecute(args: JsonObject): Object/</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2460</x>
+      <y>490</y>
+      <w>300</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*AffordabilityTool*
+--
+-analyzer: AffordabilityAnalyzer
+--
+#doExecute(args: JsonObject): Object</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2460</x>
+      <y>680</y>
+      <w>300</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*ContributionRoomTool*
+--
+-service: RegisteredAccountService
+--
+#doExecute(args: JsonObject): Object</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2460</x>
+      <y>870</y>
+      <w>300</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*FireProjectionTool*
+--
+-calculator: FireCalculator
+--
+#doExecute(args: JsonObject): Object</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2460</x>
+      <y>1070</y>
+      <w>300</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*SpendingSummaryTool*
+--
+-txService: TransactionService
+--
+#doExecute(args: JsonObject): Object</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2460</x>
+      <y>1260</y>
+      <w>300</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*ProposeActionTool*
+--
+-store: PendingActionStore
+--
+#doExecute(args: JsonObject): Object</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2520</x>
+      <y>1470</y>
+      <w>180</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;5 more&gt;&gt;
+*OtherFinanceTools*
+--
+NetWorthTool
+BudgetStatusTool
+DebtPayoffTool
+GoalForecastTool
+RecurringChargesTool</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2050</x>
+      <y>1300</y>
+      <w>200</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>*ToolCall*
+--
+-id: String
+-name: String
+-arguments: JsonObject</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1500</x>
+      <y>1530</y>
+      <w>160</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>*ToolResult*
+--
+-callId: String
+-success: boolean
+-data: JsonObject
+-error: String</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2890</x>
+      <y>1790</y>
+      <w>330</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*PendingActionStore*
+--
+-pending: Map&lt;String, UndoableCommand&gt;
+--
++add(c: UndoableCommand): String
++take(actionId: String): UndoableCommand</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>1650</y>
+      <w>210</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>*AgentResponse*
+--
+-answer: String
+-toolsUsed: List&lt;String&gt;
+-pendingActionId: String
+-grounded: boolean</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>874</y>
+      <w>200</w>
+      <h>25</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;190.0;15.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>313</x>
+      <y>210</y>
+      <w>516</w>
+      <h>580</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>10.0;570.0;506.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>970</y>
+      <w>497</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;487.0;440.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>366</x>
+      <y>460</y>
+      <w>457</w>
+      <h>330</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;320.0;447.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>690</y>
+      <w>345</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;122.0;335.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>936</y>
+      <w>2498</w>
+      <h>864</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;2488.0;854.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>304</x>
+      <y>970</y>
+      <w>548</w>
+      <h>690</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+returns</panel_attributes>
+    <additional_attributes>10.0;10.0;538.0;680.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1020</x>
+      <y>135</y>
+      <w>450</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=0..*</panel_attributes>
+    <additional_attributes>10.0;10.0;440.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>960</x>
+      <y>580</y>
+      <w>512</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;270.0;502.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1075</x>
+      <y>770</y>
+      <w>332</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;80.0;322.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>313</x>
+      <y>630</y>
+      <w>483</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+creates</panel_attributes>
+    <additional_attributes>10.0;10.0;473.0;220.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>943</x>
+      <y>930</y>
+      <w>551</w>
+      <h>370</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;541.0;360.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1680</x>
+      <y>1336</y>
+      <w>380</w>
+      <h>23</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=0..*</panel_attributes>
+    <additional_attributes>10.0;13.0;370.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>971</x>
+      <y>1070</y>
+      <w>520</w>
+      <h>350</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=1..*</panel_attributes>
+    <additional_attributes>10.0;340.0;510.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1030</x>
+      <y>1485</y>
+      <w>480</w>
+      <h>97</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;470.0;87.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1730</x>
+      <y>1005</y>
+      <w>250</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;240.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2187</x>
+      <y>560</y>
+      <w>395</w>
+      <h>420</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;410.0;385.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2214</x>
+      <y>750</y>
+      <w>344</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;220.0;334.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2330</x>
+      <y>935</y>
+      <w>140</w>
+      <h>47</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;37.0;130.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2330</x>
+      <y>1044</y>
+      <w>140</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;130.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2217</x>
+      <y>1050</y>
+      <w>339</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;329.0;210.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2184</x>
+      <y>1050</y>
+      <w>375</w>
+      <h>430</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;365.0;420.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2633</x>
+      <y>1330</y>
+      <w>391</w>
+      <h>470</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;381.0;460.0</additional_attributes>
+  </element>
+</diagram>

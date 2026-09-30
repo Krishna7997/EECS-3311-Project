@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>490</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Class diagram (3/6): Planning and analysis services (Strategy)</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>810</x>
+      <y>1490</y>
+      <w>380</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>*BudgetService*
+--
+-budgetRepo: BudgetRepository
+-txRepo: TransactionRepository
+-eventBus: EventBus
+--
++setBudget(b: Budget): Optional&lt;Budget&gt;
++removeBudget(c: Category, m: YearMonth): void
++getStatus(m: YearMonth): List&lt;BudgetStatus&gt;
++onEvent(e: FinanceEvent): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>800</x>
+      <y>70</y>
+      <w>390</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*AccountService*
+--
+-accountRepo: AccountRepository
+--
++addAccount(a: Account): void
++updateBalance(id: String, balance: Money): void
++buildAccountTree(): AccountGroup</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>230</x>
+      <y>90</y>
+      <w>300</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*NetWorthService*
+--
+-accountService: AccountService
+--
++computeSnapshot(): NetWorthSnapshot</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>820</x>
+      <y>320</y>
+      <w>350</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*ReportSummarizer*
+--
+-llm: LlmClient
+-promptBuilder: PromptBuilder
+--
++summarize(r: MonthlyReport): String
+-templateSummary(r: MonthlyReport): String</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>60</x>
+      <y>740</y>
+      <w>630</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>*RegisteredAccountService*
+--
+-limits: ContributionLimits
+-profileRepo: ProfileRepository
+-contributionRepo: ContributionRepository
+--
++computeRoom(t: AccountType, year: int): ContributionRoom
++checkContribution(t: AccountType, amt: Money, d: LocalDate): ContributionCheck
++recordContribution(r: ContributionRecord): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>830</x>
+      <y>750</y>
+      <w>340</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>*ContributionLimits*
+--
+-tfsaAnnualLimits: Map&lt;Integer, Money&gt;
+-fhsaAnnualLimit: Money
+-fhsaLifetimeLimit: Money
+--
+_+loadFrom(json: Path): ContributionLimits_
++tfsaLimitFor(year: int): Money</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>530</y>
+      <w>670</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*FireCalculator*
+--
++project(in: FireInputs): FireProjection
++yearsToFire(invested: Money, yearlySaving: Money, rate: double, target: Money): int</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>150</x>
+      <y>1780</y>
+      <w>450</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>*DebtPayoffPlanner*
+--
+-debtRepo: DebtRepository
+-strategy: PayoffStrategy
+--
++setStrategy(s: PayoffStrategy): void
++plan(extraMonthly: Money): PayoffPlan
+-simulate(ordered: List&lt;Debt&gt;, extra: Money): PayoffPlan</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>820</x>
+      <y>1800</y>
+      <w>350</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+*PayoffStrategy*
+--
++orderDebts(debts: List&lt;Debt&gt;): List&lt;Debt&gt;
++name(): String</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1340</x>
+      <y>1510</y>
+      <w>350</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*AvalancheStrategy*
+--
++orderDebts(debts: List&lt;Debt&gt;): List&lt;Debt&gt;</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1340</x>
+      <y>1900</y>
+      <w>350</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*SnowballStrategy*
+--
++orderDebts(debts: List&lt;Debt&gt;): List&lt;Debt&gt;</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1300</x>
+      <y>1020</y>
+      <w>440</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*RecurringChargeDetector*
+--
+-minOccurrences: int
+--
++detect(txs: List&lt;Transaction&gt;): List&lt;RecurringCharge&gt;</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>800</x>
+      <y>1240</y>
+      <w>390</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>*GoalService*
+--
++createGoal(g: SavingsGoal): void
++deleteGoal(goalId: String): void
++recordDeposit(goalId: String, amt: Money): void
++forecast(goalId: String): GoalForecast</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>830</x>
+      <y>1010</y>
+      <w>330</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*CashFlowForecaster*
+--
+-txRepo: TransactionRepository
+-recurring: RecurringChargeDetector
+--
++forecast(months: int): CashFlowForecast</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>140</x>
+      <y>1230</y>
+      <w>480</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*AffordabilityAnalyzer*
+--
+-forecaster: CashFlowForecaster
+-goals: GoalService
+-budgets: BudgetService
+--
++check(amount: Money, date: LocalDate): AffordabilityResult</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>180</x>
+      <y>340</y>
+      <w>390</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*ReportService*
+--
+-summarizer: ReportSummarizer
+--
++buildMonthlyReport(m: YearMonth): MonthlyReport</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>805</y>
+      <w>160</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;150.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>590</x>
+      <y>1835</y>
+      <w>240</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;230.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1062</x>
+      <y>1560</y>
+      <w>412</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;240.0;402.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1160</x>
+      <y>1864</y>
+      <w>190</w>
+      <h>47</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;180.0;37.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1150</x>
+      <y>1050</y>
+      <w>160</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;150.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>530</x>
+      <y>1100</y>
+      <w>341</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;130.0;331.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>610</x>
+      <y>1282</y>
+      <w>200</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;190.0;11.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>501</x>
+      <y>1340</y>
+      <w>324</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;314.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>520</x>
+      <y>120</y>
+      <w>290</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;280.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>560</x>
+      <y>370</y>
+      <w>270</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;260.0;10.0</additional_attributes>
+  </element>
+</diagram>

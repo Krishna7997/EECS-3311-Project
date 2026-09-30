@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>680</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Class diagram (6/6): Presentation, Facade and persistence (Facade, MVC, Repository/DAO)</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>70</y>
+      <w>260</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*MainWindow*
+--
+-facade: MapleCfoFacade
+-views: List&lt;View&gt;
+--
++start(stage: Stage): void
++navigate(viewId: String): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>250</y>
+      <w>150</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+*View*
+--
++render(): Node
++refresh(): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>380</y>
+      <w>260</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>*DashboardView*
+--
++render(): Node
++refresh(): void
++onEvent(e: FinanceEvent): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>480</y>
+      <w>420</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>*TransactionsView*
+--
++onImportClicked(): void
++onCategoryChanged(txId: String, c: Category): void
++onUndo(): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>590</y>
+      <w>380</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*BudgetView*
+--
++onSaveBudget(c: Category, limit: Money): void
++onEvent(e: FinanceEvent): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>680</y>
+      <w>390</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>*PlanningView*
+--
++onRunFire(in: FireInputs): void
++onPlanDebt(m: PayoffMethod, extra: Money): void
++onCheckRoom(t: AccountType, amt: Money): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>790</y>
+      <w>430</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*GoalsView*
+--
++onCreateGoal(g: SavingsGoal): void
++onAffordabilityCheck(amt: Money, d: LocalDate): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>880</y>
+      <w>330</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*ChatView*
+--
++sendMessage(text: String): void
++onConfirmAction(actionId: String): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>970</y>
+      <w>260</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*ReportView*
+--
++onGenerate(m: YearMonth): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>580</x>
+      <y>70</y>
+      <w>230</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*MapleCfoCli*
+--
+-facade: MapleCfoFacade
+-renderer: CliRenderer
+--
+_+main(args: String[]): void_
++call(): Integer</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>960</x>
+      <y>70</y>
+      <w>230</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*CliRenderer*
+--
++table(rows: List): String
++chart(data: Map): String</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>580</x>
+      <y>250</y>
+      <w>620</w>
+      <h>660</h>
+    </coordinates>
+    <panel_attributes>*MapleCfoFacade*
+--
+-txService: TransactionService
+-netWorth: NetWorthService
+-budgets: BudgetService
+-registered: RegisteredAccountService
+-goals: GoalService
+-fire: FireCalculator
+-debtPlanner: DebtPayoffPlanner
+-recurring: RecurringChargeDetector
+-affordability: AffordabilityAnalyzer
+-reports: ReportService
+-agent: CfoAgent
+-history: CommandHistory
+-eventBus: EventBus
+--
++importTransactions(p: Path, accountId: String, profile: String): ImportResult
++saveMappingProfile(m: ColumnMapping): void
++recategorize(txId: String, c: Category): void
++undoLastEdit(): boolean
++redoLastEdit(): boolean
++addAccount(a: Account): void
++updateAccountBalance(accountId: String, balance: Money): void
++getNetWorth(): NetWorthSnapshot
++setBudget(c: Category, limit: Money, m: YearMonth): void
++getBudgetStatus(m: YearMonth): List&lt;BudgetStatus&gt;
++getRecurringCharges(): List&lt;RecurringCharge&gt;
++checkContribution(t: AccountType, amt: Money): ContributionCheck
++getContributionRoom(t: AccountType, year: int): ContributionRoom
++projectFire(in: FireInputs): FireProjection
++planDebtPayoff(m: PayoffMethod, extra: Money): PayoffPlan
++createGoal(g: SavingsGoal): void
++forecastGoal(goalId: String): GoalForecast
++checkAffordability(amt: Money, d: LocalDate): AffordabilityResult
++askCfo(message: String): AgentResponse
++confirmProposedAction(actionId: String): void
++dismissProposedAction(actionId: String): void
++generateMonthlyReport(m: YearMonth): MonthlyReport
++subscribe(t: EventType, l: FinanceEventListener): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1620</x>
+      <y>70</y>
+      <w>260</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+*Repository&lt;T, ID&gt;*
+--
++save(entity: T): void
++findById(id: ID): Optional&lt;T&gt;
++findAll(): List&lt;T&gt;
++delete(id: ID): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1280</x>
+      <y>330</y>
+      <w>370</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+*TransactionRepository*
+--
++findByMonth(m: YearMonth): List&lt;Transaction&gt;
++existsByFingerprint(fp: String): boolean</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1280</x>
+      <y>520</y>
+      <w>250</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*SqliteTransactionRepository*
+--
+-db: DatabaseManager</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1780</x>
+      <y>330</y>
+      <w>220</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*SqliteAccountRepository*
+--
+-db: DatabaseManager</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2060</x>
+      <y>330</y>
+      <w>210</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*SqliteBudgetRepository*
+--
+-db: DatabaseManager</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1280</x>
+      <y>70</y>
+      <w>210</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interfaces&gt;&gt;
+*OtherRepositories*
+--
+AccountRepository
+BudgetRepository
+GoalRepository
+DebtRepository
+MappingProfileRepository
+ProfileRepository
+ContributionRepository
+ConversationRepository</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1820</x>
+      <y>560</y>
+      <w>240</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*DatabaseManager*
+--
+-url: String
+--
++getConnection(): Connection
++migrate(): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>120</x>
+      <y>180</y>
+      <w>40</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=7</panel_attributes>
+    <additional_attributes>30.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>10</x>
+      <y>285</y>
+      <w>40</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30.0;10.0;10.0;10.0;10.0;140.0;30.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>10</x>
+      <y>285</y>
+      <w>40</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30.0;10.0;10.0;10.0;10.0;240.0;30.0;240.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>10</x>
+      <y>285</y>
+      <w>40</w>
+      <h>355</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30.0;10.0;10.0;10.0;10.0;345.0;30.0;345.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>10</x>
+      <y>285</y>
+      <w>40</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30.0;10.0;10.0;10.0;10.0;440.0;30.0;440.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>10</x>
+      <y>285</y>
+      <w>40</w>
+      <h>555</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30.0;10.0;10.0;10.0;10.0;545.0;30.0;545.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>10</x>
+      <y>285</y>
+      <w>40</w>
+      <h>645</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30.0;10.0;10.0;10.0;10.0;635.0;30.0;635.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>10</x>
+      <y>285</y>
+      <w>40</w>
+      <h>725</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30.0;10.0;10.0;10.0;10.0;715.0;30.0;715.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>256</x>
+      <y>180</y>
+      <w>334</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;324.0;206.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>711</x>
+      <y>180</y>
+      <w>46</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;36.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>800</x>
+      <y>106</y>
+      <w>170</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;18.0;160.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1508</x>
+      <y>190</y>
+      <w>175</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>165.0;10.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1480</x>
+      <y>136</y>
+      <w>150</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>140.0;10.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1405</x>
+      <y>410</y>
+      <w>55</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>45.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1780</x>
+      <y>190</y>
+      <w>101</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;91.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1860</x>
+      <y>190</y>
+      <w>260</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;250.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1520</x>
+      <y>554</y>
+      <w>310</w>
+      <h>53</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;300.0;43.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1886</x>
+      <y>380</y>
+      <w>54</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;44.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1975</x>
+      <y>380</y>
+      <w>173</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>163.0;10.0;10.0;180.0</additional_attributes>
+  </element>
+</diagram>

@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>520</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Class diagram (2/6): Import and categorization (Adapter, Strategy)</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>130</y>
+      <w>490</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+*TransactionImporter*
+--
++importFile(file: Path, accountId: String): List&lt;Transaction&gt;</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>90</x>
+      <y>430</y>
+      <w>490</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>*CsvTransactionAdapter*
+--
+-mapping: ColumnMapping
+-reader: CsvReader
+--
++importFile(file: Path, accountId: String): List&lt;Transaction&gt;
++readHeader(file: Path): List&lt;String&gt;
+-parseRow(row: Map): Transaction
+-validate(t: Transaction): List&lt;String&gt;</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>450</x>
+      <y>760</y>
+      <w>350</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>*ColumnMapping*
+--
+-profileName: String
+-dateColumn: String
+-dateFormat: String
+-descriptionColumn: String
+-amountColumn: String
+-debitColumn: String
+-creditColumn: String
+-negateAmounts: boolean
+--
++isValidFor(header: List&lt;String&gt;): boolean</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>760</x>
+      <y>450</y>
+      <w>410</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+*MappingProfileRepository*
+--
++save(m: ColumnMapping): void
++findByName(name: String): Optional&lt;ColumnMapping&gt;
++findAll(): List&lt;ColumnMapping&gt;</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1330</x>
+      <y>820</y>
+      <w>390</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+*CategorizationStrategy*
+--
++categorize(t: Transaction): Optional&lt;Category&gt;</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1020</x>
+      <y>1110</y>
+      <w>450</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*RuleBasedCategorizer*
+--
+-rules: List&lt;CategoryRule&gt;
+--
++categorize(t: Transaction): Optional&lt;Category&gt;
++learnFromCorrection(t: Transaction, c: Category): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1560</x>
+      <y>1100</y>
+      <w>400</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*LlmCategorizer*
+--
+-llm: LlmClient
+-promptBuilder: PromptBuilder
+--
++categorize(t: Transaction): Optional&lt;Category&gt;
+-parseCategory(reply: String): Optional&lt;Category&gt;</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1300</x>
+      <y>460</y>
+      <w>460</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*CategorizationService*
+--
+-strategies: List&lt;CategorizationStrategy&gt;
+--
++categorizeAll(txs: List&lt;Transaction&gt;): List&lt;Transaction&gt;
++learn(t: Transaction, c: Category): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1100</x>
+      <y>1340</y>
+      <w>280</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*CategoryRule*
+--
+-keyword: String
+-category: Category
+--
++matches(t: Transaction): boolean</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>910</x>
+      <y>70</y>
+      <w>610</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>*TransactionService*
+--
+-mappings: MappingProfileRepository
+-categorizer: CategorizationService
+-repo: TransactionRepository
+-eventBus: EventBus
+--
++importFrom(file: Path, accountId: String, profileName: String): ImportResult
++recategorize(txId: String, c: Category): Category
++findByMonth(m: YearMonth): List&lt;Transaction&gt;
++search(query: String): List&lt;Transaction&gt;</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1850</x>
+      <y>450</y>
+      <w>230</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>*ImportResult*
+--
+-imported: int
+-duplicatesSkipped: int
+-rejectedRows: List&lt;String&gt;
+-uncategorized: int</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>281</x>
+      <y>200</y>
+      <w>53</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;43.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>386</x>
+      <y>570</y>
+      <w>167</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=1
+m2=1
+uses</panel_attributes>
+    <additional_attributes>10.0;10.0;157.0;190.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>711</x>
+      <y>550</y>
+      <w>211</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;</panel_attributes>
+    <additional_attributes>201.0;10.0;10.0;210.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1282</x>
+      <y>890</y>
+      <w>216</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>206.0;10.0;10.0;220.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1546</x>
+      <y>890</y>
+      <w>177</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;167.0;210.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1231</x>
+      <y>1200</y>
+      <w>23</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=0..*</panel_attributes>
+    <additional_attributes>13.0;10.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1516</x>
+      <y>550</y>
+      <w>23</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=1..*
+ordered chain</panel_attributes>
+    <additional_attributes>13.0;10.0;10.0;270.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>995</x>
+      <y>250</y>
+      <w>160</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>150.0;10.0;10.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>519</x>
+      <y>250</y>
+      <w>460</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+creates with mapping</panel_attributes>
+    <additional_attributes>450.0;10.0;10.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1292</x>
+      <y>250</y>
+      <w>202</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;192.0;210.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1415</x>
+      <y>250</y>
+      <w>445</w>
+      <h>213</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;435.0;203.0</additional_attributes>
+  </element>
+</diagram>
