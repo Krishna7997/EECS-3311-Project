@@ -319,7 +319,7 @@ All diagrams are drawn in **UMLet**, and the editable `.uxf` file for each one i
 
 ### 3.1 Part 1: Domain model
 
-Plain domain objects plus the **Composite** structure used for net worth. `Money` is an immutable value object (BigDecimal) so that no floating-point rounding errors reach financial totals.
+Plain domain objects plus the **Composite** structure used for net worth. Every class is connected: an `Account` holds `Transaction`s, a `SavingsGoal` is funded from an account, a `Debt` tracks the balance of a credit-card or loan account, and a `RecurringCharge` is detected from repeated transactions. `Money` is an immutable value object (BigDecimal) so that no floating-point rounding errors reach financial totals.
 
 **Class diagram (1/7): Domain model (Composite: net worth)**
 

@@ -71,7 +71,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>40</x>
-      <y>560</y>
+      <y>580</y>
       <w>140</w>
       <h>190</h>
     </coordinates>
@@ -91,8 +91,8 @@ LOAN</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>320</x>
-      <y>880</y>
+      <x>440</x>
+      <y>900</y>
       <w>210</w>
       <h>170</h>
     </coordinates>
@@ -111,7 +111,7 @@ LOAN</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>620</x>
+      <x>740</x>
       <y>520</y>
       <w>260</w>
       <h>220</h>
@@ -134,8 +134,8 @@ LOAN</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>620</x>
-      <y>880</y>
+      <x>1080</x>
+      <y>900</y>
       <w>140</w>
       <h>280</h>
     </coordinates>
@@ -160,8 +160,8 @@ UNCATEGORIZED</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1060</x>
-      <y>560</y>
+      <x>1080</x>
+      <y>580</y>
       <w>170</w>
       <h>90</h>
     </coordinates>
@@ -175,7 +175,7 @@ UNCATEGORIZED</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1060</x>
+      <x>1080</x>
       <y>260</y>
       <w>200</w>
       <h>130</h>
@@ -193,10 +193,10 @@ UNCATEGORIZED</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1400</x>
-      <y>70</y>
-      <w>180</w>
-      <h>150</h>
+      <x>240</x>
+      <y>580</y>
+      <w>210</w>
+      <h>170</h>
     </coordinates>
     <panel_attributes>*SavingsGoal*
 --
@@ -205,6 +205,7 @@ UNCATEGORIZED</panel_attributes>
 -target: Money
 -saved: Money
 -deadline: LocalDate
+-linkedAccountId: String
 --
 +progress(): double</panel_attributes>
     <additional_attributes></additional_attributes>
@@ -212,10 +213,10 @@ UNCATEGORIZED</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1400</x>
-      <y>290</y>
+      <x>480</x>
+      <y>580</y>
       <w>170</w>
-      <h>130</h>
+      <h>140</h>
     </coordinates>
     <panel_attributes>*Debt*
 --
@@ -223,14 +224,15 @@ UNCATEGORIZED</panel_attributes>
 -name: String
 -balance: Money
 -apr: double
--minPayment: Money</panel_attributes>
+-minPayment: Money
+-accountId: String</panel_attributes>
     <additional_attributes></additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1400</x>
-      <y>480</y>
+      <x>740</x>
+      <y>900</y>
       <w>240</w>
       <h>130</h>
     </coordinates>
@@ -247,7 +249,7 @@ UNCATEGORIZED</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>40</x>
-      <y>800</y>
+      <y>830</y>
       <w>220</w>
       <h>110</h>
     </coordinates>
@@ -263,7 +265,7 @@ UNCATEGORIZED</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>40</x>
-      <y>990</y>
+      <y>1020</y>
       <w>230</w>
       <h>140</h>
     </coordinates>
@@ -316,77 +318,77 @@ children</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>125</x>
+      <x>124</x>
       <y>440</y>
-      <w>50</w>
-      <h>130</h>
+      <w>52</w>
+      <h>150</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>40.0;10.0;10.0;120.0</additional_attributes>
+    <additional_attributes>42.0;10.0;10.0;140.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>330</x>
-      <y>419</y>
-      <w>300</w>
-      <h>157</h>
+      <y>406</y>
+      <w>420</w>
+      <h>181</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
 m2=0..*
 holds</panel_attributes>
-    <additional_attributes>10.0;10.0;290.0;147.0</additional_attributes>
+    <additional_attributes>10.0;10.0;410.0;171.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>702</x>
+      <x>935</x>
       <y>730</y>
-      <w>41</w>
-      <h>160</h>
+      <w>155</w>
+      <h>218</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>31.0;10.0;10.0;150.0</additional_attributes>
+    <additional_attributes>10.0;10.0;145.0;208.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>497</x>
+      <x>613</x>
       <y>730</y>
-      <w>156</w>
-      <h>160</h>
+      <w>166</w>
+      <h>180</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>146.0;10.0;10.0;150.0</additional_attributes>
+    <additional_attributes>156.0;10.0;10.0;170.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>750</x>
-      <y>640</y>
-      <w>356</w>
-      <h>326</h>
+      <x>1145</x>
+      <y>660</y>
+      <w>28</w>
+      <h>250</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>346.0;10.0;10.0;316.0</additional_attributes>
+    <additional_attributes>18.0;10.0;10.0;240.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1137</x>
+      <x>1157</x>
       <y>380</y>
       <w>30</w>
-      <h>190</h>
+      <h>210</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>20.0;10.0;10.0;180.0</additional_attributes>
+    <additional_attributes>20.0;10.0;10.0;200.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>141</x>
-      <y>900</y>
+      <y>930</y>
       <w>22</w>
       <h>100</h>
     </coordinates>
@@ -399,12 +401,54 @@ makes</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>119</x>
-      <y>740</y>
-      <w>30</w>
-      <h>70</h>
+      <x>118</x>
+      <y>760</y>
+      <w>32</w>
+      <h>80</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>20.0;60.0;10.0;10.0</additional_attributes>
+    <additional_attributes>22.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>228</x>
+      <y>440</y>
+      <w>84</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=0..*
+m2=0..1
+funded from</panel_attributes>
+    <additional_attributes>74.0;140.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>301</x>
+      <y>440</y>
+      <w>189</w>
+      <h>153</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=0..1
+m2=1
+tracks balance of</panel_attributes>
+    <additional_attributes>179.0;143.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>852</x>
+      <y>730</y>
+      <w>25</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=2..*
+detected from</panel_attributes>
+    <additional_attributes>10.0;170.0;15.0;10.0</additional_attributes>
   </element>
 </diagram>
