@@ -6,7 +6,7 @@
     <coordinates>
       <x>0</x>
       <y>310</y>
-      <w>2750</w>
+      <w>2970</w>
       <h>895</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -15,9 +15,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>1160</x>
+      <x>1270</x>
       <y>805</y>
-      <w>1580</w>
+      <w>1690</w>
       <h>260</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -37,9 +37,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>555</x>
+      <x>605</x>
       <y>70</y>
-      <w>210</w>
+      <w>230</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:ReportView / MapleCfoCli</panel_attributes>
@@ -48,9 +48,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>870</x>
+      <x>945</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:MapleCfoFacade</panel_attributes>
@@ -59,9 +59,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1185</x>
+      <x>1290</x>
       <y>70</y>
-      <w>130</w>
+      <w>140</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:ReportService</panel_attributes>
@@ -70,9 +70,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1375</x>
+      <x>1500</x>
       <y>70</y>
-      <w>170</w>
+      <w>180</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:TransactionService</panel_attributes>
@@ -81,9 +81,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1575</x>
+      <x>1710</x>
       <y>70</y>
-      <w>130</w>
+      <w>140</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:BudgetService</panel_attributes>
@@ -92,9 +92,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1735</x>
+      <x>1880</x>
       <y>70</y>
-      <w>150</w>
+      <w>160</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:NetWorthService</panel_attributes>
@@ -103,9 +103,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1915</x>
+      <x>2065</x>
       <y>70</y>
-      <w>210</w>
+      <w>230</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:RecurringChargeDetector</panel_attributes>
@@ -114,9 +114,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2155</x>
+      <x>2325</x>
       <y>70</y>
-      <w>150</w>
+      <w>170</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:ReportSummarizer</panel_attributes>
@@ -125,9 +125,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2590</x>
+      <x>2805</x>
       <y>70</y>
-      <w>100</w>
+      <w>110</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:LlmClient</panel_attributes>
@@ -138,137 +138,137 @@
     <coordinates>
       <x>100</x>
       <y>140</y>
-      <w>570</w>
+      <w>630</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 1: select September 2026 → "Generate" (CLI: maplecfo report 2026-09)</panel_attributes>
-    <additional_attributes>10.0;10.0;560.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;620.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>650</x>
+      <x>710</x>
       <y>180</y>
-      <w>300</w>
+      <w>320</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 2: generateMonthlyReport(2026-09)</panel_attributes>
-    <additional_attributes>10.0;10.0;290.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;310.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>930</x>
+      <x>1010</x>
       <y>220</y>
-      <w>330</w>
+      <w>360</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 3: buildMonthlyReport(2026-09)</panel_attributes>
-    <additional_attributes>10.0;10.0;320.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;350.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1240</x>
+      <x>1350</x>
       <y>260</y>
-      <w>230</w>
+      <w>250</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 4: findByMonth(2026-09)</panel_attributes>
-    <additional_attributes>10.0;10.0;220.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;240.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1240</x>
+      <x>1350</x>
       <y>345</y>
-      <w>230</w>
+      <w>250</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 5: empty</panel_attributes>
-    <additional_attributes>220.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>240.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>930</x>
+      <x>1010</x>
       <y>385</y>
-      <w>330</w>
+      <w>360</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 6: throws NoDataException</panel_attributes>
-    <additional_attributes>320.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>350.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>650</x>
+      <x>710</x>
       <y>425</y>
-      <w>300</w>
+      <w>320</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 7: "No data for this month"</panel_attributes>
-    <additional_attributes>290.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>310.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1240</x>
+      <x>1350</x>
       <y>505</y>
-      <w>230</w>
+      <w>250</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 8: transactions</panel_attributes>
-    <additional_attributes>220.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>240.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1240</x>
+      <x>1350</x>
       <y>545</y>
-      <w>410</w>
+      <w>440</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 9: getStatus(2026-09)</panel_attributes>
-    <additional_attributes>10.0;10.0;400.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;430.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1240</x>
+      <x>1350</x>
       <y>585</y>
-      <w>580</w>
+      <w>620</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 10: computeSnapshot()</panel_attributes>
-    <additional_attributes>10.0;10.0;570.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;610.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1240</x>
+      <x>1350</x>
       <y>625</y>
-      <w>790</w>
+      <w>840</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 11: detect(transactions)</panel_attributes>
-    <additional_attributes>10.0;10.0;780.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;830.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1240</x>
+      <x>1350</x>
       <y>665</y>
       <w>70</w>
       <h>45</h>
@@ -280,55 +280,55 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1240</x>
+      <x>1350</x>
       <y>715</y>
-      <w>1000</w>
+      <w>1070</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 13: summarize(report)</panel_attributes>
-    <additional_attributes>10.0;10.0;990.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1060.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2220</x>
+      <x>2400</x>
       <y>755</y>
-      <w>430</w>
+      <w>470</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 14: chat(summaryPrompt with computed figures only)</panel_attributes>
-    <additional_attributes>10.0;10.0;420.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;460.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2220</x>
+      <x>2400</x>
       <y>840</y>
-      <w>430</w>
+      <w>470</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 15: short narrative</panel_attributes>
-    <additional_attributes>420.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>460.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1240</x>
+      <x>1350</x>
       <y>880</y>
-      <w>1000</w>
+      <w>1070</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 16: narrative</panel_attributes>
-    <additional_attributes>990.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>1060.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2220</x>
+      <x>2400</x>
       <y>960</y>
       <w>70</w>
       <h>45</h>
@@ -340,50 +340,50 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1240</x>
+      <x>1350</x>
       <y>1010</y>
-      <w>1000</w>
+      <w>1070</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 18: template narrative (no AI)</panel_attributes>
-    <additional_attributes>990.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>1060.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>930</x>
+      <x>1010</x>
       <y>1070</y>
-      <w>330</w>
+      <w>360</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 19: MonthlyReport(figures, narrative)</panel_attributes>
-    <additional_attributes>320.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>350.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>650</x>
+      <x>710</x>
       <y>1110</y>
-      <w>300</w>
+      <w>320</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 20: report</panel_attributes>
-    <additional_attributes>290.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>310.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
       <y>1150</y>
-      <w>570</w>
+      <w>630</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 21: summary screen with charts (CLI: formatted text)</panel_attributes>
-    <additional_attributes>560.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>620.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -399,7 +399,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>650</x>
+      <x>710</x>
       <y>100</y>
       <w>20</w>
       <h>1150</h>
@@ -410,7 +410,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>930</x>
+      <x>1010</x>
       <y>100</y>
       <w>20</w>
       <h>1150</h>
@@ -421,7 +421,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1240</x>
+      <x>1350</x>
       <y>100</y>
       <w>20</w>
       <h>1150</h>
@@ -432,7 +432,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1450</x>
+      <x>1580</x>
       <y>100</y>
       <w>20</w>
       <h>1150</h>
@@ -443,7 +443,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1630</x>
+      <x>1770</x>
       <y>100</y>
       <w>20</w>
       <h>1150</h>
@@ -454,7 +454,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1800</x>
+      <x>1950</x>
       <y>100</y>
       <w>20</w>
       <h>1150</h>
@@ -465,7 +465,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2010</x>
+      <x>2170</x>
       <y>100</y>
       <w>20</w>
       <h>1150</h>
@@ -476,7 +476,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2220</x>
+      <x>2400</x>
       <y>100</y>
       <w>20</w>
       <h>1150</h>
@@ -487,7 +487,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2630</x>
+      <x>2850</x>
       <y>100</y>
       <w>20</w>
       <h>1150</h>
@@ -500,7 +500,7 @@
     <coordinates>
       <x>60</x>
       <y>312</y>
-      <w>250</w>
+      <w>280</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[no transactions in that month]</panel_attributes>
@@ -511,29 +511,29 @@
     <coordinates>
       <x>-10</x>
       <y>470</y>
-      <w>2770</w>
+      <w>2990</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;2760.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;2980.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
       <x>10</x>
       <y>483</y>
-      <w>30</w>
+      <w>180</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>[]</panel_attributes>
+    <panel_attributes>[transactions found]</panel_attributes>
     <additional_attributes></additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1220</x>
+      <x>1330</x>
       <y>807</y>
-      <w>130</w>
+      <w>140</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[LLM available]</panel_attributes>
@@ -542,20 +542,20 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1150</x>
+      <x>1260</x>
       <y>925</y>
-      <w>1600</w>
+      <w>1710</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;1590.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1700.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1170</x>
+      <x>1280</x>
       <y>938</y>
-      <w>140</w>
+      <w>160</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[LLM unavailable]</panel_attributes>
@@ -566,7 +566,7 @@
     <coordinates>
       <x>20</x>
       <y>10</y>
-      <w>320</w>
+      <w>350</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>SD10: Generate the monthly summary (F12)</panel_attributes>

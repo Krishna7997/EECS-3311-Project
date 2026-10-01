@@ -6,7 +6,7 @@
     <coordinates>
       <x>0</x>
       <y>270</y>
-      <w>2730</w>
+      <w>2960</w>
       <h>980</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -15,9 +15,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>1810</x>
+      <x>1970</x>
       <y>795</y>
-      <w>730</w>
+      <w>790</w>
       <h>275</h>
     </coordinates>
     <panel_attributes>loop</panel_attributes>
@@ -26,9 +26,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>2080</x>
+      <x>2260</x>
       <y>880</y>
-      <w>440</w>
+      <w>480</w>
       <h>130</h>
     </coordinates>
     <panel_attributes>loop</panel_attributes>
@@ -48,9 +48,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>555</x>
+      <x>600</x>
       <y>70</y>
-      <w>130</w>
+      <w>140</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:DashboardView</panel_attributes>
@@ -59,9 +59,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>880</x>
+      <x>955</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:MapleCfoFacade</panel_attributes>
@@ -70,9 +70,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1160</x>
+      <x>1265</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:AccountService</panel_attributes>
@@ -81,9 +81,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1625</x>
+      <x>1780</x>
       <y>70</y>
-      <w>150</w>
+      <w>160</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:NetWorthService</panel_attributes>
@@ -92,9 +92,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1810</x>
+      <x>1965</x>
       <y>70</y>
-      <w>180</w>
+      <w>190</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:AccountGroup (root)</panel_attributes>
@@ -103,9 +103,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2020</x>
+      <x>2185</x>
       <y>70</y>
-      <w>260</w>
+      <w>290</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:AccountGroup (e.g. Registered)</panel_attributes>
@@ -114,9 +114,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2370</x>
+      <x>2585</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:Account (leaf)</panel_attributes>
@@ -125,9 +125,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2540</x>
+      <x>2760</x>
       <y>70</y>
-      <w>160</w>
+      <w>180</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:AccountRepository</panel_attributes>
@@ -138,161 +138,161 @@
     <coordinates>
       <x>100</x>
       <y>140</y>
-      <w>530</w>
+      <w>580</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 1: edit TFSA balance to $6,200</panel_attributes>
-    <additional_attributes>10.0;10.0;520.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;570.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>610</x>
+      <x>660</x>
       <y>180</y>
-      <w>350</w>
+      <w>380</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 2: updateAccountBalance(accountId, 6200)</panel_attributes>
-    <additional_attributes>10.0;10.0;340.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;370.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>940</x>
+      <x>1020</x>
       <y>220</y>
-      <w>300</w>
+      <w>330</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 3: updateBalance(accountId, 6200)</panel_attributes>
-    <additional_attributes>10.0;10.0;290.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;320.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>940</x>
+      <x>1020</x>
       <y>305</y>
-      <w>300</w>
+      <w>330</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 4: ValidationException</panel_attributes>
-    <additional_attributes>290.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>320.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>610</x>
+      <x>660</x>
       <y>345</y>
-      <w>350</w>
+      <w>380</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 5: validation error</panel_attributes>
-    <additional_attributes>340.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>370.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
       <y>385</y>
-      <w>530</w>
+      <w>580</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 6: "Assets cannot be negative, use a LOAN/CREDIT_CARD account"</panel_attributes>
-    <additional_attributes>520.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>570.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1220</x>
+      <x>1330</x>
       <y>465</y>
-      <w>1410</w>
+      <w>1530</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 7: save(account)</panel_attributes>
-    <additional_attributes>10.0;10.0;1400.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1520.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>610</x>
+      <x>660</x>
       <y>505</y>
-      <w>350</w>
+      <w>380</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 8: getNetWorth()</panel_attributes>
-    <additional_attributes>10.0;10.0;340.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;370.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>940</x>
+      <x>1020</x>
       <y>545</y>
-      <w>770</w>
+      <w>850</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 9: computeSnapshot()</panel_attributes>
-    <additional_attributes>10.0;10.0;760.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;840.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1220</x>
+      <x>1330</x>
       <y>585</y>
-      <w>490</w>
+      <w>540</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 10: buildAccountTree()</panel_attributes>
-    <additional_attributes>480.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>530.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1220</x>
+      <x>1330</x>
       <y>625</y>
-      <w>1410</w>
+      <w>1530</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 11: findAll()</panel_attributes>
-    <additional_attributes>10.0;10.0;1400.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1520.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1220</x>
+      <x>1330</x>
       <y>665</y>
-      <w>1410</w>
+      <w>1530</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 12: accounts</panel_attributes>
-    <additional_attributes>1400.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>1520.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1220</x>
+      <x>1330</x>
       <y>705</y>
-      <w>490</w>
+      <w>540</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 13: ROOT (groups: Banking, Registered, Investments, Debts)</panel_attributes>
-    <additional_attributes>10.0;10.0;480.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;530.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1690</x>
+      <x>1850</x>
       <y>745</y>
       <w>220</w>
       <h>20</h>
@@ -304,55 +304,55 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1890</x>
+      <x>2050</x>
       <y>830</y>
-      <w>270</w>
+      <w>290</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 15: getValue()</panel_attributes>
-    <additional_attributes>10.0;10.0;260.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;280.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2140</x>
+      <x>2320</x>
       <y>915</y>
-      <w>310</w>
+      <w>350</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 16: getValue()</panel_attributes>
-    <additional_attributes>10.0;10.0;300.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;340.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2140</x>
+      <x>2320</x>
       <y>955</y>
-      <w>310</w>
+      <w>350</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 17: balance (negative if liability)</panel_attributes>
-    <additional_attributes>300.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>340.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1890</x>
+      <x>2050</x>
       <y>1015</y>
-      <w>270</w>
+      <w>290</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 18: group subtotal</panel_attributes>
-    <additional_attributes>260.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>280.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1690</x>
+      <x>1850</x>
       <y>1075</y>
       <w>220</w>
       <h>20</h>
@@ -364,38 +364,38 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>940</x>
+      <x>1020</x>
       <y>1115</y>
-      <w>770</w>
+      <w>850</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 20: NetWorthSnapshot(total, assets, liabilities, byGroup)</panel_attributes>
-    <additional_attributes>760.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>840.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>610</x>
+      <x>660</x>
       <y>1155</y>
-      <w>350</w>
+      <w>380</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 21: snapshot</panel_attributes>
-    <additional_attributes>340.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>370.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
       <y>1195</y>
-      <w>530</w>
+      <w>580</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 22: net-worth card + breakdown chart</panel_attributes>
-    <additional_attributes>520.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>570.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -411,7 +411,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>610</x>
+      <x>660</x>
       <y>100</y>
       <w>20</w>
       <h>1195</h>
@@ -422,7 +422,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>940</x>
+      <x>1020</x>
       <y>100</y>
       <w>20</w>
       <h>1195</h>
@@ -433,7 +433,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1220</x>
+      <x>1330</x>
       <y>100</y>
       <w>20</w>
       <h>1195</h>
@@ -444,7 +444,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1690</x>
+      <x>1850</x>
       <y>100</y>
       <w>20</w>
       <h>1195</h>
@@ -455,7 +455,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1890</x>
+      <x>2050</x>
       <y>100</y>
       <w>20</w>
       <h>1195</h>
@@ -466,7 +466,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2140</x>
+      <x>2320</x>
       <y>100</y>
       <w>20</w>
       <h>1195</h>
@@ -477,7 +477,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2430</x>
+      <x>2650</x>
       <y>100</y>
       <w>20</w>
       <h>1195</h>
@@ -488,7 +488,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2610</x>
+      <x>2840</x>
       <y>100</y>
       <w>20</w>
       <h>1195</h>
@@ -501,7 +501,7 @@
     <coordinates>
       <x>60</x>
       <y>272</y>
-      <w>300</w>
+      <w>330</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[negative balance on an asset account]</panel_attributes>
@@ -512,11 +512,11 @@
     <coordinates>
       <x>-10</x>
       <y>430</y>
-      <w>2750</w>
+      <w>2980</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;2740.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;2970.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
@@ -532,9 +532,9 @@
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1870</x>
+      <x>2030</x>
       <y>797</y>
-      <w>150</w>
+      <w>170</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[each child group]</panel_attributes>
@@ -543,9 +543,9 @@
   <element>
     <id>Text</id>
     <coordinates>
-      <x>2140</x>
+      <x>2320</x>
       <y>882</y>
-      <w>120</w>
+      <w>130</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[each account]</panel_attributes>
@@ -556,7 +556,7 @@
     <coordinates>
       <x>20</x>
       <y>10</y>
-      <w>380</w>
+      <w>420</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>SD03: Update an account and view net worth (F03)</panel_attributes>

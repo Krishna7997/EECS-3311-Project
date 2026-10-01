@@ -6,7 +6,7 @@
     <coordinates>
       <x>0</x>
       <y>310</y>
-      <w>2280</w>
+      <w>2450</w>
       <h>975</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -15,9 +15,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>700</x>
+      <x>770</x>
       <y>975</y>
-      <w>1570</w>
+      <w>1670</w>
       <h>210</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -37,9 +37,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>460</x>
+      <x>495</x>
       <y>70</y>
-      <w>120</w>
+      <w>130</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:PlanningView</panel_attributes>
@@ -48,9 +48,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>720</x>
+      <x>785</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:MapleCfoFacade</panel_attributes>
@@ -59,9 +59,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1085</x>
+      <x>1175</x>
       <y>70</y>
-      <w>210</w>
+      <w>230</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:RegisteredAccountService</panel_attributes>
@@ -70,9 +70,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1330</x>
+      <x>1450</x>
       <y>70</y>
-      <w>160</w>
+      <w>180</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:ProfileRepository</panel_attributes>
@@ -81,9 +81,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1520</x>
+      <x>1660</x>
       <y>70</y>
-      <w>200</w>
+      <w>220</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:ContributionRepository</panel_attributes>
@@ -92,9 +92,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1755</x>
+      <x>1910</x>
       <y>70</y>
-      <w>130</w>
+      <w>140</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:LimitsService</panel_attributes>
@@ -103,9 +103,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1915</x>
+      <x>2080</x>
       <y>70</y>
-      <w>170</w>
+      <w>180</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:ContributionLimits</panel_attributes>
@@ -114,7 +114,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2120</x>
+      <x>2290</x>
       <y>70</y>
       <w>100</w>
       <h>40</h>
@@ -127,113 +127,113 @@
     <coordinates>
       <x>100</x>
       <y>140</y>
-      <w>430</w>
+      <w>470</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 1: "I want to put $3,000 in my TFSA"</panel_attributes>
-    <additional_attributes>10.0;10.0;420.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;460.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>510</x>
+      <x>550</x>
       <y>180</y>
-      <w>290</w>
+      <w>320</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 2: checkContribution(TFSA, 3000)</panel_attributes>
-    <additional_attributes>10.0;10.0;280.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;310.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>780</x>
+      <x>850</x>
       <y>220</y>
-      <w>420</w>
+      <w>450</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 3: checkContribution(TFSA, 3000, today)</panel_attributes>
-    <additional_attributes>10.0;10.0;410.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;440.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1180</x>
+      <x>1280</x>
       <y>260</y>
-      <w>240</w>
+      <w>270</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 4: findById(currentUserId)</panel_attributes>
-    <additional_attributes>10.0;10.0;230.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;260.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1180</x>
+      <x>1280</x>
       <y>345</y>
-      <w>240</w>
+      <w>270</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 5: profile missing fields</panel_attributes>
-    <additional_attributes>230.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>260.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>780</x>
+      <x>850</x>
       <y>385</y>
-      <w>420</w>
+      <w>450</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 6: ContributionCheck(UNKNOWN, missingFields)</panel_attributes>
-    <additional_attributes>410.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>510</x>
+      <x>550</x>
       <y>425</y>
-      <w>290</w>
+      <w>320</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 7: result</panel_attributes>
-    <additional_attributes>280.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>310.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
       <y>465</y>
-      <w>430</w>
+      <w>470</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 8: "Add your birth year and residency year first"</panel_attributes>
-    <additional_attributes>420.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>460.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1180</x>
+      <x>1280</x>
       <y>545</y>
-      <w>240</w>
+      <w>270</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 9: UserProfile</panel_attributes>
-    <additional_attributes>230.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>260.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1180</x>
+      <x>1280</x>
       <y>585</y>
       <w>70</w>
       <h>45</h>
@@ -245,81 +245,81 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1180</x>
+      <x>1280</x>
       <y>635</y>
-      <w>650</w>
+      <w>710</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 11: currentLimits()</panel_attributes>
-    <additional_attributes>10.0;10.0;640.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;700.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1180</x>
+      <x>1280</x>
       <y>675</y>
-      <w>650</w>
+      <w>710</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 12: ContributionLimits</panel_attributes>
-    <additional_attributes>640.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>700.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1180</x>
+      <x>1280</x>
       <y>715</y>
-      <w>830</w>
+      <w>900</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 13: tfsaLimitFor(year) for each eligible year</panel_attributes>
-    <additional_attributes>10.0;10.0;820.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;890.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1180</x>
+      <x>1280</x>
       <y>755</y>
-      <w>830</w>
+      <w>900</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 14: annual limits</panel_attributes>
-    <additional_attributes>820.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>890.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1180</x>
+      <x>1280</x>
       <y>795</y>
-      <w>450</w>
+      <w>500</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 15: findAll()</panel_attributes>
-    <additional_attributes>10.0;10.0;440.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;490.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1180</x>
+      <x>1280</x>
       <y>835</y>
-      <w>450</w>
+      <w>500</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 16: records (filtered to TFSA)</panel_attributes>
-    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>490.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1020</x>
+      <x>1110</x>
       <y>885</y>
-      <w>340</w>
+      <w>370</w>
       <h>70</h>
     </coordinates>
     <panel_attributes>room = Σ annual limits since eligibility
@@ -330,62 +330,62 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>780</x>
+      <x>850</x>
       <y>1010</y>
-      <w>420</w>
+      <w>450</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 17: ContributionCheck(OK, roomBefore, roomAfter)</panel_attributes>
-    <additional_attributes>410.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1180</x>
+      <x>1280</x>
       <y>1090</y>
-      <w>1000</w>
+      <w>1070</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 18: publish(CONTRIBUTION_WARNING)</panel_attributes>
-    <additional_attributes>10.0;10.0;990.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1060.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>780</x>
+      <x>850</x>
       <y>1130</y>
-      <w>420</w>
+      <w>450</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 19: ContributionCheck(OVER, excess)</panel_attributes>
-    <additional_attributes>410.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>510</x>
+      <x>550</x>
       <y>1190</y>
-      <w>290</w>
+      <w>320</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 20: ContributionCheck</panel_attributes>
-    <additional_attributes>280.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>310.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
       <y>1230</y>
-      <w>430</w>
+      <w>470</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 21: room gauge + OK / warning with excess amount</panel_attributes>
-    <additional_attributes>420.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>460.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -401,7 +401,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>510</x>
+      <x>550</x>
       <y>100</y>
       <w>20</w>
       <h>1230</h>
@@ -412,7 +412,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>780</x>
+      <x>850</x>
       <y>100</y>
       <w>20</w>
       <h>1230</h>
@@ -423,7 +423,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1180</x>
+      <x>1280</x>
       <y>100</y>
       <w>20</w>
       <h>1230</h>
@@ -434,7 +434,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1400</x>
+      <x>1530</x>
       <y>100</y>
       <w>20</w>
       <h>1230</h>
@@ -445,7 +445,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1610</x>
+      <x>1760</x>
       <y>100</y>
       <w>20</w>
       <h>1230</h>
@@ -456,18 +456,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1810</x>
-      <y>100</y>
-      <w>20</w>
-      <h>1230</h>
-    </coordinates>
-    <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;1220.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>1990</x>
+      <x>1970</x>
       <y>100</y>
       <w>20</w>
       <h>1230</h>
@@ -487,11 +476,22 @@
     <additional_attributes>10.0;10.0;10.0;1220.0</additional_attributes>
   </element>
   <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2330</x>
+      <y>100</y>
+      <w>20</w>
+      <h>1230</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;1220.0</additional_attributes>
+  </element>
+  <element>
     <id>Text</id>
     <coordinates>
       <x>60</x>
       <y>312</y>
-      <w>420</w>
+      <w>460</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[profile incomplete (no birth year / residency year)]</panel_attributes>
@@ -502,18 +502,18 @@
     <coordinates>
       <x>-10</x>
       <y>510</y>
-      <w>2300</w>
+      <w>2470</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;2290.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;2460.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
       <x>10</x>
       <y>523</y>
-      <w>150</w>
+      <w>170</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[profile complete]</panel_attributes>
@@ -522,9 +522,9 @@
   <element>
     <id>Text</id>
     <coordinates>
-      <x>760</x>
+      <x>830</x>
       <y>977</y>
-      <w>130</w>
+      <w>140</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[amount ≤ room]</panel_attributes>
@@ -533,20 +533,20 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>690</x>
+      <x>760</x>
       <y>1055</y>
-      <w>1590</w>
+      <w>1690</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;1580.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1680.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>710</x>
+      <x>780</x>
       <y>1068</y>
-      <w>130</w>
+      <w>140</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[amount &gt; room]</panel_attributes>
@@ -557,7 +557,7 @@
     <coordinates>
       <x>20</x>
       <y>10</y>
-      <w>430</w>
+      <w>470</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>SD04: Check TFSA / RRSP / FHSA contribution room (F06)</panel_attributes>

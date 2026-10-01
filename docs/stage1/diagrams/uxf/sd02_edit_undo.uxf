@@ -6,7 +6,7 @@
     <coordinates>
       <x>0</x>
       <y>390</y>
-      <w>2140</w>
+      <w>2320</w>
       <h>570</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -17,7 +17,7 @@
     <coordinates>
       <x>0</x>
       <y>1095</y>
-      <w>1760</w>
+      <w>1910</w>
       <h>420</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -37,9 +37,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>355</x>
+      <x>370</x>
       <y>70</y>
-      <w>250</w>
+      <w>280</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:TransactionsView / BudgetView</panel_attributes>
@@ -48,9 +48,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>740</x>
+      <x>805</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:MapleCfoFacade</panel_attributes>
@@ -59,9 +59,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>940</x>
+      <x>1025</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:CommandHistory</panel_attributes>
@@ -70,9 +70,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1280</x>
+      <x>1395</x>
       <y>70</y>
-      <w>180</w>
+      <w>190</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:RecategorizeCommand</panel_attributes>
@@ -81,9 +81,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1565</x>
+      <x>1710</x>
       <y>70</y>
-      <w>170</w>
+      <w>180</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:TransactionService</panel_attributes>
@@ -92,9 +92,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1765</x>
+      <x>1915</x>
       <y>70</y>
-      <w>190</w>
+      <w>210</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:CategorizationService</panel_attributes>
@@ -103,7 +103,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1980</x>
+      <x>2160</x>
       <y>70</y>
       <w>100</w>
       <h>40</h>
@@ -116,151 +116,151 @@
     <coordinates>
       <x>100</x>
       <y>140</y>
-      <w>390</w>
+      <w>420</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 1: change category of "UBER *EATS" to DINING</panel_attributes>
+    <additional_attributes>10.0;10.0;410.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>500</x>
+      <y>180</y>
+      <w>390</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+2: recategorize(txId, DINING)</panel_attributes>
     <additional_attributes>10.0;10.0;380.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>470</x>
-      <y>180</y>
-      <w>350</w>
-      <h>20</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;
-2: recategorize(txId, DINING)</panel_attributes>
-    <additional_attributes>10.0;10.0;340.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>800</x>
+      <x>870</x>
       <y>220</y>
-      <w>580</w>
+      <w>630</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 3: new RecategorizeCommand(txService, txId, DINING)</panel_attributes>
-    <additional_attributes>10.0;10.0;570.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;620.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>800</x>
+      <x>870</x>
       <y>260</y>
-      <w>220</w>
+      <w>240</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 4: run(cmd)</panel_attributes>
-    <additional_attributes>10.0;10.0;210.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;230.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1000</x>
+      <x>1090</x>
       <y>300</y>
-      <w>380</w>
+      <w>410</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 5: execute()</panel_attributes>
-    <additional_attributes>10.0;10.0;370.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;400.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>340</y>
-      <w>300</w>
+      <w>330</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 6: recategorize(txId, DINING)</panel_attributes>
-    <additional_attributes>10.0;10.0;290.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;320.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>425</y>
-      <w>300</w>
+      <w>330</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 7: throws NotFoundException</panel_attributes>
-    <additional_attributes>290.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>320.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1000</x>
+      <x>1090</x>
       <y>465</y>
-      <w>380</w>
+      <w>410</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 8: exception (nothing pushed on undo stack)</panel_attributes>
-    <additional_attributes>370.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>400.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>800</x>
+      <x>870</x>
       <y>505</y>
-      <w>220</w>
+      <w>240</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 9: failure</panel_attributes>
-    <additional_attributes>210.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>230.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>470</x>
+      <x>500</x>
       <y>545</y>
-      <w>350</w>
+      <w>390</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 10: error "Transaction no longer exists"</panel_attributes>
-    <additional_attributes>340.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>380.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>625</y>
-      <w>300</w>
+      <w>330</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 11: oldCategory = TRANSPORT</panel_attributes>
-    <additional_attributes>290.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>320.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1640</x>
+      <x>1790</x>
       <y>665</y>
-      <w>230</w>
+      <w>240</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 12: learn(tx, DINING)</panel_attributes>
-    <additional_attributes>10.0;10.0;220.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;230.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1700</x>
+      <x>1840</x>
       <y>715</y>
-      <w>330</w>
+      <w>360</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>RuleBasedCategorizer adds merchant rule
@@ -270,19 +270,19 @@ so future imports use it</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1640</x>
+      <x>1790</x>
       <y>775</y>
-      <w>400</w>
+      <w>430</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 13: publish(TRANSACTION_RECATEGORIZED)</panel_attributes>
-    <additional_attributes>10.0;10.0;390.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;420.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1000</x>
+      <x>1090</x>
       <y>815</y>
       <w>70</w>
       <h>45</h>
@@ -294,115 +294,115 @@ so future imports use it</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>470</x>
+      <x>500</x>
       <y>865</y>
-      <w>350</w>
-      <h>20</h>
-    </coordinates>
-    <panel_attributes>lt=.&gt;
-15: ok</panel_attributes>
-    <additional_attributes>340.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>100</x>
-      <y>905</y>
       <w>390</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
-16: row updated, "Undo" enabled</panel_attributes>
+15: ok</panel_attributes>
     <additional_attributes>380.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
+      <y>905</y>
+      <w>420</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+16: row updated, "Undo" enabled</panel_attributes>
+    <additional_attributes>410.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
       <y>965</y>
-      <w>390</w>
+      <w>420</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 17: click "Undo" (Ctrl+Z)</panel_attributes>
+    <additional_attributes>10.0;10.0;410.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>500</x>
+      <y>1005</y>
+      <w>390</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+18: undoLastEdit()</panel_attributes>
     <additional_attributes>10.0;10.0;380.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>470</x>
-      <y>1005</y>
-      <w>350</w>
-      <h>20</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;
-18: undoLastEdit()</panel_attributes>
-    <additional_attributes>10.0;10.0;340.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>800</x>
+      <x>870</x>
       <y>1045</y>
-      <w>220</w>
+      <w>240</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 19: undo()</panel_attributes>
-    <additional_attributes>10.0;10.0;210.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;230.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>800</x>
+      <x>870</x>
       <y>1130</y>
-      <w>220</w>
+      <w>240</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 20: false</panel_attributes>
-    <additional_attributes>210.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>230.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>470</x>
+      <x>500</x>
       <y>1170</y>
-      <w>350</w>
+      <w>390</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 21: nothing to undo</panel_attributes>
-    <additional_attributes>340.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>380.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1000</x>
+      <x>1090</x>
       <y>1250</y>
-      <w>380</w>
+      <w>410</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 22: undo()</panel_attributes>
-    <additional_attributes>10.0;10.0;370.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;400.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>1290</y>
-      <w>300</w>
+      <w>330</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 23: recategorize(txId, TRANSPORT)</panel_attributes>
-    <additional_attributes>10.0;10.0;290.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;320.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1000</x>
+      <x>1090</x>
       <y>1330</y>
       <w>70</w>
       <h>45</h>
@@ -414,45 +414,45 @@ so future imports use it</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>800</x>
+      <x>870</x>
       <y>1380</y>
-      <w>220</w>
+      <w>240</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 25: true</panel_attributes>
-    <additional_attributes>210.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>230.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>470</x>
+      <x>500</x>
       <y>1420</y>
-      <w>350</w>
+      <w>390</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 26: ok</panel_attributes>
-    <additional_attributes>340.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>380.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
       <y>1460</y>
-      <w>390</w>
+      <w>420</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 27: category restored</panel_attributes>
-    <additional_attributes>380.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>410.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>420</x>
+      <x>450</x>
       <y>1530</y>
-      <w>650</w>
+      <w>710</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>SetBudgetCommand and CreateGoalCommand follow the same
@@ -473,7 +473,7 @@ run → execute / undo path through CommandHistory</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>470</x>
+      <x>500</x>
       <y>100</y>
       <w>20</w>
       <h>1530</h>
@@ -484,7 +484,7 @@ run → execute / undo path through CommandHistory</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>800</x>
+      <x>870</x>
       <y>100</y>
       <w>20</w>
       <h>1530</h>
@@ -495,7 +495,7 @@ run → execute / undo path through CommandHistory</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1000</x>
+      <x>1090</x>
       <y>100</y>
       <w>20</w>
       <h>1530</h>
@@ -506,7 +506,7 @@ run → execute / undo path through CommandHistory</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>100</y>
       <w>20</w>
       <h>1530</h>
@@ -517,7 +517,7 @@ run → execute / undo path through CommandHistory</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1640</x>
+      <x>1790</x>
       <y>100</y>
       <w>20</w>
       <h>1530</h>
@@ -528,7 +528,7 @@ run → execute / undo path through CommandHistory</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1850</x>
+      <x>2010</x>
       <y>100</y>
       <w>20</w>
       <h>1530</h>
@@ -539,7 +539,7 @@ run → execute / undo path through CommandHistory</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2020</x>
+      <x>2200</x>
       <y>100</y>
       <w>20</w>
       <h>1530</h>
@@ -552,7 +552,7 @@ run → execute / undo path through CommandHistory</panel_attributes>
     <coordinates>
       <x>60</x>
       <y>392</y>
-      <w>190</w>
+      <w>210</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[transaction not found]</panel_attributes>
@@ -563,11 +563,11 @@ run → execute / undo path through CommandHistory</panel_attributes>
     <coordinates>
       <x>-10</x>
       <y>590</y>
-      <w>2160</w>
+      <w>2340</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;2150.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;2330.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
@@ -585,7 +585,7 @@ run → execute / undo path through CommandHistory</panel_attributes>
     <coordinates>
       <x>60</x>
       <y>1097</y>
-      <w>150</w>
+      <w>170</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[undo stack empty]</panel_attributes>
@@ -596,21 +596,21 @@ run → execute / undo path through CommandHistory</panel_attributes>
     <coordinates>
       <x>-10</x>
       <y>1215</y>
-      <w>1780</w>
+      <w>1930</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;1770.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1920.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
       <x>10</x>
       <y>1228</y>
-      <w>30</w>
+      <w>150</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>[]</panel_attributes>
+    <panel_attributes>[undo available]</panel_attributes>
     <additional_attributes></additional_attributes>
   </element>
   <element>
@@ -618,7 +618,7 @@ run → execute / undo path through CommandHistory</panel_attributes>
     <coordinates>
       <x>20</x>
       <y>10</y>
-      <w>480</w>
+      <w>530</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>SD02: Correct a category / set a budget, with undo (F02, F04)</panel_attributes>

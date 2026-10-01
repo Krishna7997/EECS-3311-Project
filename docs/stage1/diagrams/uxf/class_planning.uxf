@@ -6,7 +6,7 @@
     <coordinates>
       <x>20</x>
       <y>20</y>
-      <w>490</w>
+      <w>540</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>Class diagram (3/7): Planning and analysis services (Strategy)</panel_attributes>
@@ -15,9 +15,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>840</x>
-      <y>1490</y>
-      <w>380</w>
+      <x>40</x>
+      <y>70</y>
+      <w>420</w>
       <h>170</h>
     </coordinates>
     <panel_attributes>*BudgetService*
@@ -35,9 +35,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>840</x>
-      <y>70</y>
-      <w>390</w>
+      <x>1610</x>
+      <y>700</y>
+      <w>440</w>
       <h>120</h>
     </coordinates>
     <panel_attributes>*AccountService*
@@ -52,9 +52,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>230</x>
-      <y>90</y>
-      <w>300</w>
+      <x>1660</x>
+      <y>520</y>
+      <w>340</w>
       <h>80</h>
     </coordinates>
     <panel_attributes>*NetWorthService*
@@ -67,9 +67,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>860</x>
-      <y>320</y>
-      <w>350</w>
+      <x>1140</x>
+      <y>700</y>
+      <w>390</w>
       <h>120</h>
     </coordinates>
     <panel_attributes>*ReportSummarizer*
@@ -84,10 +84,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>60</x>
-      <y>740</y>
-      <w>630</w>
-      <h>150</h>
+      <x>40</x>
+      <y>900</y>
+      <w>700</w>
+      <h>170</h>
     </coordinates>
     <panel_attributes>*RegisteredAccountService*
 --
@@ -97,15 +97,16 @@
 --
 +computeRoom(t: AccountType, year: int): ContributionRoom
 +checkContribution(t: AccountType, amt: Money, d: LocalDate): ContributionCheck
-+recordContribution(r: ContributionRecord): void</panel_attributes>
++recordContribution(r: ContributionRecord): void
++updateRrspLimit(limit: Money): void</panel_attributes>
     <additional_attributes></additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>860</x>
-      <y>750</y>
-      <w>340</w>
+      <x>820</x>
+      <y>920</y>
+      <w>380</w>
       <h>130</h>
     </coordinates>
     <panel_attributes>*ContributionLimits*
@@ -122,8 +123,44 @@ _+loadFrom(json: Path): ContributionLimits_
     <id>UMLClass</id>
     <coordinates>
       <x>40</x>
-      <y>530</y>
-      <w>670</w>
+      <y>1320</y>
+      <w>230</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;record&gt;&gt;
+*FireInputs*
+--
+-invested: Money
+-yearlySaving: Money
+-annualSpending: Money
+-realReturn: double
+-withdrawalRate: double
+-currentAge: int</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>420</x>
+      <y>1320</y>
+      <w>270</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;record&gt;&gt;
+*FireProjection*
+--
+-targetAmount: Money
+-yearsToFire: int
+-fireAge: int
+-yearlyBalances: List&lt;Money&gt;</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>1160</y>
+      <w>740</w>
       <h>80</h>
     </coordinates>
     <panel_attributes>*FireCalculator*
@@ -135,9 +172,9 @@ _+loadFrom(json: Path): ContributionLimits_
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>150</x>
-      <y>1780</y>
-      <w>450</w>
+      <x>40</x>
+      <y>300</y>
+      <w>510</w>
       <h>130</h>
     </coordinates>
     <panel_attributes>*DebtPayoffPlanner*
@@ -153,9 +190,9 @@ _+loadFrom(json: Path): ContributionLimits_
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>860</x>
-      <y>1800</y>
-      <w>350</w>
+      <x>40</x>
+      <y>500</y>
+      <w>390</w>
       <h>90</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
@@ -168,9 +205,9 @@ _+loadFrom(json: Path): ContributionLimits_
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1380</x>
-      <y>1510</y>
-      <w>350</w>
+      <x>40</x>
+      <y>680</y>
+      <w>390</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>*AvalancheStrategy*
@@ -181,9 +218,9 @@ _+loadFrom(json: Path): ContributionLimits_
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1380</x>
-      <y>1900</y>
-      <w>350</w>
+      <x>460</x>
+      <y>680</y>
+      <w>390</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>*SnowballStrategy*
@@ -194,9 +231,9 @@ _+loadFrom(json: Path): ContributionLimits_
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1330</x>
-      <y>1020</y>
-      <w>440</w>
+      <x>580</x>
+      <y>500</y>
+      <w>490</w>
       <h>80</h>
     </coordinates>
     <panel_attributes>*RecurringChargeDetector*
@@ -209,12 +246,15 @@ _+loadFrom(json: Path): ContributionLimits_
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>840</x>
-      <y>1240</y>
-      <w>390</w>
-      <h>110</h>
+      <x>1140</x>
+      <y>80</y>
+      <w>440</w>
+      <h>150</h>
     </coordinates>
     <panel_attributes>*GoalService*
+--
+-goalRepo: GoalRepository
+-forecaster: CashFlowForecaster
 --
 +createGoal(g: SavingsGoal): void
 +deleteGoal(goalId: String): void
@@ -225,9 +265,9 @@ _+loadFrom(json: Path): ContributionLimits_
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>870</x>
-      <y>1010</y>
-      <w>330</w>
+      <x>620</x>
+      <y>320</y>
+      <w>370</w>
       <h>100</h>
     </coordinates>
     <panel_attributes>*CashFlowForecaster*
@@ -241,9 +281,9 @@ _+loadFrom(json: Path): ContributionLimits_
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>140</x>
-      <y>1230</y>
-      <w>480</w>
+      <x>540</x>
+      <y>90</y>
+      <w>530</w>
       <h>120</h>
     </coordinates>
     <panel_attributes>*AffordabilityAnalyzer*
@@ -258,14 +298,18 @@ _+loadFrom(json: Path): ContributionLimits_
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>180</x>
-      <y>340</y>
-      <w>390</w>
-      <h>80</h>
+      <x>1140</x>
+      <y>480</y>
+      <w>440</w>
+      <h>150</h>
     </coordinates>
     <panel_attributes>*ReportService*
 --
 -summarizer: ReportSummarizer
+-txService: TransactionService
+-budgets: BudgetService
+-netWorth: NetWorthService
+-recurring: RecurringChargeDetector
 --
 +buildMonthlyReport(m: YearMonth): MonthlyReport</panel_attributes>
     <additional_attributes></additional_attributes>
@@ -273,112 +317,169 @@ _+loadFrom(json: Path): ContributionLimits_
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>680</x>
-      <y>805</y>
-      <w>190</w>
+      <x>730</x>
+      <y>975</y>
+      <w>100</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 uses</panel_attributes>
-    <additional_attributes>10.0;10.0;180.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;90.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>590</x>
-      <y>1835</y>
-      <w>280</w>
-      <h>20</h>
+      <x>240</x>
+      <y>420</y>
+      <w>43</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;270.0;10.0</additional_attributes>
+    <additional_attributes>33.0;10.0;10.0;80.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1102</x>
-      <y>1560</y>
-      <w>412</w>
-      <h>250</h>
+      <x>225</x>
+      <y>580</y>
+      <w>20</w>
+      <h>110</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;240.0;402.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1200</x>
-      <y>1864</y>
-      <w>190</w>
-      <h>47</h>
+      <x>340</x>
+      <y>580</y>
+      <w>249</w>
+      <h>110</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;180.0;37.0</additional_attributes>
+    <additional_attributes>10.0;10.0;239.0;100.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1190</x>
-      <y>1050</y>
-      <w>150</w>
-      <h>20</h>
+      <x>801</x>
+      <y>410</y>
+      <w>29</w>
+      <h>100</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;140.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;19.0;90.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>541</x>
-      <y>1100</y>
-      <w>362</w>
-      <h>140</h>
+      <x>795</x>
+      <y>200</y>
+      <w>20</w>
+      <h>130</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>10.0;130.0;352.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>610</x>
-      <y>1282</y>
-      <w>240</w>
+      <x>1060</x>
+      <y>142</y>
+      <w>90</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;11.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>450</x>
+      <y>142</y>
+      <w>100</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;11.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1820</x>
+      <y>590</y>
+      <w>20</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1332</x>
+      <y>620</y>
+      <w>29</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>19.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>247</x>
+      <y>1230</y>
+      <w>122</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+reads</panel_attributes>
+    <additional_attributes>112.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>431</x>
+      <y>1230</y>
+      <w>83</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+creates</panel_attributes>
+    <additional_attributes>10.0;10.0;73.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>924</x>
+      <y>220</y>
+      <w>252</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>242.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1570</x>
+      <y>547</y>
+      <w>100</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;11.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1060</x>
+      <y>537</y>
+      <w>90</w>
       <h>22</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;230.0;12.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>507</x>
-      <y>1340</y>
-      <w>343</w>
-      <h>162</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;333.0;152.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>520</x>
-      <y>120</y>
-      <w>330</w>
-      <h>20</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;320.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>560</x>
-      <y>370</y>
-      <w>310</w>
-      <h>20</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;300.0;10.0</additional_attributes>
+    <additional_attributes>80.0;12.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>

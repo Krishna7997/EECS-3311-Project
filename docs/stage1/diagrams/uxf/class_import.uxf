@@ -6,7 +6,7 @@
     <coordinates>
       <x>20</x>
       <y>20</y>
-      <w>520</w>
+      <w>570</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>Class diagram (2/7): Import and categorization (Adapter, Strategy)</panel_attributes>
@@ -17,7 +17,7 @@
     <coordinates>
       <x>40</x>
       <y>130</y>
-      <w>490</w>
+      <w>550</w>
       <h>80</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
@@ -31,7 +31,7 @@
     <coordinates>
       <x>90</x>
       <y>430</y>
-      <w>490</w>
+      <w>550</w>
       <h>150</h>
     </coordinates>
     <panel_attributes>*CsvTransactionAdapter*
@@ -48,9 +48,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>450</x>
+      <x>460</x>
       <y>760</y>
-      <w>350</w>
+      <w>390</w>
       <h>200</h>
     </coordinates>
     <panel_attributes>*ColumnMapping*
@@ -72,7 +72,7 @@
     <coordinates>
       <x>760</x>
       <y>450</y>
-      <w>410</w>
+      <w>460</w>
       <h>110</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
@@ -86,9 +86,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1330</x>
+      <x>1340</x>
       <y>820</y>
-      <w>390</w>
+      <w>430</w>
       <h>80</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
@@ -102,7 +102,7 @@
     <coordinates>
       <x>1020</x>
       <y>1110</y>
-      <w>450</w>
+      <w>500</w>
       <h>100</h>
     </coordinates>
     <panel_attributes>*RuleBasedCategorizer*
@@ -116,9 +116,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1560</x>
+      <x>1570</x>
       <y>1100</y>
-      <w>400</w>
+      <w>450</w>
       <h>120</h>
     </coordinates>
     <panel_attributes>*LlmCategorizer*
@@ -135,7 +135,7 @@
     <coordinates>
       <x>1300</x>
       <y>460</y>
-      <w>460</w>
+      <w>520</w>
       <h>100</h>
     </coordinates>
     <panel_attributes>*CategorizationService*
@@ -149,9 +149,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1100</x>
+      <x>1120</x>
       <y>1340</y>
-      <w>280</w>
+      <w>310</w>
       <h>100</h>
     </coordinates>
     <panel_attributes>*CategoryRule*
@@ -167,7 +167,7 @@
     <coordinates>
       <x>910</x>
       <y>70</y>
-      <w>610</w>
+      <w>680</w>
       <h>190</h>
     </coordinates>
     <panel_attributes>*TransactionService*
@@ -186,9 +186,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1850</x>
+      <x>1870</x>
       <y>450</y>
-      <w>230</w>
+      <w>260</w>
       <h>110</h>
     </coordinates>
     <panel_attributes>*ImportResult*
@@ -202,7 +202,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>281</x>
+      <x>311</x>
       <y>200</y>
       <w>53</w>
       <h>240</h>
@@ -213,7 +213,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>386</x>
+      <x>416</x>
       <y>570</y>
       <w>167</w>
       <h>200</h>
@@ -227,40 +227,40 @@ uses</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>711</x>
+      <x>739</x>
       <y>550</y>
-      <w>211</w>
+      <w>209</w>
       <h>220</h>
     </coordinates>
     <panel_attributes>lt=.&gt;</panel_attributes>
-    <additional_attributes>201.0;10.0;10.0;210.0</additional_attributes>
+    <additional_attributes>199.0;10.0;10.0;210.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1282</x>
+      <x>1308</x>
       <y>890</y>
-      <w>216</w>
+      <w>219</w>
       <h>230</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>206.0;10.0;10.0;220.0</additional_attributes>
+    <additional_attributes>209.0;10.0;10.0;220.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1546</x>
+      <x>1577</x>
       <y>890</y>
-      <w>177</w>
+      <w>180</w>
       <h>220</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;167.0;210.0</additional_attributes>
+    <additional_attributes>10.0;10.0;170.0;210.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1231</x>
+      <x>1261</x>
       <y>1200</y>
       <w>23</w>
       <h>150</h>
@@ -268,12 +268,12 @@ uses</panel_attributes>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1
 m2=0..*</panel_attributes>
-    <additional_attributes>13.0;10.0;10.0;140.0</additional_attributes>
+    <additional_attributes>10.0;10.0;13.0;140.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1516</x>
+      <x>1546</x>
       <y>550</y>
       <w>23</w>
       <h>280</h>
@@ -287,46 +287,46 @@ ordered chain</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>995</x>
+      <x>1022</x>
       <y>250</y>
-      <w>160</w>
+      <w>165</w>
       <h>210</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>150.0;10.0;10.0;200.0</additional_attributes>
+    <additional_attributes>155.0;10.0;10.0;200.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>519</x>
+      <x>550</x>
       <y>250</y>
-      <w>460</w>
+      <w>463</w>
       <h>190</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 creates with mapping</panel_attributes>
-    <additional_attributes>450.0;10.0;10.0;180.0</additional_attributes>
+    <additional_attributes>453.0;10.0;10.0;180.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1292</x>
+      <x>1325</x>
       <y>250</y>
-      <w>202</w>
+      <w>200</w>
       <h>220</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;192.0;210.0</additional_attributes>
+    <additional_attributes>10.0;10.0;190.0;210.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1415</x>
+      <x>1450</x>
       <y>250</y>
-      <w>445</w>
-      <h>213</h>
+      <w>439</w>
+      <h>210</h>
     </coordinates>
     <panel_attributes>lt=.&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;435.0;203.0</additional_attributes>
+    <additional_attributes>10.0;10.0;429.0;200.0</additional_attributes>
   </element>
 </diagram>

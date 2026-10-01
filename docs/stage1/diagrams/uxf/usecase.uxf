@@ -6,7 +6,7 @@
     <coordinates>
       <x>20</x>
       <y>10</y>
-      <w>210</w>
+      <w>230</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>Use-case diagram: MapleCFO</panel_attributes>
@@ -95,7 +95,7 @@
     <coordinates>
       <x>330</x>
       <y>90</y>
-      <w>270</w>
+      <w>320</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>UC01 Import bank transactions</panel_attributes>
@@ -106,7 +106,7 @@
     <coordinates>
       <x>330</x>
       <y>168</y>
-      <w>270</w>
+      <w>320</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>UC02 Correct category / undo edit</panel_attributes>
@@ -117,7 +117,7 @@
     <coordinates>
       <x>330</x>
       <y>246</y>
-      <w>270</w>
+      <w>320</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>UC03 Manage accounts &amp;
@@ -129,7 +129,7 @@ view net worth</panel_attributes>
     <coordinates>
       <x>330</x>
       <y>324</y>
-      <w>270</w>
+      <w>320</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>UC04 Set budget &amp;
@@ -141,7 +141,7 @@ receive alerts</panel_attributes>
     <coordinates>
       <x>330</x>
       <y>402</y>
-      <w>270</w>
+      <w>320</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>UC05 Review recurring charges</panel_attributes>
@@ -152,7 +152,7 @@ receive alerts</panel_attributes>
     <coordinates>
       <x>330</x>
       <y>480</y>
-      <w>270</w>
+      <w>320</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>UC06 Check TFSA/RRSP/FHSA room</panel_attributes>
@@ -163,7 +163,7 @@ receive alerts</panel_attributes>
     <coordinates>
       <x>330</x>
       <y>558</y>
-      <w>270</w>
+      <w>320</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>UC07 Run FIRE projection</panel_attributes>
@@ -174,7 +174,7 @@ receive alerts</panel_attributes>
     <coordinates>
       <x>330</x>
       <y>636</y>
-      <w>270</w>
+      <w>320</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>UC08 Plan debt payoff</panel_attributes>
@@ -185,7 +185,7 @@ receive alerts</panel_attributes>
     <coordinates>
       <x>330</x>
       <y>714</y>
-      <w>270</w>
+      <w>320</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>UC09 Manage savings goal</panel_attributes>
@@ -196,7 +196,7 @@ receive alerts</panel_attributes>
     <coordinates>
       <x>330</x>
       <y>792</y>
-      <w>270</w>
+      <w>320</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>UC10 Ask the AI CFO</panel_attributes>
@@ -207,7 +207,7 @@ receive alerts</panel_attributes>
     <coordinates>
       <x>330</x>
       <y>870</y>
-      <w>270</w>
+      <w>320</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>UC11 Check affordability</panel_attributes>
@@ -218,7 +218,7 @@ receive alerts</panel_attributes>
     <coordinates>
       <x>330</x>
       <y>948</y>
-      <w>270</w>
+      <w>320</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>UC12 Generate monthly summary</panel_attributes>
@@ -229,7 +229,7 @@ receive alerts</panel_attributes>
     <coordinates>
       <x>330</x>
       <y>1026</y>
-      <w>270</w>
+      <w>320</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>UC13 Auto-sync bank data</panel_attributes>
@@ -240,7 +240,7 @@ receive alerts</panel_attributes>
     <coordinates>
       <x>330</x>
       <y>1104</y>
-      <w>270</w>
+      <w>320</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>UC14 Confirm detected contribution /
@@ -252,7 +252,7 @@ RRSP estimate</panel_attributes>
     <coordinates>
       <x>330</x>
       <y>1182</y>
-      <w>270</w>
+      <w>320</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>UC15 Update contribution limits</panel_attributes>
@@ -306,7 +306,7 @@ RRSP estimate</panel_attributes>
     <id>UMLUseCase</id>
     <coordinates>
       <x>820</x>
-      <y>620</y>
+      <y>560</y>
       <w>240</w>
       <h>60</h>
     </coordinates>
@@ -494,85 +494,85 @@ action</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>590</x>
+      <x>640</x>
       <y>1120</y>
-      <w>740</w>
+      <w>690</w>
       <h>102</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>10.0;92.0;730.0;10.0</additional_attributes>
+    <additional_attributes>10.0;92.0;680.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>590</x>
+      <x>640</x>
       <y>1202</y>
-      <w>740</w>
+      <w>690</w>
       <h>118</h>
     </coordinates>
     <panel_attributes>lt=-
 notified on failure</panel_attributes>
-    <additional_attributes>10.0;10.0;730.0;108.0</additional_attributes>
+    <additional_attributes>10.0;10.0;680.0;108.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>590</x>
+      <x>640</x>
       <y>110</y>
-      <w>240</w>
+      <w>190</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;include&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;230.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;180.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>590</x>
+      <x>640</x>
       <y>730</y>
-      <w>240</w>
+      <w>190</w>
       <h>102</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;include&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;92.0;230.0;10.0</additional_attributes>
+    <additional_attributes>10.0;92.0;180.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>590</x>
+      <x>640</x>
       <y>890</y>
-      <w>240</w>
+      <w>190</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;include&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;230.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;180.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>590</x>
+      <x>640</x>
       <y>968</y>
-      <w>240</w>
+      <w>190</w>
       <h>32</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;include&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;230.0;22.0</additional_attributes>
+    <additional_attributes>10.0;10.0;180.0;22.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>590</x>
-      <y>640</y>
-      <w>240</w>
-      <h>192</h>
+      <x>640</x>
+      <y>580</y>
+      <w>190</w>
+      <h>252</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extend&gt;&gt;</panel_attributes>
-    <additional_attributes>230.0;10.0;10.0;182.0</additional_attributes>
+    <additional_attributes>180.0;10.0;10.0;242.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -599,12 +599,12 @@ notified on failure</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>590</x>
+      <x>640</x>
       <y>510</y>
-      <w>740</w>
+      <w>690</w>
       <h>322</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>10.0;312.0;560.0;312.0;730.0;10.0</additional_attributes>
+    <additional_attributes>10.0;312.0;510.0;312.0;680.0;10.0</additional_attributes>
   </element>
 </diagram>

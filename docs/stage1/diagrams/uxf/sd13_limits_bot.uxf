@@ -4,9 +4,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>340</x>
+      <x>360</x>
       <y>350</y>
-      <w>1850</w>
+      <w>1990</w>
       <h>1065</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -15,9 +15,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>360</x>
+      <x>380</x>
       <y>795</y>
-      <w>1820</w>
+      <w>1960</w>
       <h>600</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -28,7 +28,7 @@
     <coordinates>
       <x>60</x>
       <y>70</y>
-      <w>280</w>
+      <w>300</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:GitHub Actions (weekly schedule)</panel_attributes>
@@ -37,9 +37,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>375</x>
+      <x>390</x>
       <y>70</y>
-      <w>150</w>
+      <w>160</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:LimitsUpdateJob</panel_attributes>
@@ -48,9 +48,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>625</x>
+      <x>665</x>
       <y>70</y>
-      <w>150</w>
+      <w>170</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:CraLimitsScraper</panel_attributes>
@@ -59,9 +59,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>915</x>
+      <x>985</x>
       <y>70</y>
-      <w>190</w>
+      <w>210</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:canada.ca (CRA pages)</panel_attributes>
@@ -70,9 +70,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1135</x>
+      <x>1220</x>
       <y>70</y>
-      <w>150</w>
+      <w>160</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:LimitsValidator</panel_attributes>
@@ -81,9 +81,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1320</x>
+      <x>1415</x>
       <y>70</y>
-      <w>120</w>
+      <w>130</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:GitHub repo</panel_attributes>
@@ -92,9 +92,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1600</x>
+      <x>1725</x>
       <y>70</y>
-      <w>180</w>
+      <w>190</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:GitHubIssueNotifier</panel_attributes>
@@ -103,9 +103,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1815</x>
+      <x>1950</x>
       <y>70</y>
-      <w>130</w>
+      <w>140</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:EmailNotifier</panel_attributes>
@@ -114,7 +114,7 @@
   <element>
     <id>UMLActor</id>
     <coordinates>
-      <x>2040</x>
+      <x>2200</x>
       <y>50</y>
       <w>80</w>
       <h>90</h>
@@ -125,201 +125,201 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>190</x>
+      <x>200</x>
       <y>140</y>
-      <w>270</w>
+      <w>280</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 1: main() (cron: weekly)</panel_attributes>
-    <additional_attributes>10.0;10.0;260.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;270.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
+      <x>460</x>
       <y>180</y>
-      <w>950</w>
+      <w>1030</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 2: read current contribution_limits.json</panel_attributes>
-    <additional_attributes>10.0;10.0;940.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1020.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
+      <x>460</x>
       <y>220</y>
-      <w>950</w>
+      <w>1030</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 3: previous</panel_attributes>
-    <additional_attributes>940.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>1020.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
+      <x>460</x>
       <y>260</y>
-      <w>270</w>
+      <w>300</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 4: fetch()</panel_attributes>
-    <additional_attributes>10.0;10.0;260.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;290.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>690</x>
+      <x>740</x>
       <y>300</y>
-      <w>330</w>
+      <w>360</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 5: GET TFSA / FHSA / RRSP limit pages</panel_attributes>
-    <additional_attributes>10.0;10.0;320.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;350.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>690</x>
+      <x>740</x>
       <y>385</y>
-      <w>330</w>
+      <w>360</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 6: error / unexpected HTML</panel_attributes>
-    <additional_attributes>320.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>350.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
+      <x>460</x>
       <y>425</y>
-      <w>270</w>
+      <w>300</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 7: throws ScrapeException</panel_attributes>
-    <additional_attributes>260.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>290.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
+      <x>460</x>
       <y>465</y>
-      <w>1260</w>
+      <w>1370</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 8: notify(JobResult(FAILED, "scrape failed"))</panel_attributes>
-    <additional_attributes>10.0;10.0;1250.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1360.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1370</x>
+      <x>1470</x>
       <y>505</y>
-      <w>330</w>
+      <w>360</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 9: open issue "Limits update failed"</panel_attributes>
-    <additional_attributes>320.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>350.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
+      <x>460</x>
       <y>545</y>
-      <w>1450</w>
+      <w>1570</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 10: notify(result)</panel_attributes>
-    <additional_attributes>10.0;10.0;1440.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1560.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1870</x>
+      <x>2010</x>
       <y>585</y>
-      <w>220</w>
+      <w>240</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 11: email with run link</panel_attributes>
-    <additional_attributes>10.0;10.0;210.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;230.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>690</x>
+      <x>740</x>
       <y>665</y>
-      <w>330</w>
+      <w>360</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 12: HTML tables</panel_attributes>
-    <additional_attributes>320.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>350.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
+      <x>460</x>
       <y>705</y>
-      <w>270</w>
+      <w>300</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 13: ContributionLimits (next)</panel_attributes>
-    <additional_attributes>260.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>290.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
+      <x>460</x>
       <y>745</y>
-      <w>780</w>
+      <w>850</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 14: validate(next, previous)</panel_attributes>
-    <additional_attributes>10.0;10.0;770.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;840.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
+      <x>460</x>
       <y>830</y>
-      <w>780</w>
+      <w>850</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 15: ok</panel_attributes>
-    <additional_attributes>770.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>840.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
+      <x>460</x>
       <y>870</y>
-      <w>950</w>
+      <w>1030</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 16: commit updated contribution_limits.json</panel_attributes>
-    <additional_attributes>10.0;10.0;940.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1020.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1230</x>
+      <x>1310</x>
       <y>920</y>
-      <w>310</w>
+      <w>340</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>apps pick it up on next start (SD12)</panel_attributes>
@@ -328,21 +328,21 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
+      <x>460</x>
       <y>1000</y>
-      <w>780</w>
+      <w>850</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 17: ok</panel_attributes>
-    <additional_attributes>770.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>840.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>370</x>
+      <x>380</x>
       <y>1050</y>
-      <w>160</w>
+      <w>180</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>nothing to commit</panel_attributes>
@@ -351,69 +351,69 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
+      <x>460</x>
       <y>1130</y>
-      <w>780</w>
+      <w>850</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 18: errors</panel_attributes>
-    <additional_attributes>770.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>840.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
+      <x>460</x>
       <y>1170</y>
-      <w>1260</w>
+      <w>1370</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 19: notify(JobResult(FAILED, errors))</panel_attributes>
-    <additional_attributes>10.0;10.0;1250.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1360.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1370</x>
+      <x>1470</x>
       <y>1210</y>
-      <w>330</w>
+      <w>360</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 20: open issue with validation errors</panel_attributes>
-    <additional_attributes>320.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>350.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
+      <x>460</x>
       <y>1250</y>
-      <w>1450</w>
+      <w>1570</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 21: notify(result)</panel_attributes>
-    <additional_attributes>10.0;10.0;1440.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1560.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1870</x>
+      <x>2010</x>
       <y>1290</y>
-      <w>220</w>
+      <w>240</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 22: email with details</panel_attributes>
-    <additional_attributes>10.0;10.0;210.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;230.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1190</x>
+      <x>1280</x>
       <y>1340</y>
-      <w>380</w>
+      <w>410</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>file NOT changed, users keep last good values</panel_attributes>
@@ -422,7 +422,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>190</x>
+      <x>200</x>
       <y>100</y>
       <w>20</w>
       <h>1360</h>
@@ -433,7 +433,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
+      <x>460</x>
       <y>100</y>
       <w>20</w>
       <h>1360</h>
@@ -444,7 +444,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>690</x>
+      <x>740</x>
       <y>100</y>
       <w>20</w>
       <h>1360</h>
@@ -455,7 +455,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1000</x>
+      <x>1080</x>
       <y>100</y>
       <w>20</w>
       <h>1360</h>
@@ -466,7 +466,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1200</x>
+      <x>1290</x>
       <y>100</y>
       <w>20</w>
       <h>1360</h>
@@ -477,7 +477,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1370</x>
+      <x>1470</x>
       <y>100</y>
       <w>20</w>
       <h>1360</h>
@@ -488,7 +488,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1680</x>
+      <x>1810</x>
       <y>100</y>
       <w>20</w>
       <h>1360</h>
@@ -499,7 +499,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1870</x>
+      <x>2010</x>
       <y>100</y>
       <w>20</w>
       <h>1360</h>
@@ -510,7 +510,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2070</x>
+      <x>2230</x>
       <y>130</y>
       <w>20</w>
       <h>1330</h>
@@ -521,9 +521,9 @@
   <element>
     <id>Text</id>
     <coordinates>
-      <x>400</x>
+      <x>420</x>
       <y>352</y>
-      <w>290</w>
+      <w>320</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[page unreachable or layout changed]</panel_attributes>
@@ -532,18 +532,18 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>330</x>
+      <x>350</x>
       <y>630</y>
-      <w>1870</w>
+      <w>2010</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;1860.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;2000.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>350</x>
+      <x>370</x>
       <y>643</y>
       <w>80</w>
       <h>30</h>
@@ -554,9 +554,9 @@
   <element>
     <id>Text</id>
     <coordinates>
-      <x>420</x>
+      <x>440</x>
       <y>797</y>
-      <w>160</w>
+      <w>170</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[valid and changed]</panel_attributes>
@@ -565,20 +565,20 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>350</x>
+      <x>370</x>
       <y>965</y>
-      <w>1840</w>
+      <w>1980</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;1830.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1970.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>370</x>
+      <x>390</x>
       <y>978</y>
-      <w>170</w>
+      <w>190</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[valid and unchanged]</panel_attributes>
@@ -587,20 +587,20 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>350</x>
+      <x>370</x>
       <y>1095</y>
-      <w>1840</w>
+      <w>1980</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;1830.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1970.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>370</x>
+      <x>390</x>
       <y>1108</y>
-      <w>80</w>
+      <w>90</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[invalid]</panel_attributes>
@@ -611,7 +611,7 @@
     <coordinates>
       <x>20</x>
       <y>10</y>
-      <w>390</w>
+      <w>430</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>SD13: Weekly limits bot with failure alerts (F15)</panel_attributes>

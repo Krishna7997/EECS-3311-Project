@@ -4,9 +4,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>830</x>
+      <x>810</x>
       <y>400</y>
-      <w>1100</w>
+      <w>1180</w>
       <h>300</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -26,9 +26,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>560</x>
+      <x>605</x>
       <y>70</y>
-      <w>120</w>
+      <w>130</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:PlanningView</panel_attributes>
@@ -37,9 +37,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>870</x>
+      <x>845</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:MapleCfoFacade</panel_attributes>
@@ -48,9 +48,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1260</x>
+      <x>1270</x>
       <y>70</y>
-      <w>160</w>
+      <w>180</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:RrspRoomEstimator</panel_attributes>
@@ -59,9 +59,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1535</x>
+      <x>1565</x>
       <y>70</y>
-      <w>190</w>
+      <w>210</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:TransactionRepository</panel_attributes>
@@ -70,9 +70,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1755</x>
+      <x>1810</x>
       <y>70</y>
-      <w>130</w>
+      <w>140</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:LimitsService</panel_attributes>
@@ -81,9 +81,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1915</x>
+      <x>1975</x>
       <y>70</y>
-      <w>210</w>
+      <w>230</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:RegisteredAccountService</panel_attributes>
@@ -94,65 +94,65 @@
     <coordinates>
       <x>100</x>
       <y>140</y>
-      <w>530</w>
+      <w>580</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 1: open RRSP room</panel_attributes>
-    <additional_attributes>10.0;10.0;520.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;570.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>610</x>
+      <x>660</x>
       <y>180</y>
-      <w>340</w>
+      <w>270</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 2: getRrspEstimate(2026)</panel_attributes>
-    <additional_attributes>10.0;10.0;330.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;260.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>930</x>
+      <x>910</x>
       <y>220</y>
-      <w>420</w>
+      <w>460</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 3: estimate(2026)</panel_attributes>
-    <additional_attributes>10.0;10.0;410.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;450.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1330</x>
+      <x>1350</x>
       <y>260</y>
-      <w>310</w>
+      <w>330</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 4: findByMonth(each month of 2025)</panel_attributes>
-    <additional_attributes>10.0;10.0;300.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;320.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1330</x>
+      <x>1350</x>
       <y>300</y>
-      <w>310</w>
+      <w>330</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 5: transactions</panel_attributes>
-    <additional_attributes>300.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>320.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1330</x>
+      <x>1350</x>
       <y>340</y>
       <w>70</w>
       <h>45</h>
@@ -164,43 +164,43 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>930</x>
+      <x>910</x>
       <y>435</y>
-      <w>420</w>
+      <w>460</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 7: RrspEstimate(UNKNOWN, "enter your NOA limit")</panel_attributes>
-    <additional_attributes>410.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>450.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1330</x>
+      <x>1350</x>
       <y>515</y>
-      <w>500</w>
+      <w>540</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 8: currentLimits()</panel_attributes>
-    <additional_attributes>10.0;10.0;490.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;530.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1330</x>
+      <x>1350</x>
       <y>555</y>
-      <w>500</w>
+      <w>540</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 9: ContributionLimits (RRSP rate 18%, yearly max)</panel_attributes>
-    <additional_attributes>490.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>530.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1330</x>
+      <x>1350</x>
       <y>595</y>
       <w>70</w>
       <h>45</h>
@@ -212,73 +212,121 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>930</x>
+      <x>910</x>
       <y>645</y>
-      <w>420</w>
+      <w>460</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 11: RrspEstimate(room, basis, confidence)</panel_attributes>
-    <additional_attributes>410.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>450.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>610</x>
+      <x>660</x>
       <y>705</y>
-      <w>340</w>
+      <w>270</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 12: estimate</panel_attributes>
-    <additional_attributes>330.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>260.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
       <y>745</y>
-      <w>530</w>
+      <w>580</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 13: "Estimated new RRSP room: $X (confirm or enter NOA value)"</panel_attributes>
-    <additional_attributes>520.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>570.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
       <y>785</y>
-      <w>530</w>
+      <w>580</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 14: Confirm / edit value</panel_attributes>
-    <additional_attributes>10.0;10.0;520.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;570.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>610</x>
+      <x>660</x>
       <y>825</y>
-      <w>340</w>
+      <w>270</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
-15: (profile update) rrspDeductionLimit</panel_attributes>
-    <additional_attributes>10.0;10.0;330.0;10.0</additional_attributes>
+15: confirmRrspLimit(value)</panel_attributes>
+    <additional_attributes>10.0;10.0;260.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>910</x>
+      <y>865</y>
+      <w>1190</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+16: updateRrspLimit(value)</panel_attributes>
+    <additional_attributes>10.0;10.0;1180.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>910</x>
+      <y>905</y>
+      <w>1190</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+17: saved</panel_attributes>
+    <additional_attributes>1180.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>660</x>
+      <y>945</y>
+      <w>270</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+18: ok</panel_attributes>
+    <additional_attributes>260.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>985</y>
+      <w>580</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+19: "RRSP room updated"</panel_attributes>
+    <additional_attributes>570.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1840</x>
-      <y>875</y>
-      <w>360</w>
+      <x>1950</x>
+      <y>1035</y>
+      <w>290</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>RegisteredAccountService uses the confirmed
-value for room checks (SD04)</panel_attributes>
+    <panel_attributes>the confirmed limit is used by
+room checks (SD04)</panel_attributes>
     <additional_attributes></additional_attributes>
   </element>
   <element>
@@ -287,83 +335,83 @@ value for room checks (SD04)</panel_attributes>
       <x>100</x>
       <y>130</y>
       <w>20</w>
-      <h>845</h>
+      <h>1005</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;835.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;995.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>610</x>
+      <x>660</x>
       <y>100</y>
       <w>20</w>
-      <h>875</h>
+      <h>1035</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;865.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;1025.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>930</x>
+      <x>910</x>
       <y>100</y>
       <w>20</w>
-      <h>875</h>
+      <h>1035</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;865.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;1025.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1330</x>
+      <x>1350</x>
       <y>100</y>
       <w>20</w>
-      <h>875</h>
+      <h>1035</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;865.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;1025.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1620</x>
+      <x>1660</x>
       <y>100</y>
       <w>20</w>
-      <h>875</h>
+      <h>1035</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;865.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;1025.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1810</x>
+      <x>1870</x>
       <y>100</y>
       <w>20</w>
-      <h>875</h>
+      <h>1035</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;865.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;1025.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2010</x>
+      <x>2080</x>
       <y>100</y>
       <w>20</w>
-      <h>875</h>
+      <h>1035</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;865.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;1025.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>890</x>
+      <x>870</x>
       <y>402</y>
-      <w>220</w>
+      <w>240</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[no payroll deposits found]</panel_attributes>
@@ -372,20 +420,20 @@ value for room checks (SD04)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>820</x>
+      <x>800</x>
       <y>480</y>
-      <w>1120</w>
+      <w>1200</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;1110.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1190.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>840</x>
+      <x>820</x>
       <y>493</y>
-      <w>120</w>
+      <w>130</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[income found]</panel_attributes>
@@ -396,7 +444,7 @@ value for room checks (SD04)</panel_attributes>
     <coordinates>
       <x>20</x>
       <y>10</y>
-      <w>410</w>
+      <w>450</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>SD14: RRSP room estimate from payroll deposits (F14)</panel_attributes>

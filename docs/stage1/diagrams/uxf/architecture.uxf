@@ -6,7 +6,7 @@
     <coordinates>
       <x>20</x>
       <y>10</y>
-      <w>270</w>
+      <w>300</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>Architecture: layered package view</panel_attributes>
@@ -255,7 +255,7 @@ via Repositories</panel_attributes>
     <coordinates>
       <x>1000</x>
       <y>690</y>
-      <w>260</w>
+      <w>300</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>&lt;&lt;external&gt;&gt;
@@ -266,9 +266,9 @@ via Repositories</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1000</x>
-      <y>800</y>
-      <w>260</w>
-      <h>60</h>
+      <y>790</y>
+      <w>300</w>
+      <h>70</h>
     </coordinates>
     <panel_attributes>&lt;&lt;external&gt;&gt;
 *Weekly limits bot*
@@ -281,7 +281,7 @@ via Repositories</panel_attributes>
       <x>460</x>
       <y>1000</y>
       <w>220</w>
-      <h>60</h>
+      <h>70</h>
     </coordinates>
     <panel_attributes>&lt;&lt;external&gt;&gt;
 *Bank CSV exports*

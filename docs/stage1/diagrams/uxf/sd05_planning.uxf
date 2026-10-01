@@ -6,7 +6,7 @@
     <coordinates>
       <x>0</x>
       <y>270</y>
-      <w>1450</w>
+      <w>1570</w>
       <h>455</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -15,9 +15,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>790</x>
+      <x>860</x>
       <y>980</y>
-      <w>1100</w>
+      <w>1180</w>
       <h>365</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -26,9 +26,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>1250</x>
+      <x>1370</x>
       <y>485</y>
-      <w>460</w>
+      <w>500</w>
       <h>100</h>
     </coordinates>
     <panel_attributes>loop</panel_attributes>
@@ -37,9 +37,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>1430</x>
+      <x>1560</x>
       <y>1185</y>
-      <w>380</w>
+      <w>410</w>
       <h>100</h>
     </coordinates>
     <panel_attributes>loop</panel_attributes>
@@ -59,9 +59,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>550</x>
+      <x>595</x>
       <y>70</y>
-      <w>120</w>
+      <w>130</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:PlanningView</panel_attributes>
@@ -70,9 +70,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>830</x>
+      <x>895</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:MapleCfoFacade</panel_attributes>
@@ -81,9 +81,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1270</x>
+      <x>1385</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:FireCalculator</panel_attributes>
@@ -92,9 +92,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1440</x>
+      <x>1560</x>
       <y>70</y>
-      <w>160</w>
+      <w>180</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:DebtPayoffPlanner</panel_attributes>
@@ -103,9 +103,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1710</x>
+      <x>1855</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:PayoffStrategy</panel_attributes>
@@ -114,9 +114,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1880</x>
+      <x>2035</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:DebtRepository</panel_attributes>
@@ -127,65 +127,65 @@
     <coordinates>
       <x>100</x>
       <y>140</y>
-      <w>520</w>
+      <w>570</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 1: enter spending, savings, return rate → "Project"</panel_attributes>
-    <additional_attributes>10.0;10.0;510.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;560.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>600</x>
+      <x>650</x>
       <y>180</y>
-      <w>310</w>
+      <w>330</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 2: projectFire(FireInputs)</panel_attributes>
-    <additional_attributes>10.0;10.0;300.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;320.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>890</x>
+      <x>960</x>
       <y>220</y>
-      <w>460</w>
+      <w>510</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 3: project(inputs)</panel_attributes>
-    <additional_attributes>10.0;10.0;450.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;500.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>890</x>
+      <x>960</x>
       <y>305</y>
-      <w>460</w>
+      <w>510</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 4: throws IllegalArgumentException</panel_attributes>
-    <additional_attributes>450.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>500.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>600</x>
+      <x>650</x>
       <y>345</y>
-      <w>310</w>
+      <w>330</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 5: validation messages</panel_attributes>
-    <additional_attributes>300.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>320.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1330</x>
+      <x>1450</x>
       <y>425</y>
       <w>70</w>
       <h>45</h>
@@ -197,7 +197,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1330</x>
+      <x>1450</x>
       <y>520</y>
       <w>70</w>
       <h>45</h>
@@ -209,151 +209,151 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>890</x>
+      <x>960</x>
       <y>590</y>
-      <w>460</w>
+      <w>510</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 8: FireProjection(targetAmount, years, yearlyBalances)</panel_attributes>
-    <additional_attributes>450.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>500.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>600</x>
+      <x>650</x>
       <y>630</y>
-      <w>310</w>
+      <w>330</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 9: projection</panel_attributes>
-    <additional_attributes>300.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>320.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
       <y>670</y>
-      <w>520</w>
+      <w>570</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 10: FIRE age + growth chart (+ scenarios at ±5% savings rate)</panel_attributes>
-    <additional_attributes>510.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>560.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
       <y>730</y>
-      <w>520</w>
+      <w>570</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 11: choose "Avalanche", extra $200/month → "Plan"</panel_attributes>
-    <additional_attributes>10.0;10.0;510.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;560.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>600</x>
+      <x>650</x>
       <y>770</y>
-      <w>310</w>
+      <w>330</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 12: planDebtPayoff(AVALANCHE, 200)</panel_attributes>
-    <additional_attributes>10.0;10.0;300.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;320.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>890</x>
+      <x>960</x>
       <y>810</y>
-      <w>640</w>
+      <w>700</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 13: setStrategy(new AvalancheStrategy())</panel_attributes>
-    <additional_attributes>10.0;10.0;630.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;690.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>890</x>
+      <x>960</x>
       <y>850</y>
-      <w>640</w>
+      <w>700</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 14: plan(200)</panel_attributes>
-    <additional_attributes>10.0;10.0;630.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;690.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1510</x>
+      <x>1640</x>
       <y>890</y>
-      <w>450</w>
+      <w>480</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 15: findAll()</panel_attributes>
-    <additional_attributes>10.0;10.0;440.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;470.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1510</x>
+      <x>1640</x>
       <y>930</y>
-      <w>450</w>
+      <w>480</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 16: debts</panel_attributes>
-    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>470.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>890</x>
+      <x>960</x>
       <y>1015</y>
-      <w>640</w>
+      <w>700</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 17: PayoffPlan(empty, warning)</panel_attributes>
-    <additional_attributes>630.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>690.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1510</x>
+      <x>1640</x>
       <y>1095</y>
-      <w>280</w>
+      <w>300</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 18: orderDebts(debts)</panel_attributes>
-    <additional_attributes>10.0;10.0;270.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;290.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1510</x>
+      <x>1640</x>
       <y>1135</y>
-      <w>280</w>
+      <w>300</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 19: debts sorted by APR (desc)</panel_attributes>
-    <additional_attributes>270.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>290.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1510</x>
+      <x>1640</x>
       <y>1220</y>
       <w>70</w>
       <h>45</h>
@@ -365,38 +365,38 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>890</x>
+      <x>960</x>
       <y>1290</y>
-      <w>640</w>
+      <w>700</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 21: PayoffPlan(monthsToDebtFree, totalInterest, schedule)</panel_attributes>
-    <additional_attributes>630.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>690.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>600</x>
+      <x>650</x>
       <y>1350</y>
-      <w>310</w>
+      <w>330</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 22: plan</panel_attributes>
-    <additional_attributes>300.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>320.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
       <y>1390</y>
-      <w>520</w>
+      <w>570</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 23: payoff timeline, compare with Snowball</panel_attributes>
-    <additional_attributes>510.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>560.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -412,7 +412,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>600</x>
+      <x>650</x>
       <y>100</y>
       <w>20</w>
       <h>1370</h>
@@ -423,7 +423,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>890</x>
+      <x>960</x>
       <y>100</y>
       <w>20</w>
       <h>1370</h>
@@ -434,7 +434,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1330</x>
+      <x>1450</x>
       <y>100</y>
       <w>20</w>
       <h>1370</h>
@@ -445,7 +445,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1510</x>
+      <x>1640</x>
       <y>100</y>
       <w>20</w>
       <h>1370</h>
@@ -456,7 +456,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1770</x>
+      <x>1920</x>
       <y>100</y>
       <w>20</w>
       <h>1370</h>
@@ -467,7 +467,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1940</x>
+      <x>2100</x>
       <y>100</y>
       <w>20</w>
       <h>1370</h>
@@ -480,7 +480,7 @@
     <coordinates>
       <x>60</x>
       <y>272</y>
-      <w>520</w>
+      <w>570</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[invalid inputs (negative spending, rate &gt; 15%, savings &gt; income)]</panel_attributes>
@@ -491,11 +491,11 @@
     <coordinates>
       <x>-10</x>
       <y>390</y>
-      <w>1470</w>
+      <w>1590</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;1460.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1580.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
@@ -511,9 +511,9 @@
   <element>
     <id>Text</id>
     <coordinates>
-      <x>850</x>
+      <x>920</x>
       <y>982</y>
-      <w>350</w>
+      <w>380</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[no debts or minimum payments exceed budget]</panel_attributes>
@@ -522,31 +522,31 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>780</x>
+      <x>850</x>
       <y>1060</y>
-      <w>1120</w>
+      <w>1200</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;1110.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1190.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>800</x>
+      <x>870</x>
       <y>1073</y>
-      <w>30</w>
+      <w>140</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>[]</panel_attributes>
+    <panel_attributes>[debts to plan]</panel_attributes>
     <additional_attributes></additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1310</x>
+      <x>1430</x>
       <y>487</y>
-      <w>390</w>
+      <w>430</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[each year until invested ≥ target (max 70 years)]</panel_attributes>
@@ -555,9 +555,9 @@
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1490</x>
+      <x>1620</x>
       <y>1187</y>
-      <w>310</w>
+      <w>340</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[month by month until all balances = 0]</panel_attributes>
@@ -568,7 +568,7 @@
     <coordinates>
       <x>20</x>
       <y>10</y>
-      <w>420</w>
+      <w>460</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>SD05: FIRE projection and debt payoff plan (F07, F08)</panel_attributes>

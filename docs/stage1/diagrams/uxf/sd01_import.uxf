@@ -6,7 +6,7 @@
     <coordinates>
       <x>0</x>
       <y>310</y>
-      <w>3820</w>
+      <w>4160</w>
       <h>2035</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -17,7 +17,7 @@
     <coordinates>
       <x>20</x>
       <y>855</y>
-      <w>3790</w>
+      <w>4130</w>
       <h>1470</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -26,9 +26,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>2310</x>
+      <x>2530</x>
       <y>1180</y>
-      <w>890</w>
+      <w>960</w>
       <h>650</h>
     </coordinates>
     <panel_attributes>loop</panel_attributes>
@@ -37,9 +37,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>590</x>
+      <x>650</x>
       <y>2055</y>
-      <w>3200</w>
+      <w>3480</w>
       <h>130</h>
     </coordinates>
     <panel_attributes>opt</panel_attributes>
@@ -48,9 +48,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>2330</x>
+      <x>2550</x>
       <y>1265</y>
-      <w>860</w>
+      <w>930</w>
       <h>545</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -59,9 +59,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>2350</x>
+      <x>2570</x>
       <y>1510</y>
-      <w>820</w>
+      <w>890</w>
       <h>280</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -81,9 +81,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>585</x>
+      <x>635</x>
       <y>70</y>
-      <w>150</w>
+      <w>170</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:TransactionsView</panel_attributes>
@@ -92,9 +92,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1020</x>
+      <x>1115</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:MapleCfoFacade</panel_attributes>
@@ -103,9 +103,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1605</x>
+      <x>1750</x>
       <y>70</y>
-      <w>170</w>
+      <w>180</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:TransactionService</panel_attributes>
@@ -114,9 +114,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1825</x>
+      <x>1995</x>
       <y>70</y>
-      <w>210</w>
+      <w>230</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:MappingProfileRepository</panel_attributes>
@@ -125,9 +125,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2065</x>
+      <x>2255</x>
       <y>70</y>
-      <w>190</w>
+      <w>210</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:CsvTransactionAdapter</panel_attributes>
@@ -136,9 +136,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2285</x>
+      <x>2495</x>
       <y>70</y>
-      <w>190</w>
+      <w>210</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:CategorizationService</panel_attributes>
@@ -147,9 +147,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2500</x>
+      <x>2740</x>
       <y>70</y>
-      <w>180</w>
+      <w>200</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:RuleBasedCategorizer</panel_attributes>
@@ -158,9 +158,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2710</x>
+      <x>2965</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:LlmCategorizer</panel_attributes>
@@ -169,9 +169,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>3070</x>
+      <x>3355</x>
       <y>70</y>
-      <w>100</w>
+      <w>110</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:LlmClient</panel_attributes>
@@ -180,9 +180,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>3195</x>
+      <x>3495</x>
       <y>70</y>
-      <w>190</w>
+      <w>210</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:TransactionRepository</panel_attributes>
@@ -191,7 +191,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>3420</x>
+      <x>3730</x>
       <y>70</y>
       <w>100</w>
       <h>40</h>
@@ -202,9 +202,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>3645</x>
+      <x>3980</x>
       <y>70</y>
-      <w>130</w>
+      <w>140</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:BudgetService</panel_attributes>
@@ -215,127 +215,127 @@
     <coordinates>
       <x>100</x>
       <y>140</y>
-      <w>570</w>
+      <w>630</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 1: choose CSV file, account and mapping profile (e.g. "TD chequing")</panel_attributes>
-    <additional_attributes>10.0;10.0;560.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;620.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>650</x>
+      <x>710</x>
       <y>180</y>
-      <w>450</w>
+      <w>490</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 2: importTransactions(path, accountId, "TD chequing")</panel_attributes>
-    <additional_attributes>10.0;10.0;440.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;480.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1080</x>
+      <x>1180</x>
       <y>220</y>
-      <w>620</w>
+      <w>670</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 3: importFrom(path, accountId, "TD chequing")</panel_attributes>
-    <additional_attributes>10.0;10.0;610.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;660.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1680</x>
+      <x>1830</x>
       <y>260</y>
-      <w>260</w>
+      <w>290</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 4: findByName("TD chequing")</panel_attributes>
-    <additional_attributes>10.0;10.0;250.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;280.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1680</x>
+      <x>1830</x>
       <y>345</y>
-      <w>260</w>
+      <w>290</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 5: empty / invalid</panel_attributes>
-    <additional_attributes>250.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>280.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1080</x>
+      <x>1180</x>
       <y>385</y>
-      <w>620</w>
+      <w>670</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 6: ImportResult(needsMapping)</panel_attributes>
-    <additional_attributes>610.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>660.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>650</x>
+      <x>710</x>
       <y>425</y>
-      <w>450</w>
+      <w>490</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 7: needs mapping</panel_attributes>
-    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>480.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
       <y>465</y>
-      <w>570</w>
+      <w>630</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 8: column-mapping dialog (date, description, amount…)</panel_attributes>
-    <additional_attributes>560.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>620.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
       <y>505</y>
-      <w>570</w>
+      <w>630</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 9: map columns, save as new profile</panel_attributes>
-    <additional_attributes>10.0;10.0;560.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;620.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>650</x>
+      <x>710</x>
       <y>545</y>
-      <w>450</w>
+      <w>490</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 10: saveMappingProfile(mapping)</panel_attributes>
-    <additional_attributes>10.0;10.0;440.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;480.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>600</x>
+      <x>660</x>
       <y>595</y>
-      <w>550</w>
+      <w>590</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>then the import is retried with the new profile</panel_attributes>
@@ -344,43 +344,43 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1680</x>
+      <x>1830</x>
       <y>675</y>
-      <w>260</w>
+      <w>290</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 11: ColumnMapping</panel_attributes>
-    <additional_attributes>250.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>280.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1680</x>
+      <x>1830</x>
       <y>715</y>
-      <w>490</w>
+      <w>540</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 12: new CsvTransactionAdapter(mapping)</panel_attributes>
-    <additional_attributes>10.0;10.0;480.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;530.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1680</x>
+      <x>1830</x>
       <y>755</y>
-      <w>490</w>
+      <w>540</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 13: importFile(path, accountId)</panel_attributes>
-    <additional_attributes>10.0;10.0;480.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;530.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2150</x>
+      <x>2350</x>
       <y>795</y>
       <w>70</w>
       <h>45</h>
@@ -392,177 +392,177 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1680</x>
+      <x>1830</x>
       <y>890</y>
-      <w>490</w>
+      <w>540</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 15: throws ImportException</panel_attributes>
-    <additional_attributes>480.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>530.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1080</x>
+      <x>1180</x>
       <y>930</y>
-      <w>620</w>
+      <w>670</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 16: ImportResult(failed, reason)</panel_attributes>
-    <additional_attributes>610.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>660.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>650</x>
+      <x>710</x>
       <y>970</y>
-      <w>450</w>
+      <w>490</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 17: error</panel_attributes>
-    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>480.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
       <y>1010</y>
-      <w>570</w>
+      <w>630</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 18: "Could not read this file"</panel_attributes>
-    <additional_attributes>560.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>620.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1680</x>
+      <x>1830</x>
       <y>1090</y>
-      <w>490</w>
+      <w>540</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 19: List&lt;Transaction&gt; (bad rows collected in rejectedRows)</panel_attributes>
-    <additional_attributes>480.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>530.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1680</x>
+      <x>1830</x>
       <y>1130</y>
-      <w>710</w>
+      <w>780</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 20: categorizeAll(txs)</panel_attributes>
-    <additional_attributes>10.0;10.0;700.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;770.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2370</x>
+      <x>2590</x>
       <y>1215</y>
-      <w>230</w>
+      <w>260</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 21: categorize(tx)</panel_attributes>
-    <additional_attributes>10.0;10.0;220.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;250.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2370</x>
+      <x>2590</x>
       <y>1300</y>
-      <w>230</w>
+      <w>260</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 22: GROCERIES</panel_attributes>
-    <additional_attributes>220.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>250.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2370</x>
+      <x>2590</x>
       <y>1380</y>
-      <w>230</w>
+      <w>260</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 23: empty</panel_attributes>
-    <additional_attributes>220.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>250.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2370</x>
+      <x>2590</x>
       <y>1420</y>
-      <w>420</w>
+      <w>460</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 24: categorize(tx)</panel_attributes>
-    <additional_attributes>10.0;10.0;410.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;450.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2770</x>
+      <x>3030</x>
       <y>1460</y>
-      <w>360</w>
+      <w>390</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 25: chat(categorizationPrompt, no tools)</panel_attributes>
-    <additional_attributes>10.0;10.0;350.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;380.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2770</x>
+      <x>3030</x>
       <y>1545</y>
-      <w>360</w>
+      <w>390</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 26: "DINING"</panel_attributes>
-    <additional_attributes>350.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>380.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2370</x>
+      <x>2590</x>
       <y>1585</y>
-      <w>420</w>
+      <w>460</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 27: DINING</panel_attributes>
-    <additional_attributes>410.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>450.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2370</x>
+      <x>2590</x>
       <y>1665</y>
-      <w>420</w>
+      <w>460</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 28: empty</panel_attributes>
-    <additional_attributes>410.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>450.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>2280</x>
+      <x>2490</x>
       <y>1715</y>
-      <w>210</w>
+      <w>230</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>tx marked UNCATEGORIZED
@@ -572,55 +572,55 @@ for user review</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1680</x>
+      <x>1830</x>
       <y>1835</y>
-      <w>710</w>
+      <w>780</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 29: categorized txs</panel_attributes>
-    <additional_attributes>700.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>770.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1680</x>
+      <x>1830</x>
       <y>1875</y>
-      <w>1620</w>
+      <w>1780</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 30: existsByFingerprint(fp) / save(tx)</panel_attributes>
-    <additional_attributes>10.0;10.0;1610.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1770.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1680</x>
+      <x>1830</x>
       <y>1915</y>
-      <w>1800</w>
+      <w>1960</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 31: publish(TRANSACTIONS_IMPORTED)</panel_attributes>
-    <additional_attributes>10.0;10.0;1790.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1950.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>3460</x>
+      <x>3770</x>
       <y>1955</y>
-      <w>260</w>
+      <w>290</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 32: onEvent(e)</panel_attributes>
-    <additional_attributes>10.0;10.0;250.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;280.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>3700</x>
+      <x>4040</x>
       <y>1995</y>
       <w>70</w>
       <h>45</h>
@@ -632,62 +632,62 @@ for user review</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>3460</x>
+      <x>3770</x>
       <y>2090</y>
-      <w>260</w>
+      <w>290</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 34: publish(BUDGET_EXCEEDED)</panel_attributes>
-    <additional_attributes>250.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>280.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>650</x>
+      <x>710</x>
       <y>2130</y>
-      <w>2830</w>
+      <w>3080</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 35: onEvent(e) → show alert banner</panel_attributes>
-    <additional_attributes>2820.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>3070.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1080</x>
+      <x>1180</x>
       <y>2190</y>
-      <w>620</w>
+      <w>670</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 36: ImportResult(imported, duplicatesSkipped, rejectedRows, uncategorized)</panel_attributes>
-    <additional_attributes>610.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>660.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>650</x>
+      <x>710</x>
       <y>2230</y>
-      <w>450</w>
+      <w>490</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 37: ImportResult</panel_attributes>
-    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>480.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
       <y>2270</y>
-      <w>570</w>
+      <w>630</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 38: summary + table of new transactions</panel_attributes>
-    <additional_attributes>560.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>620.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -703,7 +703,7 @@ for user review</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>650</x>
+      <x>710</x>
       <y>100</y>
       <w>20</w>
       <h>2290</h>
@@ -714,7 +714,7 @@ for user review</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1080</x>
+      <x>1180</x>
       <y>100</y>
       <w>20</w>
       <h>2290</h>
@@ -725,7 +725,7 @@ for user review</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1680</x>
+      <x>1830</x>
       <y>100</y>
       <w>20</w>
       <h>2290</h>
@@ -736,7 +736,7 @@ for user review</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1920</x>
+      <x>2100</x>
       <y>100</y>
       <w>20</w>
       <h>2290</h>
@@ -747,7 +747,7 @@ for user review</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2150</x>
+      <x>2350</x>
       <y>100</y>
       <w>20</w>
       <h>2290</h>
@@ -758,7 +758,7 @@ for user review</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2370</x>
+      <x>2590</x>
       <y>100</y>
       <w>20</w>
       <h>2290</h>
@@ -769,7 +769,7 @@ for user review</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2580</x>
+      <x>2830</x>
       <y>100</y>
       <w>20</w>
       <h>2290</h>
@@ -780,7 +780,7 @@ for user review</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2770</x>
+      <x>3030</x>
       <y>100</y>
       <w>20</w>
       <h>2290</h>
@@ -791,7 +791,7 @@ for user review</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>3110</x>
+      <x>3400</x>
       <y>100</y>
       <w>20</w>
       <h>2290</h>
@@ -802,7 +802,7 @@ for user review</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>3280</x>
+      <x>3590</x>
       <y>100</y>
       <w>20</w>
       <h>2290</h>
@@ -813,7 +813,7 @@ for user review</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>3460</x>
+      <x>3770</x>
       <y>100</y>
       <w>20</w>
       <h>2290</h>
@@ -824,7 +824,7 @@ for user review</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>3700</x>
+      <x>4040</x>
       <y>100</y>
       <w>20</w>
       <h>2290</h>
@@ -837,7 +837,7 @@ for user review</panel_attributes>
     <coordinates>
       <x>60</x>
       <y>312</y>
-      <w>510</w>
+      <w>560</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[profile not found or header does not match (isValidFor = false)]</panel_attributes>
@@ -848,18 +848,18 @@ for user review</panel_attributes>
     <coordinates>
       <x>-10</x>
       <y>640</y>
-      <w>3840</w>
+      <w>4180</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;3830.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;4170.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
       <x>10</x>
       <y>653</y>
-      <w>110</w>
+      <w>120</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[profile ok]</panel_attributes>
@@ -870,7 +870,7 @@ for user review</panel_attributes>
     <coordinates>
       <x>80</x>
       <y>857</y>
-      <w>200</w>
+      <w>220</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[file unreadable / empty]</panel_attributes>
@@ -881,18 +881,18 @@ for user review</panel_attributes>
     <coordinates>
       <x>10</x>
       <y>1055</y>
-      <w>3810</w>
+      <w>4150</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;3800.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;4140.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
       <x>30</x>
       <y>1068</y>
-      <w>110</w>
+      <w>120</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[rows parsed]</panel_attributes>
@@ -901,9 +901,9 @@ for user review</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>2370</x>
+      <x>2590</x>
       <y>1182</y>
-      <w>150</w>
+      <w>170</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[each transaction]</panel_attributes>
@@ -912,9 +912,9 @@ for user review</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>650</x>
+      <x>710</x>
       <y>2057</y>
-      <w>240</w>
+      <w>270</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[a category is over its limit]</panel_attributes>
@@ -923,9 +923,9 @@ for user review</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>2390</x>
+      <x>2610</x>
       <y>1267</y>
-      <w>120</w>
+      <w>130</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[rule matches]</panel_attributes>
@@ -934,20 +934,20 @@ for user review</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2320</x>
+      <x>2540</x>
       <y>1345</y>
-      <w>880</w>
+      <w>950</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;870.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;940.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>2340</x>
+      <x>2560</x>
       <y>1358</y>
-      <w>80</w>
+      <w>90</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[no rule]</panel_attributes>
@@ -956,9 +956,9 @@ for user review</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>2410</x>
+      <x>2630</x>
       <y>1512</y>
-      <w>260</w>
+      <w>280</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[reply is a valid Category name]</panel_attributes>
@@ -967,20 +967,20 @@ for user review</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2340</x>
+      <x>2560</x>
       <y>1630</y>
-      <w>840</w>
+      <w>910</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;830.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;900.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>2360</x>
+      <x>2580</x>
       <y>1643</y>
-      <w>250</w>
+      <w>280</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[LLM error or unknown category]</panel_attributes>
@@ -991,7 +991,7 @@ for user review</panel_attributes>
     <coordinates>
       <x>20</x>
       <y>10</y>
-      <w>480</w>
+      <w>530</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>SD01: Import and categorize bank transactions (F01, F02, F04)</panel_attributes>

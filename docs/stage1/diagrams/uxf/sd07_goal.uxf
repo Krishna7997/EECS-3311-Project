@@ -6,7 +6,7 @@
     <coordinates>
       <x>0</x>
       <y>350</y>
-      <w>2090</w>
+      <w>2240</w>
       <h>540</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -26,9 +26,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>450</x>
+      <x>485</x>
       <y>70</y>
-      <w>100</w>
+      <w>110</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:GoalsView</panel_attributes>
@@ -37,9 +37,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>640</x>
+      <x>685</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:MapleCfoFacade</panel_attributes>
@@ -48,9 +48,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1030</x>
+      <x>1125</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:CommandHistory</panel_attributes>
@@ -59,9 +59,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1200</x>
+      <x>1300</x>
       <y>70</y>
-      <w>160</w>
+      <w>180</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:CreateGoalCommand</panel_attributes>
@@ -70,9 +70,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1420</x>
+      <x>1545</x>
       <y>70</y>
-      <w>120</w>
+      <w>130</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:GoalService</panel_attributes>
@@ -81,9 +81,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1725</x>
+      <x>1870</x>
       <y>70</y>
-      <w>170</w>
+      <w>180</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:CashFlowForecaster</panel_attributes>
@@ -92,7 +92,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1930</x>
+      <x>2080</x>
       <y>70</y>
       <w>100</w>
       <h>40</h>
@@ -105,149 +105,149 @@
     <coordinates>
       <x>100</x>
       <y>140</y>
-      <w>410</w>
+      <w>450</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 1: "Laptop fund", $1,800 by 2027-04-30</panel_attributes>
-    <additional_attributes>10.0;10.0;400.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;440.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>490</x>
+      <x>530</x>
       <y>180</y>
-      <w>230</w>
+      <w>240</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 2: createGoal(goal)</panel_attributes>
-    <additional_attributes>10.0;10.0;220.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;230.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>700</x>
+      <x>750</x>
       <y>220</y>
-      <w>410</w>
+      <w>460</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 3: run(new CreateGoalCommand(goalService, goal))</panel_attributes>
-    <additional_attributes>10.0;10.0;400.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;450.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1090</x>
+      <x>1190</x>
       <y>260</y>
-      <w>200</w>
+      <w>210</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 4: execute()</panel_attributes>
-    <additional_attributes>10.0;10.0;190.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;200.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1270</x>
+      <x>1380</x>
       <y>300</y>
-      <w>220</w>
+      <w>240</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 5: createGoal(goal)</panel_attributes>
-    <additional_attributes>10.0;10.0;210.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;230.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1270</x>
+      <x>1380</x>
       <y>385</y>
-      <w>220</w>
+      <w>240</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 6: ValidationException</panel_attributes>
-    <additional_attributes>210.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>230.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>490</x>
+      <x>530</x>
       <y>425</y>
-      <w>800</w>
+      <w>870</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 7: error shown next to field</panel_attributes>
-    <additional_attributes>790.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>860.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1470</x>
+      <x>1600</x>
       <y>505</y>
-      <w>520</w>
+      <w>540</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 8: publish(GOAL_UPDATED)</panel_attributes>
-    <additional_attributes>10.0;10.0;510.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;530.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>490</x>
+      <x>530</x>
       <y>545</y>
-      <w>230</w>
+      <w>240</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 9: forecastGoal(goalId)</panel_attributes>
-    <additional_attributes>10.0;10.0;220.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;230.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>700</x>
+      <x>750</x>
       <y>585</y>
-      <w>790</w>
+      <w>870</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 10: forecast(goalId)</panel_attributes>
-    <additional_attributes>10.0;10.0;780.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;860.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1470</x>
+      <x>1600</x>
       <y>625</y>
-      <w>350</w>
+      <w>370</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 11: forecast(monthsUntilDeadline)</panel_attributes>
-    <additional_attributes>10.0;10.0;340.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;360.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1470</x>
+      <x>1600</x>
       <y>665</y>
-      <w>350</w>
+      <w>370</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 12: CashFlowForecast(avgMonthlySurplus)</panel_attributes>
-    <additional_attributes>340.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>360.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1470</x>
+      <x>1600</x>
       <y>705</y>
       <w>70</w>
       <h>45</h>
@@ -259,38 +259,38 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>700</x>
+      <x>750</x>
       <y>755</y>
-      <w>790</w>
+      <w>870</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 14: GoalForecast(requiredMonthly, projectedDate, onTrack)</panel_attributes>
-    <additional_attributes>780.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>860.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>490</x>
+      <x>530</x>
       <y>795</y>
-      <w>230</w>
+      <w>240</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 15: forecast</panel_attributes>
-    <additional_attributes>220.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>230.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
       <y>835</y>
-      <w>410</w>
+      <w>450</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 16: progress ring + "save $257/month, on track"</panel_attributes>
-    <additional_attributes>400.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -306,7 +306,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>490</x>
+      <x>530</x>
       <y>100</y>
       <w>20</w>
       <h>835</h>
@@ -317,7 +317,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>700</x>
+      <x>750</x>
       <y>100</y>
       <w>20</w>
       <h>835</h>
@@ -328,7 +328,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1090</x>
+      <x>1190</x>
       <y>100</y>
       <w>20</w>
       <h>835</h>
@@ -339,7 +339,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1270</x>
+      <x>1380</x>
       <y>100</y>
       <w>20</w>
       <h>835</h>
@@ -350,7 +350,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1470</x>
+      <x>1600</x>
       <y>100</y>
       <w>20</w>
       <h>835</h>
@@ -361,7 +361,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1800</x>
+      <x>1950</x>
       <y>100</y>
       <w>20</w>
       <h>835</h>
@@ -372,7 +372,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1970</x>
+      <x>2120</x>
       <y>100</y>
       <w>20</w>
       <h>835</h>
@@ -385,7 +385,7 @@
     <coordinates>
       <x>60</x>
       <y>352</y>
-      <w>290</w>
+      <w>320</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[target ≤ 0 or deadline in the past]</panel_attributes>
@@ -396,11 +396,11 @@
     <coordinates>
       <x>-10</x>
       <y>470</y>
-      <w>2110</w>
+      <w>2260</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;2100.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;2250.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
@@ -418,7 +418,7 @@
     <coordinates>
       <x>20</x>
       <y>10</y>
-      <w>360</w>
+      <w>400</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>SD07: Create and forecast a savings goal (F09)</panel_attributes>

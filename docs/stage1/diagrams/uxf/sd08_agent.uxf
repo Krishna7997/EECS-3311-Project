@@ -4,9 +4,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>670</x>
+      <x>730</x>
       <y>390</y>
-      <w>2520</w>
+      <w>2730</w>
       <h>1395</h>
     </coordinates>
     <panel_attributes>loop</panel_attributes>
@@ -15,9 +15,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>670</x>
+      <x>730</x>
       <y>1800</y>
-      <w>810</w>
+      <w>870</w>
       <h>90</h>
     </coordinates>
     <panel_attributes>opt</panel_attributes>
@@ -26,9 +26,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>690</x>
+      <x>750</x>
       <y>475</y>
-      <w>2490</w>
+      <w>2700</w>
       <h>1290</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -37,9 +37,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>710</x>
+      <x>770</x>
       <y>600</y>
-      <w>740</w>
+      <w>800</w>
       <h>90</h>
     </coordinates>
     <panel_attributes>opt</panel_attributes>
@@ -48,9 +48,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>1300</x>
+      <x>1420</x>
       <y>785</y>
-      <w>1680</w>
+      <w>1820</w>
       <h>525</h>
     </coordinates>
     <panel_attributes>loop</panel_attributes>
@@ -59,9 +59,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>1300</x>
+      <x>1420</x>
       <y>1445</y>
-      <w>1860</w>
+      <w>2010</w>
       <h>250</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -70,9 +70,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>1320</x>
+      <x>1440</x>
       <y>920</y>
-      <w>1650</w>
+      <w>1790</w>
       <h>330</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -92,9 +92,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>480</x>
+      <x>510</x>
       <y>70</y>
-      <w>200</w>
+      <w>220</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:ChatView / MapleCfoCli</panel_attributes>
@@ -103,9 +103,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>710</x>
+      <x>765</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:MapleCfoFacade</panel_attributes>
@@ -114,7 +114,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1320</x>
+      <x>1440</x>
       <y>70</y>
       <w>100</w>
       <h>40</h>
@@ -125,9 +125,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1515</x>
+      <x>1660</x>
       <y>70</y>
-      <w>170</w>
+      <w>180</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:ConversationMemory</panel_attributes>
@@ -136,9 +136,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1765</x>
+      <x>1930</x>
       <y>70</y>
-      <w>130</w>
+      <w>140</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:PromptBuilder</panel_attributes>
@@ -147,9 +147,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1925</x>
+      <x>2095</x>
       <y>70</y>
-      <w>270</w>
+      <w>290</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:LlmClient (ClaudeClientAdapter)</panel_attributes>
@@ -158,9 +158,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2230</x>
+      <x>2415</x>
       <y>70</y>
-      <w>120</w>
+      <w>130</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:ToolRegistry</panel_attributes>
@@ -169,9 +169,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2415</x>
+      <x>2620</x>
       <y>70</y>
-      <w>330</w>
+      <w>360</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:FinanceTool (e.g. ContributionRoomTool)</panel_attributes>
@@ -180,9 +180,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2830</x>
+      <x>3085</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:Domain service</panel_attributes>
@@ -191,9 +191,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>3000</x>
+      <x>3260</x>
       <y>70</y>
-      <w>160</w>
+      <w>180</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:ResponseValidator</panel_attributes>
@@ -204,149 +204,149 @@
     <coordinates>
       <x>100</x>
       <y>140</y>
-      <w>490</w>
+      <w>530</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 1: "Should my next $500 go to my TFSA or my credit card?"</panel_attributes>
-    <additional_attributes>10.0;10.0;480.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;520.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>570</x>
+      <x>610</x>
       <y>180</y>
-      <w>220</w>
+      <w>240</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 2: askCfo(message)</panel_attributes>
-    <additional_attributes>10.0;10.0;210.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;230.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>770</x>
+      <x>830</x>
       <y>220</y>
-      <w>610</w>
+      <w>670</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 3: handle(message)</panel_attributes>
-    <additional_attributes>10.0;10.0;600.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;660.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>260</y>
-      <w>250</w>
+      <w>280</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 4: add(user message)</panel_attributes>
-    <additional_attributes>10.0;10.0;240.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;270.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>300</y>
-      <w>480</w>
+      <w>530</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 5: buildMessages(memory, message)</panel_attributes>
-    <additional_attributes>10.0;10.0;470.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;520.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>340</y>
-      <w>480</w>
+      <w>530</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 6: system prompt (rules + profile summary) + recent turns</panel_attributes>
-    <additional_attributes>470.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>520.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>425</y>
-      <w>710</w>
+      <w>770</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 7: chat(messages, TR.schemas())</panel_attributes>
-    <additional_attributes>10.0;10.0;700.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;760.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>510</y>
-      <w>710</w>
+      <w>770</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 8: LlmException</panel_attributes>
-    <additional_attributes>700.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>760.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>550</y>
-      <w>710</w>
+      <w>770</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 9: retry once with backoff</panel_attributes>
-    <additional_attributes>10.0;10.0;700.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;760.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>770</x>
+      <x>830</x>
       <y>635</y>
-      <w>610</w>
+      <w>670</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 10: AgentResponse("AI unavailable, open the Planning tab", grounded=false)</panel_attributes>
-    <additional_attributes>600.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>660.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>735</y>
-      <w>710</w>
+      <w>770</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 11: toolCalls [contribution_room(TFSA), debt_summary()]</panel_attributes>
-    <additional_attributes>700.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>760.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>820</y>
-      <w>940</w>
+      <w>1010</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 12: execute(call)</panel_attributes>
-    <additional_attributes>10.0;10.0;930.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1000.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2280</x>
+      <x>2470</x>
       <y>860</y>
       <w>70</w>
       <h>45</h>
@@ -358,165 +358,165 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>955</y>
-      <w>940</w>
+      <w>1010</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 14: ToolResult(success=false, error)</panel_attributes>
-    <additional_attributes>930.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>1000.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2280</x>
+      <x>2470</x>
       <y>1035</y>
-      <w>310</w>
-      <h>20</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;
-15: execute(args)</panel_attributes>
-    <additional_attributes>10.0;10.0;300.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>2570</x>
-      <y>1075</y>
       <w>340</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
-16: computeRoom(TFSA, 2026) / plan(...)</panel_attributes>
+15: execute(args)</panel_attributes>
     <additional_attributes>10.0;10.0;330.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2570</x>
+      <x>2790</x>
+      <y>1075</y>
+      <w>380</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+16: computeRoom(TFSA, 2026) / plan(...)</panel_attributes>
+    <additional_attributes>10.0;10.0;370.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2790</x>
       <y>1115</y>
-      <w>340</w>
+      <w>380</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 17: result</panel_attributes>
+    <additional_attributes>370.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2470</x>
+      <y>1155</y>
+      <w>340</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+18: ToolResult(success=true, data)</panel_attributes>
     <additional_attributes>330.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2280</x>
-      <y>1155</y>
-      <w>310</w>
-      <h>20</h>
-    </coordinates>
-    <panel_attributes>lt=.&gt;
-18: ToolResult(success=true, data)</panel_attributes>
-    <additional_attributes>300.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>1195</y>
-      <w>940</w>
+      <w>1010</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 19: ToolResult</panel_attributes>
-    <additional_attributes>930.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>1000.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>1255</y>
-      <w>250</w>
+      <w>280</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 20: add(tool result)</panel_attributes>
-    <additional_attributes>10.0;10.0;240.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;270.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>1355</y>
-      <w>710</w>
+      <w>770</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 21: answer text</panel_attributes>
-    <additional_attributes>700.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>760.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>1395</y>
-      <w>1730</w>
+      <w>1880</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 22: validate(answer, toolResults)</panel_attributes>
-    <additional_attributes>10.0;10.0;1720.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1870.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>1480</y>
-      <w>1730</w>
+      <w>1880</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 23: ungrounded</panel_attributes>
-    <additional_attributes>1720.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>1870.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>1520</y>
-      <w>710</w>
+      <w>770</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 24: chat(messages + "Only use numbers from tool results")</panel_attributes>
-    <additional_attributes>10.0;10.0;700.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;760.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>1560</y>
-      <w>710</w>
+      <w>770</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 25: revised answer</panel_attributes>
-    <additional_attributes>700.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>760.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>1640</y>
-      <w>1730</w>
+      <w>1880</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 26: ok (disclaimer appended)</panel_attributes>
-    <additional_attributes>1720.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>1870.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1250</x>
+      <x>1360</x>
       <y>1710</y>
-      <w>250</w>
+      <w>270</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>a final answer ends the loop</panel_attributes>
@@ -525,62 +525,62 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>770</x>
+      <x>830</x>
       <y>1835</y>
-      <w>610</w>
+      <w>670</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 27: AgentResponse("I couldn't finish, here is what I found…")</panel_attributes>
-    <additional_attributes>600.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>660.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>1895</y>
-      <w>250</w>
+      <w>280</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 28: add(assistant answer)</panel_attributes>
-    <additional_attributes>10.0;10.0;240.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;270.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>770</x>
+      <x>830</x>
       <y>1935</y>
-      <w>610</w>
+      <w>670</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 29: AgentResponse(answer, toolsUsed, grounded)</panel_attributes>
-    <additional_attributes>600.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>660.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>570</x>
+      <x>610</x>
       <y>1975</y>
-      <w>220</w>
+      <w>240</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 30: response</panel_attributes>
-    <additional_attributes>210.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>230.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
       <y>2015</y>
-      <w>490</w>
+      <w>530</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 31: answer + "tools used" chips</panel_attributes>
-    <additional_attributes>480.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>520.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -596,7 +596,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>570</x>
+      <x>610</x>
       <y>100</y>
       <w>20</w>
       <h>1995</h>
@@ -607,7 +607,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>770</x>
+      <x>830</x>
       <y>100</y>
       <w>20</w>
       <h>1995</h>
@@ -618,7 +618,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>100</y>
       <w>20</w>
       <h>1995</h>
@@ -629,7 +629,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1590</x>
+      <x>1740</x>
       <y>100</y>
       <w>20</w>
       <h>1995</h>
@@ -640,7 +640,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1820</x>
+      <x>1990</x>
       <y>100</y>
       <w>20</w>
       <h>1995</h>
@@ -651,7 +651,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2050</x>
+      <x>2230</x>
       <y>100</y>
       <w>20</w>
       <h>1995</h>
@@ -662,7 +662,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2280</x>
+      <x>2470</x>
       <y>100</y>
       <w>20</w>
       <h>1995</h>
@@ -673,7 +673,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2570</x>
+      <x>2790</x>
       <y>100</y>
       <w>20</w>
       <h>1995</h>
@@ -684,7 +684,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2890</x>
+      <x>3150</x>
       <y>100</y>
       <w>20</w>
       <h>1995</h>
@@ -695,7 +695,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>3070</x>
+      <x>3340</x>
       <y>100</y>
       <w>20</w>
       <h>1995</h>
@@ -706,9 +706,9 @@
   <element>
     <id>Text</id>
     <coordinates>
-      <x>730</x>
+      <x>790</x>
       <y>392</y>
-      <w>170</w>
+      <w>190</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[step &lt; maxSteps (6)]</panel_attributes>
@@ -717,9 +717,9 @@
   <element>
     <id>Text</id>
     <coordinates>
-      <x>730</x>
+      <x>790</x>
       <y>1802</y>
-      <w>290</w>
+      <w>320</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[maxSteps reached without an answer]</panel_attributes>
@@ -728,9 +728,9 @@
   <element>
     <id>Text</id>
     <coordinates>
-      <x>750</x>
+      <x>810</x>
       <y>477</y>
-      <w>170</w>
+      <w>190</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[API error / timeout]</panel_attributes>
@@ -739,20 +739,20 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>680</x>
+      <x>740</x>
       <y>700</y>
-      <w>2510</w>
+      <w>2720</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;2500.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;2710.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>700</x>
+      <x>760</x>
       <y>713</y>
-      <w>200</w>
+      <w>220</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[response has tool calls]</panel_attributes>
@@ -761,20 +761,20 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>680</x>
+      <x>740</x>
       <y>1320</y>
-      <w>2510</w>
+      <w>2720</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;2500.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;2710.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>700</x>
+      <x>760</x>
       <y>1333</y>
-      <w>160</w>
+      <w>170</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[final text answer]</panel_attributes>
@@ -783,9 +783,9 @@
   <element>
     <id>Text</id>
     <coordinates>
-      <x>770</x>
+      <x>830</x>
       <y>602</y>
-      <w>130</w>
+      <w>140</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[still failing]</panel_attributes>
@@ -794,9 +794,9 @@
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>787</y>
-      <w>140</w>
+      <w>150</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[each tool call]</panel_attributes>
@@ -805,9 +805,9 @@
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1360</x>
+      <x>1480</x>
       <y>1447</y>
-      <w>420</w>
+      <w>460</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[answer contains $ amounts not found in tool results]</panel_attributes>
@@ -816,20 +816,20 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1290</x>
+      <x>1410</x>
       <y>1605</y>
-      <w>1880</w>
+      <w>2030</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;1870.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;2020.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1310</x>
+      <x>1430</x>
       <y>1618</y>
-      <w>90</w>
+      <w>100</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[grounded]</panel_attributes>
@@ -838,9 +838,9 @@
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1380</x>
+      <x>1500</x>
       <y>922</y>
-      <w>240</w>
+      <w>270</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[unknown tool or invalid args]</panel_attributes>
@@ -849,18 +849,18 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1310</x>
+      <x>1430</x>
       <y>1000</y>
-      <w>1670</w>
+      <w>1810</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;1660.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1800.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1330</x>
+      <x>1450</x>
       <y>1013</y>
       <w>70</w>
       <h>30</h>
@@ -873,7 +873,7 @@
     <coordinates>
       <x>20</x>
       <y>10</y>
-      <w>490</w>
+      <w>540</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>SD08: Ask the AI CFO, a multi-step tool-using agent loop (F10)</panel_attributes>

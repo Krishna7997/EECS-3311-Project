@@ -4,9 +4,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>350</x>
+      <x>390</x>
       <y>290</y>
-      <w>2690</w>
+      <w>2910</w>
       <h>995</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -15,9 +15,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>1470</x>
+      <x>1610</x>
       <y>625</y>
-      <w>1560</w>
+      <w>1680</w>
       <h>640</h>
     </coordinates>
     <panel_attributes>par</panel_attributes>
@@ -26,9 +26,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>1490</x>
+      <x>1630</x>
       <y>760</y>
-      <w>1520</w>
+      <w>1640</w>
       <h>170</h>
     </coordinates>
     <panel_attributes>opt</panel_attributes>
@@ -37,9 +37,9 @@
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>1490</x>
+      <x>1630</x>
       <y>1075</y>
-      <w>1520</w>
+      <w>1640</w>
       <h>170</h>
     </coordinates>
     <panel_attributes>opt</panel_attributes>
@@ -59,9 +59,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>370</x>
+      <x>405</x>
       <y>70</y>
-      <w>180</w>
+      <w>190</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:ImportFolderWatcher</panel_attributes>
@@ -70,9 +70,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>780</x>
+      <x>845</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:MapleCfoFacade</panel_attributes>
@@ -81,9 +81,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1095</x>
+      <x>1190</x>
       <y>70</y>
-      <w>170</w>
+      <w>180</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:TransactionService</panel_attributes>
@@ -92,7 +92,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1510</x>
+      <x>1650</x>
       <y>70</y>
       <w>100</w>
       <h>40</h>
@@ -103,9 +103,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1785</x>
+      <x>1950</x>
       <y>70</y>
-      <w>170</w>
+      <w>180</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:BalanceSyncService</panel_attributes>
@@ -114,9 +114,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2110</x>
+      <x>2305</x>
       <y>70</y>
-      <w>140</w>
+      <w>150</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:AccountService</panel_attributes>
@@ -125,9 +125,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2280</x>
+      <x>2480</x>
       <y>70</y>
-      <w>180</w>
+      <w>200</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:ContributionDetector</panel_attributes>
@@ -136,9 +136,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2665</x>
+      <x>2910</x>
       <y>70</y>
-      <w>170</w>
+      <w>180</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:PendingActionStore</panel_attributes>
@@ -147,9 +147,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2865</x>
+      <x>3120</x>
       <y>70</y>
-      <w>130</w>
+      <w>140</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>:DashboardView</panel_attributes>
@@ -160,17 +160,17 @@
     <coordinates>
       <x>100</x>
       <y>140</y>
-      <w>370</w>
+      <w>410</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 1: saves td_sept.csv into the watch folder</panel_attributes>
-    <additional_attributes>10.0;10.0;360.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;400.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>450</x>
+      <x>490</x>
       <y>180</y>
       <w>70</w>
       <h>45</h>
@@ -182,7 +182,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>450</x>
+      <x>490</x>
       <y>230</y>
       <w>70</w>
       <h>45</h>
@@ -194,57 +194,57 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>450</x>
+      <x>490</x>
       <y>325</y>
-      <w>1120</w>
+      <w>1220</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 4: publish(REMINDER_DUE: "map columns for new file")</panel_attributes>
-    <additional_attributes>10.0;10.0;1110.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1210.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1550</x>
+      <x>1690</x>
       <y>365</y>
-      <w>1390</w>
+      <w>1510</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 5: onEvent(e) → "New file needs a column mapping"</panel_attributes>
-    <additional_attributes>10.0;10.0;1380.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1500.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>450</x>
+      <x>490</x>
       <y>445</y>
-      <w>410</w>
+      <w>440</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 6: importTransactions(path, accountId, profile)</panel_attributes>
-    <additional_attributes>10.0;10.0;400.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;430.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>840</x>
+      <x>910</x>
       <y>485</y>
-      <w>350</w>
+      <w>380</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 7: importFrom(path, accountId, profile)</panel_attributes>
-    <additional_attributes>10.0;10.0;340.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;370.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1020</x>
+      <x>1110</x>
       <y>535</y>
-      <w>320</w>
+      <w>350</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>same import + categorize flow as SD01</panel_attributes>
@@ -253,31 +253,31 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1170</x>
+      <x>1270</x>
       <y>575</y>
-      <w>400</w>
+      <w>440</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 8: publish(TRANSACTIONS_IMPORTED, ImportResult)</panel_attributes>
-    <additional_attributes>10.0;10.0;390.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;430.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1550</x>
+      <x>1690</x>
       <y>660</y>
-      <w>330</w>
+      <w>360</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 9: onEvent(e)</panel_attributes>
-    <additional_attributes>10.0;10.0;320.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;350.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1860</x>
+      <x>2030</x>
       <y>700</y>
       <w>70</w>
       <h>45</h>
@@ -289,55 +289,55 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1860</x>
+      <x>2030</x>
       <y>795</y>
-      <w>330</w>
+      <w>360</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 11: updateBalance(accountId, balance)</panel_attributes>
-    <additional_attributes>10.0;10.0;320.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;350.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1550</x>
+      <x>1690</x>
       <y>835</y>
-      <w>330</w>
+      <w>360</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 12: publish(ACCOUNT_BALANCE_UPDATED)</panel_attributes>
-    <additional_attributes>320.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>350.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1550</x>
+      <x>1690</x>
       <y>875</y>
-      <w>1390</w>
+      <w>1510</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 13: onEvent(e) → net worth refreshed</panel_attributes>
-    <additional_attributes>10.0;10.0;1380.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1500.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1550</x>
+      <x>1690</x>
       <y>975</y>
-      <w>830</w>
+      <w>900</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 14: onEvent(e)</panel_attributes>
-    <additional_attributes>10.0;10.0;820.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;890.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2360</x>
+      <x>2570</x>
       <y>1015</y>
       <w>70</w>
       <h>45</h>
@@ -349,69 +349,69 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2360</x>
+      <x>2570</x>
       <y>1110</y>
-      <w>400</w>
+      <w>440</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 16: add(new RecordContributionCommand(record))</panel_attributes>
-    <additional_attributes>10.0;10.0;390.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;430.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1550</x>
+      <x>1690</x>
       <y>1150</y>
-      <w>830</w>
+      <w>900</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 17: publish(CONTRIBUTION_DETECTED, actionId)</panel_attributes>
-    <additional_attributes>820.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>890.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1550</x>
+      <x>1690</x>
       <y>1190</y>
-      <w>1390</w>
+      <w>1510</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 18: onEvent(e) → "Log $500 TFSA contribution?" [Confirm]</panel_attributes>
-    <additional_attributes>10.0;10.0;1380.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1500.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
       <y>1290</y>
-      <w>2840</w>
+      <w>3100</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 19: click Confirm</panel_attributes>
-    <additional_attributes>10.0;10.0;2830.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;3090.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>840</x>
+      <x>910</x>
       <y>1330</y>
-      <w>2100</w>
+      <w>2290</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 20: confirmProposedAction(actionId)</panel_attributes>
-    <additional_attributes>2090.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>2280.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>790</x>
+      <x>860</x>
       <y>1380</y>
-      <w>2020</w>
+      <w>2200</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>facade takes the command from PendingActionStore
@@ -432,7 +432,7 @@ and runs it through CommandHistory (undoable)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>450</x>
+      <x>490</x>
       <y>100</y>
       <w>20</w>
       <h>1380</h>
@@ -443,7 +443,7 @@ and runs it through CommandHistory (undoable)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>840</x>
+      <x>910</x>
       <y>100</y>
       <w>20</w>
       <h>1380</h>
@@ -454,7 +454,7 @@ and runs it through CommandHistory (undoable)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1170</x>
+      <x>1270</x>
       <y>100</y>
       <w>20</w>
       <h>1380</h>
@@ -465,7 +465,7 @@ and runs it through CommandHistory (undoable)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1550</x>
+      <x>1690</x>
       <y>100</y>
       <w>20</w>
       <h>1380</h>
@@ -476,7 +476,7 @@ and runs it through CommandHistory (undoable)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1860</x>
+      <x>2030</x>
       <y>100</y>
       <w>20</w>
       <h>1380</h>
@@ -487,7 +487,7 @@ and runs it through CommandHistory (undoable)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2170</x>
+      <x>2370</x>
       <y>100</y>
       <w>20</w>
       <h>1380</h>
@@ -498,7 +498,7 @@ and runs it through CommandHistory (undoable)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2360</x>
+      <x>2570</x>
       <y>100</y>
       <w>20</w>
       <h>1380</h>
@@ -509,7 +509,7 @@ and runs it through CommandHistory (undoable)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2740</x>
+      <x>2990</x>
       <y>100</y>
       <w>20</w>
       <h>1380</h>
@@ -520,7 +520,7 @@ and runs it through CommandHistory (undoable)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2920</x>
+      <x>3180</x>
       <y>100</y>
       <w>20</w>
       <h>1380</h>
@@ -531,9 +531,9 @@ and runs it through CommandHistory (undoable)</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>410</x>
+      <x>450</x>
       <y>292</y>
-      <w>170</w>
+      <w>190</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[no matching profile]</panel_attributes>
@@ -542,20 +542,20 @@ and runs it through CommandHistory (undoable)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>340</x>
+      <x>380</x>
       <y>410</y>
-      <w>2710</w>
+      <w>2930</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;2700.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;2920.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>360</x>
+      <x>400</x>
       <y>423</y>
-      <w>130</w>
+      <w>140</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[profile found]</panel_attributes>
@@ -564,9 +564,9 @@ and runs it through CommandHistory (undoable)</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1530</x>
+      <x>1670</x>
       <y>627</y>
-      <w>120</w>
+      <w>130</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[balance sync]</panel_attributes>
@@ -575,20 +575,20 @@ and runs it through CommandHistory (undoable)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1460</x>
+      <x>1600</x>
       <y>940</y>
-      <w>1580</w>
+      <w>1700</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;1570.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1690.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1480</x>
+      <x>1620</x>
       <y>953</y>
-      <w>200</w>
+      <w>220</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[contribution detection]</panel_attributes>
@@ -597,9 +597,9 @@ and runs it through CommandHistory (undoable)</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1550</x>
+      <x>1690</x>
       <y>762</y>
-      <w>200</w>
+      <w>220</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[balance column present]</panel_attributes>
@@ -608,9 +608,9 @@ and runs it through CommandHistory (undoable)</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1550</x>
+      <x>1690</x>
       <y>1077</y>
-      <w>280</w>
+      <w>310</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>[TFSA / RRSP / FHSA transfer found]</panel_attributes>
@@ -621,7 +621,7 @@ and runs it through CommandHistory (undoable)</panel_attributes>
     <coordinates>
       <x>20</x>
       <y>10</y>
-      <w>480</w>
+      <w>530</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>SD11: Auto-sync, a CSV dropped in the watch folder (F13, F14)</panel_attributes>
