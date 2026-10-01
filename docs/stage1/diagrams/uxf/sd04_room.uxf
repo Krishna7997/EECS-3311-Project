@@ -6,8 +6,8 @@
     <coordinates>
       <x>0</x>
       <y>310</y>
-      <w>2120</w>
-      <h>895</h>
+      <w>2280</w>
+      <h>975</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
     <additional_attributes></additional_attributes>
@@ -16,8 +16,8 @@
     <id>UMLFrame</id>
     <coordinates>
       <x>700</x>
-      <y>895</y>
-      <w>1410</w>
+      <y>975</y>
+      <w>1570</w>
       <h>210</h>
     </coordinates>
     <panel_attributes>alt</panel_attributes>
@@ -94,6 +94,17 @@
     <coordinates>
       <x>1755</x>
       <y>70</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>:LimitsService</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1915</x>
+      <y>70</y>
       <w>170</w>
       <h>40</h>
     </coordinates>
@@ -103,7 +114,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1960</x>
+      <x>2120</x>
       <y>70</y>
       <w>100</w>
       <h>40</h>
@@ -236,54 +247,78 @@
     <coordinates>
       <x>1180</x>
       <y>635</y>
-      <w>670</w>
+      <w>650</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
-11: tfsaLimitFor(year) for each eligible year</panel_attributes>
-    <additional_attributes>10.0;10.0;660.0;10.0</additional_attributes>
+11: currentLimits()</panel_attributes>
+    <additional_attributes>10.0;10.0;640.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1180</x>
       <y>675</y>
-      <w>670</w>
+      <w>650</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
-12: annual limits (from contribution_limits.json)</panel_attributes>
-    <additional_attributes>660.0;10.0;10.0;10.0</additional_attributes>
+12: ContributionLimits</panel_attributes>
+    <additional_attributes>640.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1180</x>
       <y>715</y>
-      <w>450</w>
+      <w>830</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
-13: findAll()</panel_attributes>
-    <additional_attributes>10.0;10.0;440.0;10.0</additional_attributes>
+13: tfsaLimitFor(year) for each eligible year</panel_attributes>
+    <additional_attributes>10.0;10.0;820.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1180</x>
       <y>755</y>
+      <w>830</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+14: annual limits</panel_attributes>
+    <additional_attributes>820.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>795</y>
+      <w>450</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+15: findAll()</panel_attributes>
+    <additional_attributes>10.0;10.0;440.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>835</y>
       <w>450</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
-14: records (filtered to TFSA)</panel_attributes>
+16: records (filtered to TFSA)</panel_attributes>
     <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
       <x>1020</x>
-      <y>805</y>
+      <y>885</y>
       <w>340</w>
       <h>70</h>
     </coordinates>
@@ -296,60 +331,60 @@
     <id>Relation</id>
     <coordinates>
       <x>780</x>
-      <y>930</y>
+      <y>1010</y>
       <w>420</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
-15: ContributionCheck(OK, roomBefore, roomAfter)</panel_attributes>
+17: ContributionCheck(OK, roomBefore, roomAfter)</panel_attributes>
     <additional_attributes>410.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1180</x>
-      <y>1010</y>
-      <w>840</w>
+      <y>1090</y>
+      <w>1000</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
-16: publish(CONTRIBUTION_WARNING)</panel_attributes>
-    <additional_attributes>10.0;10.0;830.0;10.0</additional_attributes>
+18: publish(CONTRIBUTION_WARNING)</panel_attributes>
+    <additional_attributes>10.0;10.0;990.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>780</x>
-      <y>1050</y>
+      <y>1130</y>
       <w>420</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
-17: ContributionCheck(OVER, excess)</panel_attributes>
+19: ContributionCheck(OVER, excess)</panel_attributes>
     <additional_attributes>410.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>510</x>
-      <y>1110</y>
+      <y>1190</y>
       <w>290</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
-18: ContributionCheck</panel_attributes>
+20: ContributionCheck</panel_attributes>
     <additional_attributes>280.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
-      <y>1150</y>
+      <y>1230</y>
       <w>430</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
-19: room gauge + OK / warning with excess amount</panel_attributes>
+21: room gauge + OK / warning with excess amount</panel_attributes>
     <additional_attributes>420.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
@@ -358,10 +393,10 @@
       <x>100</x>
       <y>130</y>
       <w>20</w>
-      <h>1120</h>
+      <h>1200</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;1110.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;1190.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -369,10 +404,10 @@
       <x>510</x>
       <y>100</y>
       <w>20</w>
-      <h>1150</h>
+      <h>1230</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;1140.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;1220.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -380,10 +415,10 @@
       <x>780</x>
       <y>100</y>
       <w>20</w>
-      <h>1150</h>
+      <h>1230</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;1140.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;1220.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -391,10 +426,10 @@
       <x>1180</x>
       <y>100</y>
       <w>20</w>
-      <h>1150</h>
+      <h>1230</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;1140.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;1220.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -402,10 +437,10 @@
       <x>1400</x>
       <y>100</y>
       <w>20</w>
-      <h>1150</h>
+      <h>1230</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;1140.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;1220.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -413,32 +448,43 @@
       <x>1610</x>
       <y>100</y>
       <w>20</w>
-      <h>1150</h>
+      <h>1230</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;1140.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;1220.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1830</x>
+      <x>1810</x>
       <y>100</y>
       <w>20</w>
-      <h>1150</h>
+      <h>1230</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;1140.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;1220.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>2000</x>
+      <x>1990</x>
       <y>100</y>
       <w>20</w>
-      <h>1150</h>
+      <h>1230</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;1140.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;1220.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2160</x>
+      <y>100</y>
+      <w>20</w>
+      <h>1230</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;1220.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
@@ -456,11 +502,11 @@
     <coordinates>
       <x>-10</x>
       <y>510</y>
-      <w>2140</w>
+      <w>2300</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;2130.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;2290.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
@@ -477,7 +523,7 @@
     <id>Text</id>
     <coordinates>
       <x>760</x>
-      <y>897</y>
+      <y>977</y>
       <w>130</w>
       <h>30</h>
     </coordinates>
@@ -488,18 +534,18 @@
     <id>Relation</id>
     <coordinates>
       <x>690</x>
-      <y>975</y>
-      <w>1430</w>
+      <y>1055</y>
+      <w>1590</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;1420.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;1580.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
       <x>710</x>
-      <y>988</y>
+      <y>1068</y>
       <w>130</w>
       <h>30</h>
     </coordinates>

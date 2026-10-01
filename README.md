@@ -9,6 +9,8 @@ EECS3311 Software Design (Fall 2026) course project by Krishna Patel.
 - 📊 Tracks net worth, budgets, subscriptions and savings goals
 - 🇨🇦 Calculates TFSA / RRSP / FHSA room and warns before you over-contribute
 - 🧮 Plans debt payoff (avalanche or snowball) and projects when you could retire early (FIRE)
+- 🔄 **Auto-sync:** save bank CSVs into a folder and everything updates itself, including balances, debts, detected contributions and reminders
+- 📅 **Self-updating CRA limits**, kept correct by a weekly checker bot that emails the developer if anything fails
 - 🤖 **AI CFO chat** answers questions like *"Can I afford a $2,000 trip in December?"* by calling finance tools and explaining the results
 
 ## How the AI stays honest
@@ -24,17 +26,18 @@ EECS3311 Software Design (Fall 2026) course project by Krishna Patel.
 | Diagram | Link |
 |---|---|
 | Use-case diagram | [usecase.png](docs/stage1/diagrams/png/usecase.png) |
-| Class diagram: 1 Domain · 2 Import · 3 Services · 4 Events/Commands · 5 AI agent · 6 UI/Facade | [1](docs/stage1/diagrams/png/class_domain.png) · [2](docs/stage1/diagrams/png/class_import.png) · [3](docs/stage1/diagrams/png/class_planning.png) · [4](docs/stage1/diagrams/png/class_events.png) · [5](docs/stage1/diagrams/png/class_agent.png) · [6](docs/stage1/diagrams/png/class_ui.png) |
+| Class diagram: 1 Domain · 2 Import · 3 Services · 4 Events/Commands · 5 AI agent · 6 UI/Facade · 7 Automation | [1](docs/stage1/diagrams/png/class_domain.png) · [2](docs/stage1/diagrams/png/class_import.png) · [3](docs/stage1/diagrams/png/class_planning.png) · [4](docs/stage1/diagrams/png/class_events.png) · [5](docs/stage1/diagrams/png/class_agent.png) · [6](docs/stage1/diagrams/png/class_ui.png) · [7](docs/stage1/diagrams/png/class_automation.png) |
 | Sequence: import · undo · net worth · TFSA room · FIRE/debt | [SD01](docs/stage1/diagrams/png/sd01_import.png) · [SD02](docs/stage1/diagrams/png/sd02_edit_undo.png) · [SD03](docs/stage1/diagrams/png/sd03_networth.png) · [SD04](docs/stage1/diagrams/png/sd04_room.png) · [SD05](docs/stage1/diagrams/png/sd05_planning.png) |
 | Sequence: subscriptions · goals · **AI CFO agent** · afford check · monthly summary | [SD06](docs/stage1/diagrams/png/sd06_insights.png) · [SD07](docs/stage1/diagrams/png/sd07_goal.png) · [SD08](docs/stage1/diagrams/png/sd08_agent.png) · [SD09](docs/stage1/diagrams/png/sd09_afford.png) · [SD10](docs/stage1/diagrams/png/sd10_report.png) |
+| Sequence: auto-sync · limits refresh · weekly limits bot · RRSP estimate | [SD11](docs/stage1/diagrams/png/sd11_autosync.png) · [SD12](docs/stage1/diagrams/png/sd12_limits_refresh.png) · [SD13](docs/stage1/diagrams/png/sd13_limits_bot.png) · [SD14](docs/stage1/diagrams/png/sd14_rrsp_estimate.png) |
 
 All diagrams are made in **[UMLet](https://www.umlet.com)**. Editable UMLet files are in [`docs/stage1/diagrams/uxf/`](docs/stage1/diagrams/uxf/) and the exported images in [`docs/stage1/diagrams/png/`](docs/stage1/diagrams/png/).
 
 ## Tech stack
-Java 21 · JavaFX (GUI) · picocli (CLI) · SQLite · Anthropic Claude API · JUnit 5 · KUMA
+Java 21 · JavaFX (GUI) · picocli (CLI) · SQLite · Anthropic Claude API · GitHub Actions · JUnit 5 · KUMA
 
 ## Design at a glance
-- **12 features** (8 deterministic, 1 AI, 3 hybrid)
+- **15 features** (11 deterministic, 1 AI, 3 hybrid)
 - **8 design patterns:** Facade, Adapter, Template Method, Factory Method, Strategy, Observer, Command, Composite
 
 📄 Full design (UML, use cases, sequence diagrams, traceability): [Stage 1 Design Report](docs/stage1/Stage1_Design_Report.md) · [PDF](docs/stage1/Stage1_Design_Report.pdf)

@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>690</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Class diagram (7/7): Automation (auto-sync, contribution detection, self-updating limits)</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>70</y>
+      <w>350</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>*ImportFolderWatcher*
+--
+-folder: Path
+-watchService: WatchService
+-txService: TransactionService
+-profileResolver: MappingProfileRepository
+--
++start(folder: Path): void
++stop(): void
+-onFileCreated(file: Path): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>480</x>
+      <y>70</y>
+      <w>390</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*BalanceSyncService*
+--
+-accountService: AccountService
+-debtRepo: DebtRepository
+--
++onEvent(e: FinanceEvent): void
+-latestBalance(r: ImportResult): Optional&lt;Money&gt;</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1480</x>
+      <y>70</y>
+      <w>370</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*ReminderService*
+--
+-txRepo: TransactionRepository
+-clock: Clock
+--
++checkReminders(): List&lt;Alert&gt;
+-daysSinceLastImport(accountId: String): long</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>900</x>
+      <y>70</y>
+      <w>460</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*ContributionDetector*
+--
+-rules: List&lt;ContributionRule&gt;
+-pendingActions: PendingActionStore
+--
++onEvent(e: FinanceEvent): void
++detect(txs: List&lt;Transaction&gt;): List&lt;ContributionRecord&gt;</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>900</x>
+      <y>320</y>
+      <w>290</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*RecordContributionCommand*
+--
+-service: RegisteredAccountService
+-record: ContributionRecord
+--
++execute(): void
++undo(): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>500</y>
+      <w>290</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*RrspRoomEstimator*
+--
+-txRepo: TransactionRepository
+-limitsService: LimitsService
+--
++estimate(year: int): RrspEstimate
+-earnedIncome(year: int): Money</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>260</x>
+      <y>700</y>
+      <w>300</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>*LimitsService*
+--
+-providers: List&lt;LimitsProvider&gt;
+-validator: LimitsValidator
+-cache: LimitsCache
+--
++currentLimits(): ContributionLimits
++refreshIfStale(): LimitsStatus</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>920</y>
+      <w>310</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+*LimitsProvider*
+--
++load(): Optional&lt;ContributionLimits&gt;
++name(): String</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>1080</y>
+      <w>310</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*RemoteLimitsProvider*
+--
+-url: URI
+-httpClient: HttpClient
+--
++load(): Optional&lt;ContributionLimits&gt;</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>400</x>
+      <y>1100</y>
+      <w>310</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*BundledLimitsProvider*
+--
+-resourcePath: String
+--
++load(): Optional&lt;ContributionLimits&gt;</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>920</y>
+      <w>660</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>*LimitsValidator*
+--
++validate(next: ContributionLimits, previous: ContributionLimits): ValidationReport
+-isMultipleOf500(m: Money): boolean
+-pastYearsUnchanged(a: ContributionLimits, b: ContributionLimits): boolean</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>400</x>
+      <y>920</y>
+      <w>340</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*LimitsCache*
+--
+-file: Path
+--
++lastGood(): Optional&lt;ContributionLimits&gt;
++save(l: ContributionLimits): void
++isStale(maxAge: Duration): boolean</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1000</x>
+      <y>500</y>
+      <w>230</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*LimitsUpdateJob*
+--
+-scraper: CraLimitsScraper
+-validator: LimitsValidator
+--
+_+main(args: String[]): void_
++run(): JobResult</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1400</x>
+      <y>700</y>
+      <w>420</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*CraLimitsScraper*
+--
+-pageUrls: List&lt;URI&gt;
+--
++fetch(): ContributionLimits
+-parseTfsaTable(html: Document): Map&lt;Integer, Money&gt;</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1860</x>
+      <y>700</y>
+      <w>230</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+*FailureNotifier*
+--
++notify(r: JobResult): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1740</x>
+      <y>920</y>
+      <w>230</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*GitHubIssueNotifier*
+--
++notify(r: JobResult): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2040</x>
+      <y>920</y>
+      <w>230</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*EmailNotifier*
+--
+-smtpHost: String
+-to: String
+--
++notify(r: JobResult): void</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>320</y>
+      <w>180</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>*TransactionService*</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>560</x>
+      <y>320</y>
+      <w>200</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+*FinanceEventListener*</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1480</x>
+      <y>320</y>
+      <w>160</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+*UndoableCommand*</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>460</x>
+      <y>520</y>
+      <w>230</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>*RegisteredAccountService*</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>127</x>
+      <y>230</y>
+      <w>58</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+importFrom()</panel_attributes>
+    <additional_attributes>48.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>652</x>
+      <y>180</y>
+      <w>29</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;140.0;19.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>705</x>
+      <y>180</y>
+      <w>304</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;140.0;294.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1055</x>
+      <y>180</y>
+      <w>65</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+proposes</panel_attributes>
+    <additional_attributes>55.0;10.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>340</y>
+      <w>310</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>300.0;10.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>233</x>
+      <y>820</y>
+      <w>117</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=1..*
+ordered fallback</panel_attributes>
+    <additional_attributes>107.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>185</x>
+      <y>1000</y>
+      <w>20</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>278</x>
+      <y>1000</y>
+      <w>205</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;195.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>550</x>
+      <y>798</y>
+      <w>412</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;402.0;122.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>448</x>
+      <y>820</y>
+      <w>87</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;77.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>241</x>
+      <y>610</y>
+      <w>108</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;98.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>447</x>
+      <y>540</y>
+      <w>127</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>117.0;10.0;10.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1220</x>
+      <y>594</y>
+      <w>270</w>
+      <h>116</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;260.0;106.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1101</x>
+      <y>610</y>
+      <w>23</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>13.0;10.0;10.0;310.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1220</x>
+      <y>574</y>
+      <w>650</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=1..*</panel_attributes>
+    <additional_attributes>10.0;10.0;640.0;142.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1862</x>
+      <y>770</y>
+      <w>100</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1996</x>
+      <y>770</y>
+      <w>130</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;150.0</additional_attributes>
+  </element>
+</diagram>

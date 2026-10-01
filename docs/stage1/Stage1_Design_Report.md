@@ -59,6 +59,8 @@ MapleCFO is a desktop application with a **GUI and a CLI** that imports the user
 5. **Remembers** the conversation, so follow-ups like "what if I wait until January?" work.
 6. **Proposes actions** (e.g. "create a savings goal") that the user must **confirm** before anything changes.
 
+Around the agent, **automation features** keep the data fresh with almost no effort: CSVs saved to a watch folder import themselves, balances update from the CSVs, registered-account contributions are detected for one-click confirmation, and the official contribution limits update themselves from a validated file kept current by a weekly bot.
+
 ### 1.4 Why an AI agent is appropriate
 
 - **The questions are open-ended and multi-step.** "Can I afford X?" needs a cash-flow forecast, the committed savings goals and budget status. A fixed form cannot anticipate every combination; an agent that plans and calls tools can.
@@ -97,14 +99,16 @@ The system is organised in layers. The GUI and CLI are thin presentation layers 
 | Application | Single entry point, undo/redo, event distribution | `MapleCfoFacade`, `CommandHistory`, `EventBus` |
 | Agent (AI) | Plan, call tools, remember, validate answers | `CfoAgent`, `ToolRegistry`, `FinanceTool`s, `ConversationMemory`, `PromptBuilder`, `ResponseValidator`, `LlmClient` |
 | Domain services (deterministic) | All financial logic and calculations | `TransactionService`, `BudgetService`, `RegisteredAccountService`, `FireCalculator`, `DebtPayoffPlanner`, … |
-| Infrastructure | Persistence, import, external APIs | `Repository<T,ID>` + SQLite implementations, `CsvTransactionAdapter`, `ClaudeClientAdapter` |
+| Automation (deterministic) | Keep data current with minimal user effort | `ImportFolderWatcher`, `BalanceSyncService`, `ContributionDetector`, `ReminderService`, `RrspRoomEstimator`, `LimitsService` |
+| Infrastructure | Persistence, import, external APIs | `Repository<T,ID>` + SQLite implementations, `CsvTransactionAdapter`, `ClaudeClientAdapter`, `RemoteLimitsProvider` |
+| Off-app job | Keep the published limits file correct | `LimitsUpdateJob`, `CraLimitsScraper`, `LimitsValidator`, `GitHubIssueNotifier`, `EmailNotifier` (run weekly by GitHub Actions) |
 
 
 ---
 
 ## 2. Detailed feature specifications
 
-MapleCFO has **12 major features**. The scope is deliberately kept lean so that every feature can be fully built and tested within the course timeline. Login, settings and "about" screens are not counted. Each feature is classified as **Deterministic** (no AI), **AI** (driven by the LLM) or **Hybrid** (deterministic core, AI for one bounded step).
+MapleCFO has **15 major features**. F01–F12 are the core money features. F13–F15 are **automation features**: they keep the data up to date so that, after a one-time setup, the user only has to download bank CSVs. Login, settings and "about" screens are not counted. Each feature is classified as **Deterministic** (no AI), **AI** (driven by the LLM) or **Hybrid** (deterministic core, AI for one bounded step).
 
 | ID | Feature | Type |
 |---|---|---|
@@ -120,6 +124,9 @@ MapleCFO has **12 major features**. The scope is deliberately kept lean so that 
 | F10 | AI CFO chat (multi-step, tool-using agent with memory) | AI |
 | F11 | "Can I afford it?" affordability check | Hybrid |
 | F12 | Monthly summary with AI narrative | Hybrid |
+| F13 | Auto-sync: watch-folder import, automatic balances and reminders | Deterministic |
+| F14 | Smart contributions: detection with confirmation, plus RRSP room estimate | Deterministic |
+| F15 | Self-updating contribution limits, with a weekly checker bot and failure alerts | Deterministic |
 
 ### F01: Bank/card CSV import with column-mapping profiles
 
@@ -185,13 +192,13 @@ MapleCFO has **12 major features**. The scope is deliberately kept lean so that 
 
 | Field | Specification |
 |---|---|
-| **Description** | Computes the user's available contribution room for each registered account and **warns before an over-contribution** (which is taxed by CRA). Annual limits are loaded from a config file (`contribution_limits.json`), so updating them each year needs no code change. |
+| **Description** | Computes the user's available contribution room for each registered account and **warns before an over-contribution** (which is taxed by CRA). Annual limits come from `contribution_limits.json`, which updates itself (F15), so neither code changes nor user input are needed each year. |
 | **User interaction (GUI)** | *Planning → Registered accounts*: room gauge per account, contribution/withdrawal log, **Check contribution** box. CLI: `maplecfo room TFSA`, `maplecfo room check TFSA 3000`. |
 | **Input** | `UserProfile` (birth year, year of Canadian residency, RRSP deduction limit from the CRA Notice of Assessment, FHSA opening year); logged contributions and withdrawals; proposed amount. |
 | **Output** | `ContributionRoom` (limit, used, available) and `ContributionCheck` (OK / OVER with the excess / UNKNOWN with the missing fields). |
 | **AI involvement** | Deterministic. |
 | **Expected workflow** | **TFSA:** room = sum of annual limits from the first eligible year (the latest of 2009, the year the user turned 18, and the year they became resident), plus withdrawals made in previous years, minus contributions. **FHSA:** annual limit plus carry-forward (capped), lifetime limit. **RRSP:** the deduction limit entered by the user minus contributions. If the amount exceeds the room → `CONTRIBUTION_WARNING` event. |
-| **Error / alternative cases** | Profile incomplete → UNKNOWN, with the missing fields listed. Limits file missing or corrupt → the feature is disabled with an explanatory message. Negative amount → validation error. |
+| **Error / alternative cases** | Profile incomplete → UNKNOWN, with the missing fields listed. Remote limits unavailable or invalid → the cached, then bundled, limits are used (F15). Negative amount → validation error. |
 
 ### F07: FIRE (financial independence) projection
 
@@ -265,11 +272,48 @@ MapleCFO has **12 major features**. The scope is deliberately kept lean so that 
 | **Expected workflow** | `ReportService` gathers the figures from the services → `ReportSummarizer` sends *only the computed figures* to the LLM to write the narrative → the summary is displayed. |
 | **Error / alternative cases** | No data for the month → message. LLM unavailable → template-based narrative (no AI). |
 
+### F13: Auto-sync (watch-folder import, automatic balances, reminders)
+
+| Field | Specification |
+|---|---|
+| **Description** | The user picks a **watch folder** (e.g. `~/Downloads/MapleCFO Inbox`). Any CSV saved there is imported automatically with the matching mapping profile. After each import, **account balances** are updated from the CSV's Balance column and **credit-card debt balances** are updated too, so net worth and the debt planner stay current. **Reminders** appear when an account hasn't been imported for 30 days and when a new monthly summary is ready. |
+| **User interaction (GUI)** | *Settings → Auto-sync*: choose the folder and turn it on or off; reminder banners on the Dashboard. CLI: `maplecfo sync start <folder>`, `maplecfo sync stop`, `maplecfo reminders`. |
+| **Input** | Watch-folder path; CSV files saved into it; saved mapping profiles. |
+| **Output** | Imported transactions, updated account and debt balances, `ACCOUNT_BALANCE_UPDATED` events, reminder alerts. |
+| **AI involvement** | Deterministic (the import itself reuses F01/F02). |
+| **Expected workflow** | `ImportFolderWatcher` (Java `WatchService`) sees a new file → chooses the mapping profile whose columns match the header → calls `importTransactions()` → `TransactionService` publishes `TRANSACTIONS_IMPORTED` → `BalanceSyncService` reads the last balance and updates the account/debt → views refresh. `ReminderService` checks the last-import dates daily and at start-up. |
+| **Error / alternative cases** | No profile matches the file → the user is asked to map the columns (as in F01). File still being written → wait until its size is stable before importing. Same file dropped twice → duplicates are skipped by fingerprint. No Balance column → balances are left unchanged and the user is told. Folder deleted or unavailable → auto-sync pauses with a warning. |
+
+### F14: Smart contributions (detection with confirmation, RRSP room estimate)
+
+| Field | Specification |
+|---|---|
+| **Description** | After each import, MapleCFO looks for transfers into registered accounts (e.g. `TFSA CONTRIBUTION`, a transfer to the linked TFSA account) and **proposes** them as contribution records. The user confirms or dismisses each one, and confirmed ones are undoable. It also **estimates new RRSP room** from last year's payroll deposits (18% of earned income, up to the yearly maximum), which the user confirms or replaces with the figure from their CRA Notice of Assessment. |
+| **User interaction (GUI)** | "Log $500 TFSA contribution?" banner with **Confirm / Dismiss**; *Planning → Registered accounts → RRSP estimate* card. CLI: `maplecfo contributions pending`, `maplecfo rrsp estimate 2026`. |
+| **Input** | Newly imported transactions; detection rules; payroll (INCOME) transactions from the previous year; RRSP rate and maximum from the limits file. |
+| **Output** | Pending `RecordContributionCommand`s, confirmed `ContributionRecord`s, `RrspEstimate` (amount, basis, confidence). |
+| **AI involvement** | Deterministic (rule-based detection; the user always confirms). |
+| **Expected workflow** | `ContributionDetector` listens for `TRANSACTIONS_IMPORTED` → matches rules → stores a `RecordContributionCommand` in `PendingActionStore` and publishes `CONTRIBUTION_DETECTED` → on Confirm, the facade runs it through `CommandHistory`. `RrspRoomEstimator` sums last year's income deposits and applies min(18% × income, yearly max). |
+| **Error / alternative cases** | Ambiguous transfer (e.g. to "SAVINGS") → not proposed. Dismissed proposal → not proposed again for that transaction. No payroll deposits found → estimate is UNKNOWN and the user enters the NOA figure. Income includes non-employment money → the estimate is labelled "estimate" and must be confirmed. |
+
+### F15: Self-updating contribution limits (with weekly checker bot and failure alerts)
+
+| Field | Specification |
+|---|---|
+| **Description** | The yearly TFSA/FHSA/RRSP limits are never typed by the end user. At start-up (at most once a week) the app downloads `contribution_limits.json` from the project's GitHub repository, **validates** it, and caches it; if anything fails it falls back to the last good copy, then to the copy bundled with the app. The file itself is kept current by a **weekly GitHub Actions bot** that reads CRA's official pages, validates the numbers with the same rules, and commits only if they pass. If scraping or validation fails, the bot changes nothing, opens a GitHub issue and **emails the developer**. |
+| **User interaction (GUI)** | None needed. *Settings → About data* shows "Limits last updated: <date> (source)". CLI: `maplecfo limits status`, `maplecfo limits refresh`. |
+| **Input** | Remote JSON file; cached copy; bundled copy. Bot: CRA web pages and the current JSON in the repo. |
+| **Output** | Current `ContributionLimits`, `LimitsStatus` (UP_TO_DATE / UPDATED / USING_CACHED), `LIMITS_UPDATED` event. Bot: a commit, or a GitHub issue plus an email. |
+| **AI involvement** | Deterministic. |
+| **Expected workflow** | App: `LimitsService.refreshIfStale()` → `RemoteLimitsProvider.load()` → `LimitsValidator.validate(next, previous)` → save to `LimitsCache` → publish `LIMITS_UPDATED`. Bot: `LimitsUpdateJob.run()` → `CraLimitsScraper.fetch()` → `LimitsValidator` → commit if valid, otherwise `GitHubIssueNotifier` + `EmailNotifier`. |
+| **Error / alternative cases** | No internet → use cached limits. Downloaded file fails validation (past years changed, TFSA limit not a multiple of $500, a jump of more than $1,000, broken structure) → rejected, previous values kept. No cache on first run and no internet → bundled limits. CRA page layout changed → bot fails safely and alerts the developer. |
+
+
 ---
 
 ## 3. UML class diagram
 
-All diagrams are drawn in **UMLet**, and the editable `.uxf` file for each one is in `docs/stage1/diagrams/uxf/`. The complete class diagram is too large to read as a single picture, so it is presented in **six parts, one per package**. Classes that appear in more than one part (for example `BudgetService`, `LlmClient`) are the same class. Each part only repeats the members relevant to that part. The architecture diagram in 1.7 shows how the packages depend on each other.
+All diagrams are drawn in **UMLet**, and the editable `.uxf` file for each one is in `docs/stage1/diagrams/uxf/`. The complete class diagram is too large to read as a single picture, so it is presented in **seven parts, one per package**. Classes that appear in more than one part (for example `BudgetService`, `LlmClient`) are the same class. Each part only repeats the members relevant to that part. The architecture diagram in 1.7 shows how the packages depend on each other.
 
 **Notation:** `+` public, `-` private, `#` protected, *italic / `*`* abstract, underlined / `$` static. Solid arrow = association, dashed arrow = dependency, hollow triangle = inheritance/realisation, filled diamond = composition, hollow diamond = aggregation. Multiplicities are shown where they carry meaning.
 
@@ -277,9 +321,9 @@ All diagrams are drawn in **UMLet**, and the editable `.uxf` file for each one i
 
 Plain domain objects plus the **Composite** structure used for net worth. `Money` is an immutable value object (BigDecimal) so that no floating-point rounding errors reach financial totals.
 
-**Class diagram (1/6): Domain model (Composite: net worth)**
+**Class diagram (1/7): Domain model (Composite: net worth)**
 
-![Class diagram (1/6): Domain model (Composite: net worth)](diagrams/png/class_domain.png)
+![Class diagram (1/7): Domain model (Composite: net worth)](diagrams/png/class_domain.png)
 
 <sub>UMLet source: [diagrams/uxf/class_domain.uxf](diagrams/uxf/class_domain.uxf)</sub>
 
@@ -288,9 +332,9 @@ Plain domain objects plus the **Composite** structure used for net worth. `Money
 
 A single `CsvTransactionAdapter` **adapts** any bank's CSV layout to the `TransactionImporter` interface using a saved `ColumnMapping` profile, plus the **Strategy**-based categorization chain.
 
-**Class diagram (2/6): Import and categorization (Adapter, Strategy)**
+**Class diagram (2/7): Import and categorization (Adapter, Strategy)**
 
-![Class diagram (2/6): Import and categorization (Adapter, Strategy)](diagrams/png/class_import.png)
+![Class diagram (2/7): Import and categorization (Adapter, Strategy)](diagrams/png/class_import.png)
 
 <sub>UMLet source: [diagrams/uxf/class_import.uxf](diagrams/uxf/class_import.uxf)</sub>
 
@@ -299,9 +343,9 @@ A single `CsvTransactionAdapter` **adapts** any bank's CSV layout to the `Transa
 
 The deterministic "calculators". `DebtPayoffPlanner` uses a **Strategy** (`PayoffStrategy`). All of these classes are pure logic with injected repositories, which makes them easy to unit-test in Stage 3.
 
-**Class diagram (3/6): Planning and analysis services (Strategy)**
+**Class diagram (3/7): Planning and analysis services (Strategy)**
 
-![Class diagram (3/6): Planning and analysis services (Strategy)](diagrams/png/class_planning.png)
+![Class diagram (3/7): Planning and analysis services (Strategy)](diagrams/png/class_planning.png)
 
 <sub>UMLet source: [diagrams/uxf/class_planning.uxf](diagrams/uxf/class_planning.uxf)</sub>
 
@@ -310,9 +354,9 @@ The deterministic "calculators". `DebtPayoffPlanner` uses a **Strategy** (`Payof
 
 The **Observer** event bus that keeps views, budgets and alerts in sync, and the **Command** objects that make user edits and agent-proposed actions undoable.
 
-**Class diagram (4/6): Events and undoable commands (Observer, Command)**
+**Class diagram (4/7): Events and undoable commands (Observer, Command)**
 
-![Class diagram (4/6): Events and undoable commands (Observer, Command)](diagrams/png/class_events.png)
+![Class diagram (4/7): Events and undoable commands (Observer, Command)](diagrams/png/class_events.png)
 
 <sub>UMLet source: [diagrams/uxf/class_events.uxf](diagrams/uxf/class_events.uxf)</sub>
 
@@ -321,9 +365,9 @@ The **Observer** event bus that keeps views, budgets and alerts in sync, and the
 
 The AI agent and its collaborators. `LlmClient` is an **Adapter** over the different LLM vendor APIs, `LlmClientFactory` is a **Factory Method** (Claude or offline mock, depending on configuration), `AbstractFinanceTool` is a **Template Method**, and `ProposeActionTool` produces **Command** objects.
 
-**Class diagram (5/6): Agent layer (Adapter, Factory Method, Template Method, Command)**
+**Class diagram (5/7): Agent layer (Adapter, Factory Method, Template Method, Command)**
 
-![Class diagram (5/6): Agent layer (Adapter, Factory Method, Template Method, Command)](diagrams/png/class_agent.png)
+![Class diagram (5/7): Agent layer (Adapter, Factory Method, Template Method, Command)](diagrams/png/class_agent.png)
 
 <sub>UMLet source: [diagrams/uxf/class_agent.uxf](diagrams/uxf/class_agent.uxf)</sub>
 
@@ -332,16 +376,27 @@ The AI agent and its collaborators. `LlmClient` is an **Adapter** over the diffe
 
 JavaFX views and the picocli CLI both depend only on the **Facade**. Persistence follows the **Repository/DAO** pattern over SQLite.
 
-**Class diagram (6/6): Presentation, Facade and persistence (Facade, MVC, Repository/DAO)**
+**Class diagram (6/7): Presentation, Facade and persistence (Facade, MVC, Repository/DAO)**
 
-![Class diagram (6/6): Presentation, Facade and persistence (Facade, MVC, Repository/DAO)](diagrams/png/class_ui.png)
+![Class diagram (6/7): Presentation, Facade and persistence (Facade, MVC, Repository/DAO)](diagrams/png/class_ui.png)
 
 <sub>UMLet source: [diagrams/uxf/class_ui.uxf](diagrams/uxf/class_ui.uxf)</sub>
 
 
-### 3.7 Key result / value classes (not drawn separately)
+### 3.7 Part 7: Automation
 
-These are simple immutable data carriers (Java `record`s) returned by services. They are named in the diagrams and tables: `ImportResult`, `NetWorthSnapshot`, `ContributionRoom`, `ContributionCheck`, `FireInputs`, `FireProjection`, `PayoffPlan`, `GoalForecast`, `CashFlowForecast`, `AffordabilityResult`, `MonthlyReport`, `ValidationReport`, `ToolSchema`, `Alert`, plus the enums `PayoffMethod`, `CategorySource`, `Frequency`, `ContributionKind`, `Role`.
+The auto-sync, contribution-detection and self-updating-limits features. `LimitsService` tries an ordered list of **Strategy** providers (remote file → bundled copy) guarded by `LimitsValidator` and `LimitsCache`; `BalanceSyncService` and `ContributionDetector` are **Observers** of import events; detected contributions are **Command** objects the user confirms. `LimitsUpdateJob` is a separate entry point run weekly by GitHub Actions; it reuses `LimitsValidator` and reports failures through interchangeable `FailureNotifier`s.
+
+**Class diagram (7/7): Automation (auto-sync, contribution detection, self-updating limits)**
+
+![Class diagram (7/7): Automation (auto-sync, contribution detection, self-updating limits)](diagrams/png/class_automation.png)
+
+<sub>UMLet source: [diagrams/uxf/class_automation.uxf](diagrams/uxf/class_automation.uxf)</sub>
+
+
+### 3.8 Key result / value classes (not drawn separately)
+
+These are simple immutable data carriers (Java `record`s) returned by services. They are named in the diagrams and tables: `ImportResult`, `NetWorthSnapshot`, `ContributionRoom`, `ContributionCheck`, `FireInputs`, `FireProjection`, `PayoffPlan`, `GoalForecast`, `CashFlowForecast`, `AffordabilityResult`, `MonthlyReport`, `ValidationReport`, `ToolSchema`, `Alert`, `RrspEstimate`, `LimitsStatus`, `JobResult`, `ContributionRule`, plus the enums `PayoffMethod`, `CategorySource`, `Frequency`, `ContributionKind`, `Role`.
 
 ---
 
@@ -354,16 +409,16 @@ MapleCFO uses **eight GoF patterns** (at least five are required), plus the MVC 
 | | |
 |---|---|
 | **Problem** | Two user interfaces (GUI and CLI) need the same 20+ operations, which are spread across more than 12 services, the command history and the agent. Without a single entry point both UIs would depend on every subsystem and duplicate the coordination logic. |
-| **Participants and roles** | *Facade*: `MapleCfoFacade`. *Subsystem classes*: `TransactionService`, `BudgetService`, `RegisteredAccountService`, `FireCalculator`, `DebtPayoffPlanner`, `GoalService`, `AffordabilityAnalyzer`, `ReportService`, `CfoAgent`, `CommandHistory`, `EventBus`. *Clients*: `MainWindow` and its views, `MapleCfoCli`. |
+| **Participants and roles** | *Facade*: `MapleCfoFacade`. *Subsystem classes*: `TransactionService`, `BudgetService`, `RegisteredAccountService`, `FireCalculator`, `DebtPayoffPlanner`, `GoalService`, `AffordabilityAnalyzer`, `ReportService`, `CfoAgent`, `CommandHistory`, `EventBus`, plus the automation services `ImportFolderWatcher`, `ReminderService`, `LimitsService`, `RrspRoomEstimator`. *Clients*: `MainWindow` and its views, `MapleCfoCli`. |
 | **Why appropriate** | It gives low coupling between presentation and logic, one place to wrap operations in commands, and it guarantees that the GUI and the CLI behave identically. It is also the natural target for integration tests. |
 | **Harder without it** | Every view and every CLI command would need references to many services and would have to remember to wrap edits in commands. Adding the CLI would mean duplicating orchestration code, and GUI and CLI behaviour would drift apart. |
 
-### 4.2 Adapter: `CsvTransactionAdapter` and `ClaudeClientAdapter`
+### 4.2 Adapter: `CsvTransactionAdapter`, `ClaudeClientAdapter` and `CraLimitsScraper`
 
 | | |
 |---|---|
-| **Problem** | (a) Every bank exports CSV with different column names, date formats and sign conventions, but the system needs uniform `Transaction` objects. (b) The Claude API has its own HTTP request format and tool-calling JSON, but the agent should work with simple Java objects (`ChatMessage`, `ToolCall`, `LlmResponse`). |
-| **Participants and roles** | (a) *Target*: `TransactionImporter`. *Adapter*: `CsvTransactionAdapter`, configured by a `ColumnMapping`. *Adaptee*: the bank-specific CSV layout. *Client*: `TransactionService`. (b) *Target*: `LlmClient`. *Adapter*: `ClaudeClientAdapter` (plus `MockLlmClient`, a scripted implementation of the same interface). *Adaptee*: the Anthropic Messages API. *Client*: `CfoAgent`, `LlmCategorizer`, `ReportSummarizer`. |
+| **Problem** | (a) Every bank exports CSV with different column names, date formats and sign conventions, but the system needs uniform `Transaction` objects. (b) The Claude API has its own HTTP request format and tool-calling JSON, but the agent should work with simple Java objects (`ChatMessage`, `ToolCall`, `LlmResponse`). (c) CRA publishes the contribution limits as HTML web pages, but the limits job needs a `ContributionLimits` object. |
+| **Participants and roles** | (a) *Target*: `TransactionImporter`. *Adapter*: `CsvTransactionAdapter`, configured by a `ColumnMapping`. *Adaptee*: the bank-specific CSV layout. *Client*: `TransactionService`. (b) *Target*: `LlmClient`. *Adapter*: `ClaudeClientAdapter` (plus `MockLlmClient`, a scripted implementation of the same interface). *Adaptee*: the Anthropic Messages API. *Client*: `CfoAgent`, `LlmCategorizer`, `ReportSummarizer`. (c) *Adapter*: `CraLimitsScraper` (`fetch()` returns `ContributionLimits`). *Adaptee*: CRA's HTML pages. *Client*: `LimitsUpdateJob`. |
 | **Why appropriate** | One data-driven adapter supports any bank without new code: the user just saves a new mapping profile. The agent depends on the abstraction `LlmClient`, not on Claude's JSON format (Dependency Inversion), which makes a **mock LLM** possible for deterministic tests and offline demos. |
 | **Harder without it** | CSV parsing would need a class per bank. `CfoAgent` would contain vendor-specific JSON handling, and it could not be unit-tested without network calls and API costs. |
 
@@ -385,21 +440,21 @@ MapleCFO uses **eight GoF patterns** (at least five are required), plus the MVC 
 | **Why appropriate** | Creation logic (reading the API key, model name and timeouts, and choosing demo mode) lives in one place, and the three AI components depend only on the product interface. |
 | **Harder without it** | Configuration parsing and `if (apiKey == null)` checks would be copied into every AI component, and switching to demo mode or adding another provider would mean editing all of them. |
 
-### 4.5 Strategy: categorization and debt payoff
+### 4.5 Strategy: categorization, debt payoff, limits sources and failure notifiers
 
 | | |
 |---|---|
-| **Problem** | Several behaviours have interchangeable algorithms chosen at run time: *how to categorise* (rules or LLM) and *which debt to pay first* (avalanche or snowball). |
-| **Participants and roles** | *Contexts*: `CategorizationService`, `DebtPayoffPlanner`. *Strategy interfaces*: `CategorizationStrategy`, `PayoffStrategy`. *Concrete strategies*: `RuleBasedCategorizer`, `LlmCategorizer`; `AvalancheStrategy`, `SnowballStrategy`. |
-| **Why appropriate** | The user switches payoff methods with a toggle and compares them. Categorization strategies are combined as an ordered chain (cheap and deterministic first, LLM last). Each strategy is small and testable on its own. |
-| **Harder without it** | `DebtPayoffPlanner.plan()` would contain `if (method == AVALANCHE) … else …` branches inside the simulation loop. Adding a new method (for example "highest interest-to-balance ratio") would mean modifying tested code. |
+| **Problem** | Several behaviours have interchangeable algorithms chosen at run time: *how to categorise* (rules or LLM), *which debt to pay first* (avalanche or snowball), *where to load contribution limits from* (remote file or bundled copy) and *how to report a failed limits update* (GitHub issue or email). |
+| **Participants and roles** | *Contexts*: `CategorizationService`, `DebtPayoffPlanner`, `LimitsService`, `LimitsUpdateJob`. *Strategy interfaces*: `CategorizationStrategy`, `PayoffStrategy`, `LimitsProvider`, `FailureNotifier`. *Concrete strategies*: `RuleBasedCategorizer`, `LlmCategorizer`; `AvalancheStrategy`, `SnowballStrategy`; `RemoteLimitsProvider`, `BundledLimitsProvider`; `GitHubIssueNotifier`, `EmailNotifier`. |
+| **Why appropriate** | The user switches payoff methods with a toggle and compares them. Categorization strategies and limits providers are both used as an ordered fallback chain (cheap or reliable first). Each strategy is small and testable on its own; for example `LimitsService` can be tested with a fake provider that simulates a network failure. |
+| **Harder without it** | `DebtPayoffPlanner.plan()` would contain `if (method == AVALANCHE) … else …` branches inside the simulation loop. Adding a new method (for example "highest interest-to-balance ratio"), a new limits source or a new alert channel (for example Slack) would mean modifying tested code. |
 
 ### 4.6 Observer: `EventBus` and `FinanceEventListener`
 
 | | |
 |---|---|
-| **Problem** | When transactions are imported or recategorised, many independent parts must react: budget status, alerts, the dashboard, the budget view. The code that imports transactions should not know about any of them. |
-| **Participants and roles** | *Subject*: `EventBus` (`subscribe`, `unsubscribe`, `publish`). *Observer interface*: `FinanceEventListener`. *Concrete observers*: `BudgetService`, `AlertService`, `DashboardView`, `BudgetView`. *Publishers*: `TransactionService`, `BudgetService`, `GoalService`, `RegisteredAccountService`. *Event*: `FinanceEvent` with `EventType`. |
+| **Problem** | When transactions are imported or recategorised, many independent parts must react: budget status, alerts, balance syncing, contribution detection, the dashboard, the budget view. The code that imports transactions should not know about any of them. |
+| **Participants and roles** | *Subject*: `EventBus` (`subscribe`, `unsubscribe`, `publish`). *Observer interface*: `FinanceEventListener`. *Concrete observers*: `BudgetService`, `AlertService`, `BalanceSyncService`, `ContributionDetector`, `DashboardView`, `BudgetView`. *Publishers*: `TransactionService`, `BudgetService`, `GoalService`, `RegisteredAccountService`, `LimitsService`, `ReminderService`. *Event*: `FinanceEvent` with `EventType`. |
 | **Why appropriate** | It keeps the GUI up to date without polling and decouples the services from each other. The same events drive the CLI's alert output. |
 | **Harder without it** | `TransactionService` would have to call `budgetService.recheck()`, `dashboard.refresh()` and so on directly, creating circular dependencies between the domain and the UI. Every new view would mean editing the services. |
 
@@ -407,8 +462,8 @@ MapleCFO uses **eight GoF patterns** (at least five are required), plus the MVC 
 
 | | |
 |---|---|
-| **Problem** | (a) Users need undo/redo for edits (recategorise, set budget, create goal). (b) The **agent must never modify data by itself**. Its proposed actions need to be stored as objects, shown to the user, and executed only after confirmation. |
-| **Participants and roles** | *Command interface*: `UndoableCommand` (`execute`, `undo`, `describe`). *Concrete commands*: `RecategorizeCommand`, `SetBudgetCommand`, `CreateGoalCommand`. *Receivers*: `TransactionService`, `BudgetService`, `GoalService`. *Invoker*: `CommandHistory` (undo/redo stacks). *Client*: `MapleCfoFacade`; `ProposeActionTool` creates commands and stores them in `PendingActionStore` until the user confirms. |
+| **Problem** | (a) Users need undo/redo for edits (recategorise, set budget, create goal). (b) The **agent, and the contribution detector, must never modify data by themselves**. Its proposed actions need to be stored as objects, shown to the user, and executed only after confirmation. |
+| **Participants and roles** | *Command interface*: `UndoableCommand` (`execute`, `undo`, `describe`). *Concrete commands*: `RecategorizeCommand`, `SetBudgetCommand`, `CreateGoalCommand`, `RecordContributionCommand`. *Receivers*: `TransactionService`, `BudgetService`, `GoalService`, `RegisteredAccountService`. *Invoker*: `CommandHistory` (undo/redo stacks). *Client*: `MapleCfoFacade`; `ProposeActionTool` and `ContributionDetector` create commands and store them in `PendingActionStore` until the user confirms. |
 | **Why appropriate** | Requests become objects, which gives undo/redo, a readable description for the Confirm dialog (`describe()`), and a **human-in-the-loop safety guarantee** for AI actions. |
 | **Harder without it** | Each edit would need its own ad-hoc undo code, and there would be no clean way to represent "an action the AI suggested but the user has not approved yet". |
 
@@ -436,8 +491,10 @@ MapleCFO uses **eight GoF patterns** (at least five are required), plus the MVC 
 |---|---|---|
 | **User** | Primary | A student or young professional managing their money. Specialised into **GUI User** and **CLI User** (both reach the same use cases). |
 | **LLM Service** | Secondary (external AI service) | The Anthropic Claude API, reached through `LlmClient`. Takes part in categorisation, the AI CFO chat and report summaries. |
+| **Limits Bot** | Primary (scheduled system actor) | A GitHub Actions job that runs weekly to refresh the published contribution limits (UC15). |
+| **Developer** | Secondary | The project maintainer, notified by GitHub issue and email when the limits update fails. |
 
-The 12 main use cases cover all 12 features. `«include»` marks behaviour that always happens as part of a use case. `«extend»` marks optional behaviour (confirming an action the AI proposed).
+The 15 main use cases cover all 15 features. `«include»` marks behaviour that always happens as part of a use case. `«extend»` marks optional behaviour (confirming an action the AI proposed).
 
 **Use-case diagram: MapleCFO**
 
@@ -520,7 +577,7 @@ The 12 main use cases cover all 12 features. `«include»` marks behaviour that 
 | **Preconditions** | The user profile contains a birth year and residency year (and an RRSP limit and FHSA opening year where relevant). |
 | **Trigger** | The user opens Registered Accounts or enters an amount to check. |
 | **Main success scenario** | 1. The user selects an account type and enters an amount. 2. The system loads the profile, the limits file and the contribution history. 3. The system computes the available room. 4. The system compares the amount with the room and shows OK and the room left. |
-| **Alternative / exception flows** | 2a. Profile incomplete → the system lists the missing fields. 2b. Limits file missing → the feature is unavailable with an explanation. 4a. Amount exceeds the room → a warning shows the excess, and a `CONTRIBUTION_WARNING` alert is raised. |
+| **Alternative / exception flows** | 2a. Profile incomplete → the system lists the missing fields. 2b. Latest limits unavailable → cached or bundled limits are used (UC15). 4a. Amount exceeds the room → a warning shows the excess, and a `CONTRIBUTION_WARNING` alert is raised. |
 | **Postconditions** | Optionally, the user logs the contribution, which updates the history. |
 | **Related features** | F06 |
 
@@ -596,11 +653,48 @@ The 12 main use cases cover all 12 features. `«include»` marks behaviour that 
 | **Postconditions** | None (read-only). |
 | **Related features** | F12 |
 
+### UC13: Auto-sync bank data
+| | |
+|---|---|
+| **Actors** | User |
+| **Goal** | Keep transactions, balances and debts up to date by just saving bank CSVs into a folder. |
+| **Preconditions** | Auto-sync is turned on with a chosen watch folder; at least one mapping profile exists. |
+| **Trigger** | A new CSV file appears in the watch folder. |
+| **Main success scenario** | 1. The user saves a bank CSV into the watch folder. 2. The system detects the new file and waits until it is fully written. 3. The system picks the mapping profile whose columns match the file. 4. The system imports and categorises the transactions *(as in UC01)*. 5. The system updates the account balance, and the debt balance for credit cards, from the CSV. 6. The system refreshes the dashboard and shows an "imported N transactions" notice. |
+| **Alternative / exception flows** | 3a. No profile matches → the system asks the user to map the columns (UC01 flow 1a). 4a. Same file saved twice → all rows reported as duplicates. 5a. No Balance column → balances unchanged; the user is told. 2a. Watch folder removed → auto-sync pauses with a warning. *Reminders:* if an account has not been imported for 30 days, or a new month starts, the system shows a reminder. |
+| **Postconditions** | Transactions, account balances and debt balances are current. |
+| **Related features** | F13, F01, F02 |
+
+### UC14: Confirm a detected contribution / RRSP estimate
+| | |
+|---|---|
+| **Actors** | User |
+| **Goal** | Keep TFSA/RRSP/FHSA contribution records and RRSP room accurate without manual logging. |
+| **Preconditions** | Transactions have been imported; for the estimate, last year's payroll deposits exist. |
+| **Trigger** | The system detects a registered-account transfer after an import, or the user opens the RRSP estimate. |
+| **Main success scenario** | 1. After an import, the system finds a transfer that matches a contribution rule. 2. The system proposes "Log $500 TFSA contribution?". 3. The user clicks **Confirm**. 4. The system records the contribution (undoable) and updates the room. 5. The user opens the RRSP estimate. 6. The system estimates new room from last year's payroll deposits. 7. The user confirms the estimate, or replaces it with the NOA figure. |
+| **Alternative / exception flows** | 3a. The user dismisses the proposal → nothing is recorded and it is not proposed again. 4a. The user later presses Undo → the record is removed. 6a. No payroll deposits → the estimate is UNKNOWN; the user enters the NOA figure. |
+| **Postconditions** | Contribution history and RRSP limit are up to date. |
+| **Related features** | F14, F06 |
+
+### UC15: Update contribution limits
+| | |
+|---|---|
+| **Actors** | Limits Bot (primary); Developer (secondary, notified on failure) |
+| **Goal** | Keep the official TFSA/FHSA/RRSP limits correct for every user without anyone typing them. |
+| **Preconditions** | The repository contains a valid `contribution_limits.json`; the weekly workflow is enabled. |
+| **Trigger** | The weekly schedule fires (bot side), or the app starts with a cache older than 7 days (app side). |
+| **Main success scenario** | *Bot:* 1. The bot reads the current limits file. 2. It fetches CRA's limit pages and extracts the numbers. 3. It validates the new limits against the rules. 4. If they changed, it commits the new file. *App:* 5. On start-up the app downloads the file. 6. It validates it and caches it. 7. Room calculations use the new limits. |
+| **Alternative / exception flows** | 2a. CRA page unreachable or layout changed → no change; the bot opens a GitHub issue and emails the developer. 3a. Validation fails → same as 2a. 5a. No internet → the app uses the cached, then the bundled, limits. 6a. The downloaded file fails validation → rejected; previous limits kept. |
+| **Postconditions** | Either the latest valid limits are in use, or the last good limits remain and the developer has been alerted. |
+| **Related features** | F15, F06, F14 |
+
+
 ---
 
 ## 7. Sequence diagrams
 
-Ten sequence diagrams cover every feature. Features with the same interaction structure share a diagram (for example FIRE and debt payoff). All participants and messages use the **class and method names from the class diagram**. `alt`/`opt` fragments show error and alternative flows.
+Fourteen sequence diagrams cover every feature. Features with the same interaction structure share a diagram (for example FIRE and debt payoff). All participants and messages use the **class and method names from the class diagram**. `alt`/`opt` fragments show error and alternative flows.
 
 The GUI view is drawn as the boundary object. The **CLI follows exactly the same path**, because `MapleCfoCli` calls the same `MapleCfoFacade` methods (shown explicitly in SD08 and SD10).
 
@@ -616,6 +710,10 @@ The GUI view is drawn as the boundary object. The **CLI follows exactly the same
 | SD08 | Ask the AI CFO (agent loop) | F10 | UC10 |
 | SD09 | "Can I afford it?" with a proposed action | F11, F10, F09 | UC11, UC10 |
 | SD10 | Generate the monthly summary | F12 | UC12 |
+| SD11 | Auto-sync: CSV dropped in the watch folder | F13, F14 | UC13, UC14 |
+| SD12 | App start-up: self-updating limits with fallback | F15 | UC15 |
+| SD13 | Weekly limits bot with failure alerts | F15 | UC15 |
+| SD14 | RRSP room estimate | F14 | UC14 |
 
 ### SD01: Import and categorize transactions
 Shows the mapping-profile lookup (with the column-mapping fallback), the `CsvTransactionAdapter` (Adapter), the Strategy chain for categorisation (rules first, then the LLM), and Observer notifications that trigger budget alerts.
@@ -717,6 +815,47 @@ The figures are deterministic, and the narrative comes from the LLM with a non-A
 <sub>UMLet source: [diagrams/uxf/sd10_report.uxf](diagrams/uxf/sd10_report.uxf)</sub>
 
 
+### SD11: Auto-sync, a CSV dropped in the watch folder
+`ImportFolderWatcher` triggers the normal import, then two **Observers** react in parallel: `BalanceSyncService` updates balances, and `ContributionDetector` proposes a `RecordContributionCommand` that the user confirms.
+
+**SD11: Auto-sync, a CSV dropped in the watch folder (F13, F14)**
+
+![SD11: Auto-sync, a CSV dropped in the watch folder (F13, F14)](diagrams/png/sd11_autosync.png)
+
+<sub>UMLet source: [diagrams/uxf/sd11_autosync.uxf](diagrams/uxf/sd11_autosync.uxf)</sub>
+
+
+### SD12: App start-up, self-updating limits with fallback
+`LimitsService` tries its **Strategy** providers in order, validates anything downloaded, and falls back to the cached and then the bundled limits, so room calculations never break.
+
+**SD12: App start-up, self-updating contribution limits with fallback (F15)**
+
+![SD12: App start-up, self-updating contribution limits with fallback (F15)](diagrams/png/sd12_limits_refresh.png)
+
+<sub>UMLet source: [diagrams/uxf/sd12_limits_refresh.uxf](diagrams/uxf/sd12_limits_refresh.uxf)</sub>
+
+
+### SD13: Weekly limits bot with failure alerts
+Runs outside the app in GitHub Actions. `CraLimitsScraper` (**Adapter** over CRA's web pages) feeds `LimitsValidator`; only valid changes are committed. Failures go to both `FailureNotifier`s: a GitHub issue and an email to the developer.
+
+**SD13: Weekly limits bot with failure alerts (F15)**
+
+![SD13: Weekly limits bot with failure alerts (F15)](diagrams/png/sd13_limits_bot.png)
+
+<sub>UMLet source: [diagrams/uxf/sd13_limits_bot.uxf](diagrams/uxf/sd13_limits_bot.uxf)</sub>
+
+
+### SD14: RRSP room estimate
+A deterministic estimate from last year's payroll deposits and the current RRSP rate and maximum, which the user confirms.
+
+**SD14: RRSP room estimate from payroll deposits (F14)**
+
+![SD14: RRSP room estimate from payroll deposits (F14)](diagrams/png/sd14_rrsp_estimate.png)
+
+<sub>UMLet source: [diagrams/uxf/sd14_rrsp_estimate.uxf](diagrams/uxf/sd14_rrsp_estimate.uxf)</sub>
+
+
+
 ---
 
 ## 8. Feature-to-design traceability table
@@ -735,6 +874,9 @@ The figures are deterministic, and the narrative comes from the LLM with a non-A
 | **F10** | AI CFO chat (agent) | AI | UC10 | ChatView, MapleCfoCli, CfoAgent, ConversationMemory, PromptBuilder, LlmClient, ClaudeClientAdapter, ToolRegistry, FinanceTool, AbstractFinanceTool, ResponseValidator, PendingActionStore | askCfo(), handle(), buildMessages(), chat(), schemas(), execute(), doExecute(), validate() | SD08 | Adapter, Template Method, Factory Method, Command, Facade |
 | **F11** | "Can I afford it?" | Hybrid | UC11 | GoalsView / ChatView, AffordabilityTool, AffordabilityAnalyzer, CashFlowForecaster, GoalService, BudgetService, ProposeActionTool, PendingActionStore, CommandHistory | checkAffordability(), check(), forecast(), confirmProposedAction(), take(), run() | SD09 | Command, Template Method, Facade |
 | **F12** | Monthly summary with AI narrative | Hybrid | UC12 | ReportView, MapleCfoCli, ReportService, ReportSummarizer, LlmClient, BudgetService, NetWorthService, RecurringChargeDetector | generateMonthlyReport(), buildMonthlyReport(), summarize(), templateSummary() | SD10 | Facade, Adapter |
+| **F13** | Auto-sync: watch folder, balances, reminders | Deterministic | UC13 | ImportFolderWatcher, TransactionService, BalanceSyncService, AccountService, DebtRepository, ReminderService, EventBus | startAutoImport(), onFileCreated(), importFrom(), onEvent(), updateBalance(), checkReminders() | SD11 | Observer, Facade, Adapter |
+| **F14** | Smart contributions and RRSP estimate | Deterministic | UC14 | ContributionDetector, RecordContributionCommand, PendingActionStore, CommandHistory, RegisteredAccountService, RrspRoomEstimator | onEvent(), detect(), add(), confirmProposedAction(), run(), getRrspEstimate(), estimate() | SD11, SD14 | Observer, Command, Facade |
+| **F15** | Self-updating limits + weekly bot | Deterministic | UC15 | LimitsService, LimitsProvider, RemoteLimitsProvider, BundledLimitsProvider, LimitsValidator, LimitsCache, LimitsUpdateJob, CraLimitsScraper, FailureNotifier, GitHubIssueNotifier, EmailNotifier | refreshLimits(), refreshIfStale(), load(), validate(), save(), run(), fetch(), notify() | SD12, SD13 | Strategy, Adapter |
 
 ---
 
@@ -874,6 +1016,43 @@ The figures are deterministic, and the narrative comes from the LLM with a non-A
 
 **Execution:** `buildMonthlyReport()` loads the month's transactions and collects the deterministic figures from the services. If the month has no data, it raises `NoDataException` and the view shows a message. `ReportSummarizer.summarize()` sends only these figures to the LLM to write a short narrative, and falls back to `templateSummary()` if the LLM fails. The `MonthlyReport` is returned through the facade and displayed with charts in the GUI, or as formatted text in the CLI.
 
+### F13: Auto-sync (watch folder, balances, reminders)
+**Related use case:** UC13 · **Related sequence diagram:** SD11
+
+**Classes involved**
+
+- `ImportFolderWatcher`: watches the chosen folder with Java's `WatchService` and starts imports.
+- `TransactionService`: runs the normal import and categorisation flow (F01/F02).
+- `BalanceSyncService`: an Observer of `TRANSACTIONS_IMPORTED` that updates account and debt balances.
+- `ReminderService`: checks last-import dates and month changes, and raises reminder alerts.
+- `EventBus` and the views: deliver `ACCOUNT_BALANCE_UPDATED` and `REMINDER_DUE` to the GUI and CLI.
+
+**Important methods:** `MapleCfoFacade.startAutoImport()`, `ImportFolderWatcher.onFileCreated()`, `TransactionService.importFrom()`, `BalanceSyncService.onEvent()`, `AccountService.updateBalance()`, `ReminderService.checkReminders()`.
+
+**Execution:** `startAutoImport(folder)` starts the watcher. When a new CSV appears, `onFileCreated()` waits until the file size is stable, finds the mapping profile whose columns match the header, and calls `importTransactions()` on the facade, the same path as a manual import. After saving, `TransactionService` publishes `TRANSACTIONS_IMPORTED`. `BalanceSyncService` receives it, takes the balance from the newest row, and calls `AccountService.updateBalance()` (or updates the matching `Debt` for a card account), then publishes `ACCOUNT_BALANCE_UPDATED` so the dashboard refreshes. Separately, `ReminderService.checkReminders()` runs at start-up and daily, and publishes `REMINDER_DUE` for stale accounts or a new month.
+
+### F14: Smart contributions and RRSP estimate
+**Related use case:** UC14 · **Related sequence diagrams:** SD11, SD14
+
+**Classes involved:** `ContributionDetector` (Observer plus rule matching), `RecordContributionCommand` (undoable Command), `PendingActionStore`, `CommandHistory`, `RegisteredAccountService` (receiver), `RrspRoomEstimator`, `LimitsService`.
+
+**Important methods:** `ContributionDetector.onEvent()` / `detect()`, `PendingActionStore.add()`, `MapleCfoFacade.confirmProposedAction()`, `CommandHistory.run()`, `RegisteredAccountService.recordContribution()`, `MapleCfoFacade.getRrspEstimate()`, `RrspRoomEstimator.estimate()`.
+
+**Execution:** On `TRANSACTIONS_IMPORTED`, `ContributionDetector.detect()` matches the new transactions against contribution rules. For each match it creates a `RecordContributionCommand`, stores it in `PendingActionStore`, and publishes `CONTRIBUTION_DETECTED` so the view shows Confirm/Dismiss. This is the same human-in-the-loop mechanism the AI agent uses. On Confirm, the facade runs the command through `CommandHistory`, which calls `RegisteredAccountService.recordContribution()`, and the command can be undone. For RRSP, `RrspRoomEstimator.estimate(year)` adds up last year's INCOME deposits, reads the RRSP rate and maximum from `LimitsService.currentLimits()`, and returns min(18% × income, max) as an `RrspEstimate` for the user to confirm.
+
+### F15: Self-updating limits with weekly bot and alerts
+**Related use case:** UC15 · **Related sequence diagrams:** SD12, SD13
+
+**Classes involved**
+
+- *In the app:* `LimitsService` (context), `LimitsProvider` with `RemoteLimitsProvider` and `BundledLimitsProvider` (strategies), `LimitsValidator`, `LimitsCache`.
+- *Weekly job:* `LimitsUpdateJob`, `CraLimitsScraper` (adapter over CRA pages), the same `LimitsValidator`, and `FailureNotifier` with `GitHubIssueNotifier` and `EmailNotifier`.
+
+**Important methods:** `MapleCfoFacade.refreshLimits()`, `LimitsService.refreshIfStale()` / `currentLimits()`, `LimitsProvider.load()`, `LimitsValidator.validate()`, `LimitsCache.save()` / `lastGood()`, `LimitsUpdateJob.run()`, `CraLimitsScraper.fetch()`, `FailureNotifier.notify()`.
+
+**Execution:** At start-up, `refreshLimits()` calls `LimitsService.refreshIfStale()`. If the cache is older than 7 days, `RemoteLimitsProvider.load()` downloads `contribution_limits.json` from GitHub. `LimitsValidator.validate(next, previous)` checks that past years are unchanged, the TFSA limit is a multiple of $500, a new year is within ±$1,000 of the previous one, and the structure is correct. Valid data is saved to `LimitsCache` and `LIMITS_UPDATED` is published. Otherwise the service keeps `lastGood()`, or on a first run with no internet uses `BundledLimitsProvider`. Weekly, GitHub Actions runs `LimitsUpdateJob.run()`: `CraLimitsScraper.fetch()` reads CRA's pages, the same validator checks the result, and only valid changes are committed. Any scrape or validation failure leaves the file unchanged and calls every `FailureNotifier`, which opens a GitHub issue and emails the developer.
+
+
 ---
 
 ## 10. Important design decisions
@@ -887,15 +1066,18 @@ The figures are deterministic, and the narrative comes from the LLM with a non-A
 | D5 | **Local-first data: CSV import + SQLite, no live bank connection.** | Reliable, free, private, and easy to demo and test. Bank-aggregation APIs are paid, complex and region-limited. | Plaid or open-banking APIs. |
 | D6 | **LLM behind an interface (`LlmClient` Adapter), with only two implementations: Claude and `MockLlmClient`.** | The agent code is independent of Claude's JSON format. The mock makes agent-loop tests deterministic and free, and lets the app run in demo mode without an API key. Another provider can be added later with one new class. | Calling the Claude API directly from `CfoAgent`, or supporting several providers from day one. |
 | D7 | **Rules before AI for categorisation; the AI must answer with a valid category name.** | Cheaper, faster and predictable for common merchants. The LLM only handles the long tail, and invalid answers are flagged for review instead of guessed. | LLM-only categorisation. |
-| D8 | **Contribution limits in a config file (`contribution_limits.json`).** | CRA limits change yearly. Data, not code, should change. | Hard-coded constants. |
+| D8 | **Contribution limits in a config file (`contribution_limits.json`).** | CRA limits change yearly. Data, not code, should change; the file itself updates automatically (D15). | Hard-coded constants. |
 | D9 | **Bounded agent loop (max 6 steps) + one retry on LLM errors + schema validation of tool arguments.** | Prevents runaway loops and costs, and handles malformed LLM output safely. These behaviours will be targeted by KUMA tests (tool failures, invalid arguments, step limits). | An unbounded ReAct loop. |
 | D10 | **Education-only scope.** The agent refuses specific investment or stock picks and adds a disclaimer. | Responsible AI in a financial domain. MapleCFO is not a licensed financial advisor. | Unrestricted advice. |
 | D11 | **`Money` value object using `BigDecimal`.** | Avoids floating-point rounding errors in totals. | `double` amounts. |
-| D12 | **Lean scope: one generic CSV importer with saved mapping profiles, 12 features, on-screen summaries (no file export).** | Keeps the project buildable and fully testable in the course timeline, while every required element (GUI, CLI, 10+ features, 5+ patterns, real agent behaviour) is still met. | Separate adapters per bank, a card-rewards optimizer and PDF/CSV export (possible future extensions). |
+| D12 | **Lean core scope: one generic CSV importer with saved mapping profiles and on-screen summaries (no file export).** | Keeps the project buildable and fully testable in the course timeline, while every required element (GUI, CLI, 10+ features, 5+ patterns, real agent behaviour) is met. | Separate adapters per bank, a card-rewards optimizer and PDF/CSV export (possible future extensions). |
+| D13 | **Automate everything after the bank download (F13, F14).** A watch folder, balance sync, contribution detection and reminders. | After a one-time setup the user's only job is saving CSVs. Automations reuse existing patterns (Observer events, Command confirmation), so they add little coupling. | Manual import and manual balance and contribution entry. |
+| D14 | **Detected contributions are proposals, not automatic writes.** | The same human-in-the-loop rule as the AI agent: nothing changes the user's records without Confirm, and everything is undoable. | Auto-recording every matching transfer, which risks false positives. |
+| D15 | **Contribution limits come from a validated remote file, kept current by a weekly bot, with fallbacks and failure alerts (F15).** | No end-user typing and no developer typing errors. Scraping is fragile, so both the bot and the app validate with the same `LimitsValidator`, fall back to the last good values, and alert the developer by GitHub issue and email instead of saving bad data. | End users typing limits; the developer editing the file by hand; the app scraping CRA directly (fragile and slow). |
 
 ### 10.1 How the design prepares for Stage 3 testing
 
-- **Deterministic components (JUnit 5):** `FireCalculator`, `DebtPayoffPlanner` + strategies, `RegisteredAccountService`, `RecurringChargeDetector`, `BudgetService`, `AffordabilityAnalyzer`, `CsvTransactionAdapter` + `ColumnMapping`, `CommandHistory`, `EventBus`, `ToolRegistry` argument validation, `ResponseValidator`. Integration tests go through `MapleCfoFacade` with in-memory repositories and `MockLlmClient`.
+- **Deterministic components (JUnit 5):** `FireCalculator`, `DebtPayoffPlanner` + strategies, `RegisteredAccountService`, `RecurringChargeDetector`, `BudgetService`, `LimitsValidator` (every rule), `LimitsService` fallback order (with fake providers), `ContributionDetector` rules, `RrspRoomEstimator`, `BalanceSyncService`, `ReminderService` (with a fixed `Clock`), `ImportFolderWatcher` (temporary folder), `AffordabilityAnalyzer`, `CsvTransactionAdapter` + `ColumnMapping`, `CommandHistory`, `EventBus`, `ToolRegistry` argument validation, `ResponseValidator`. Integration tests go through `MapleCfoFacade` with in-memory repositories and `MockLlmClient`.
 - **Agent behaviour (KUMA):** candidate behavioural requirements include correct tool selection (e.g. contribution-room questions must call `contribution_room`), no invented figures (grounding), respecting user constraints ("under $300"), never changing data without confirmation, recovering from tool errors, refusing out-of-scope investment picks, and asking for clarification on ambiguous requests.
 
 ### 10.2 Technology stack (planned)
@@ -907,6 +1089,9 @@ The figures are deterministic, and the narrative comes from the LLM with a non-A
 | CLI | picocli |
 | Persistence | SQLite via JDBC (`sqlite-jdbc`) |
 | JSON | Jackson |
+| Folder watching | Java NIO `WatchService` |
+| HTML parsing (limits bot) | jsoup |
+| Automation / CI | GitHub Actions (weekly limits job; failure email through GitHub notifications and an SMTP action) |
 | LLM | Anthropic Claude Messages API over `java.net.http.HttpClient`; `MockLlmClient` for tests and demo mode |
 | Testing | JUnit 5, Mockito; KUMA for agent behaviour |
 | Version control | Public GitHub repository (the same repository for all three stages) |

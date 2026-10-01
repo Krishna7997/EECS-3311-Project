@@ -85,7 +85,7 @@
       <x>250</x>
       <y>50</y>
       <w>960</w>
-      <h>1000</h>
+      <h>1240</h>
     </coordinates>
     <panel_attributes>MapleCFO system</panel_attributes>
     <additional_attributes></additional_attributes>
@@ -222,6 +222,40 @@ receive alerts</panel_attributes>
       <h>60</h>
     </coordinates>
     <panel_attributes>UC12 Generate monthly summary</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>330</x>
+      <y>1026</y>
+      <w>270</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>UC13 Auto-sync bank data</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>330</x>
+      <y>1104</y>
+      <w>270</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>UC14 Confirm detected contribution /
+RRSP estimate</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>330</x>
+      <y>1182</y>
+      <w>270</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>UC15 Update contribution limits</panel_attributes>
     <additional_attributes></additional_attributes>
   </element>
   <element>
@@ -411,6 +445,74 @@ action</panel_attributes>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>10.0;10.0;220.0;468.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>110</x>
+      <y>510</y>
+      <w>230</w>
+      <h>556</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;220.0;546.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>110</x>
+      <y>510</y>
+      <w>230</w>
+      <h>634</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;220.0;624.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLActor</id>
+    <coordinates>
+      <x>1300</x>
+      <y>1080</y>
+      <w>140</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>Limits Bot
+(GitHub Actions)</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>UMLActor</id>
+    <coordinates>
+      <x>1300</x>
+      <y>1260</y>
+      <w>120</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>Developer</panel_attributes>
+    <additional_attributes></additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>590</x>
+      <y>1120</y>
+      <w>740</w>
+      <h>102</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;92.0;730.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>590</x>
+      <y>1202</y>
+      <w>740</w>
+      <h>118</h>
+    </coordinates>
+    <panel_attributes>lt=-
+notified on failure</panel_attributes>
+    <additional_attributes>10.0;10.0;730.0;108.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>

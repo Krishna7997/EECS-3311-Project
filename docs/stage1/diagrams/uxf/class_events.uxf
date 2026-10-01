@@ -9,14 +9,14 @@
       <w>540</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>Class diagram (4/6): Events and undoable commands (Observer, Command)</panel_attributes>
+    <panel_attributes>Class diagram (4/7): Events and undoable commands (Observer, Command)</panel_attributes>
     <additional_attributes></additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>440</x>
-      <y>240</y>
+      <y>300</y>
       <w>460</w>
       <h>120</h>
     </coordinates>
@@ -33,7 +33,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>1040</x>
-      <y>390</y>
+      <y>470</y>
       <w>260</w>
       <h>80</h>
     </coordinates>
@@ -47,7 +47,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>1090</x>
-      <y>110</y>
+      <y>140</y>
       <w>170</w>
       <h>90</h>
     </coordinates>
@@ -64,7 +64,7 @@
       <x>1510</x>
       <y>70</y>
       <w>210</w>
-      <h>160</h>
+      <h>230</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enumeration&gt;&gt;
 *EventType*
@@ -74,14 +74,18 @@ TRANSACTION_RECATEGORIZED
 BUDGET_CHANGED
 BUDGET_EXCEEDED
 GOAL_UPDATED
-CONTRIBUTION_WARNING</panel_attributes>
+CONTRIBUTION_WARNING
+ACCOUNT_BALANCE_UPDATED
+CONTRIBUTION_DETECTED
+LIMITS_UPDATED
+REMINDER_DUE</panel_attributes>
     <additional_attributes></additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>1480</x>
-      <y>370</y>
+      <y>450</y>
       <w>260</w>
       <h>100</h>
     </coordinates>
@@ -97,7 +101,7 @@ CONTRIBUTION_WARNING</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1420</x>
-      <y>850</y>
+      <y>930</y>
       <w>380</w>
       <h>170</h>
     </coordinates>
@@ -117,7 +121,7 @@ CONTRIBUTION_WARNING</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1420</x>
-      <y>600</y>
+      <y>680</y>
       <w>390</w>
       <h>110</h>
     </coordinates>
@@ -133,7 +137,7 @@ CONTRIBUTION_WARNING</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>580</x>
-      <y>990</y>
+      <y>1080</y>
       <w>170</w>
       <h>110</h>
     </coordinates>
@@ -149,7 +153,7 @@ CONTRIBUTION_WARNING</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1040</x>
-      <y>1120</y>
+      <y>1210</y>
       <w>260</w>
       <h>110</h>
     </coordinates>
@@ -165,7 +169,7 @@ CONTRIBUTION_WARNING</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1050</x>
-      <y>890</y>
+      <y>970</y>
       <w>250</w>
       <h>90</h>
     </coordinates>
@@ -180,7 +184,7 @@ CONTRIBUTION_WARNING</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1060</x>
-      <y>610</y>
+      <y>700</y>
       <w>220</w>
       <h>80</h>
     </coordinates>
@@ -194,7 +198,7 @@ CONTRIBUTION_WARNING</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>40</x>
-      <y>980</y>
+      <y>1070</y>
       <w>290</w>
       <h>130</h>
     </coordinates>
@@ -212,7 +216,7 @@ CONTRIBUTION_WARNING</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1410</x>
-      <y>1150</y>
+      <y>1230</y>
       <w>410</w>
       <h>60</h>
     </coordinates>
@@ -225,54 +229,54 @@ CONTRIBUTION_WARNING</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1290</x>
-      <y>1166</y>
+      <y>1252</y>
       <w>130</w>
       <h>22</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;120.0;12.0</additional_attributes>
+    <additional_attributes>10.0;12.0;120.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>890</x>
-      <y>350</y>
-      <w>160</w>
-      <h>56</h>
+      <x>860</x>
+      <y>410</y>
+      <w>190</w>
+      <h>71</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1
 m2=0..*
 notifies</panel_attributes>
-    <additional_attributes>10.0;10.0;150.0;46.0</additional_attributes>
+    <additional_attributes>10.0;10.0;180.0;61.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>869</x>
-      <y>169</y>
-      <w>231</w>
-      <h>81</h>
+      <x>833</x>
+      <y>204</y>
+      <w>267</w>
+      <h>106</h>
     </coordinates>
     <panel_attributes>lt=.&gt;</panel_attributes>
-    <additional_attributes>10.0;71.0;221.0;10.0</additional_attributes>
+    <additional_attributes>10.0;96.0;257.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1250</x>
-      <y>141</y>
+      <y>175</y>
       <w>270</w>
-      <h>23</h>
+      <h>20</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>10.0;13.0;260.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;260.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1195</x>
-      <y>460</y>
+      <y>540</y>
       <w>351</w>
       <h>400</h>
     </coordinates>
@@ -283,7 +287,7 @@ notifies</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1290</x>
-      <y>413</y>
+      <y>493</y>
       <w>200</w>
       <h>24</h>
     </coordinates>
@@ -294,7 +298,7 @@ notifies</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>740</x>
-      <y>1057</y>
+      <y>1147</y>
       <w>310</w>
       <h>95</h>
     </coordinates>
@@ -305,18 +309,18 @@ notifies</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>740</x>
-      <y>952</y>
+      <y>1034</y>
       <w>320</w>
-      <h>85</h>
+      <h>91</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;75.0;310.0;10.0</additional_attributes>
+    <additional_attributes>10.0;81.0;310.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>725</x>
-      <y>680</y>
+      <y>770</y>
       <w>404</w>
       <h>320</h>
     </coordinates>
@@ -327,7 +331,7 @@ notifies</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>320</x>
-      <y>1035</y>
+      <y>1125</y>
       <w>270</w>
       <h>20</h>
     </coordinates>
@@ -340,7 +344,7 @@ m2=0..*</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1290</x>
-      <y>925</y>
+      <y>1005</y>
       <w>140</w>
       <h>20</h>
     </coordinates>
@@ -351,11 +355,11 @@ m2=0..*</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1270</x>
-      <y>641</y>
+      <y>727</y>
       <w>160</w>
       <h>22</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;150.0;12.0</additional_attributes>
+    <additional_attributes>10.0;12.0;150.0;10.0</additional_attributes>
   </element>
 </diagram>

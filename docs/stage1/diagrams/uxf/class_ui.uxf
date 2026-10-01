@@ -9,7 +9,7 @@
       <w>680</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>Class diagram (6/6): Presentation, Facade and persistence (Facade, MVC, Repository/DAO)</panel_attributes>
+    <panel_attributes>Class diagram (6/7): Presentation, Facade and persistence (Facade, MVC, Repository/DAO)</panel_attributes>
     <additional_attributes></additional_attributes>
   </element>
   <element>
@@ -181,7 +181,7 @@ _+main(args: String[]): void_
       <x>580</x>
       <y>250</y>
       <w>620</w>
-      <h>660</h>
+      <h>810</h>
     </coordinates>
     <panel_attributes>*MapleCfoFacade*
 --
@@ -195,6 +195,10 @@ _+main(args: String[]): void_
 -recurring: RecurringChargeDetector
 -affordability: AffordabilityAnalyzer
 -reports: ReportService
+-autoSync: ImportFolderWatcher
+-reminders: ReminderService
+-limits: LimitsService
+-rrspEstimator: RrspRoomEstimator
 -agent: CfoAgent
 -history: CommandHistory
 -eventBus: EventBus
@@ -221,7 +225,12 @@ _+main(args: String[]): void_
 +confirmProposedAction(actionId: String): void
 +dismissProposedAction(actionId: String): void
 +generateMonthlyReport(m: YearMonth): MonthlyReport
-+subscribe(t: EventType, l: FinanceEventListener): void</panel_attributes>
++subscribe(t: EventType, l: FinanceEventListener): void
++startAutoImport(folder: Path): void
++stopAutoImport(): void
++getReminders(): List&lt;Alert&gt;
++getRrspEstimate(year: int): RrspEstimate
++refreshLimits(): LimitsStatus</panel_attributes>
     <additional_attributes></additional_attributes>
   </element>
   <element>
@@ -425,24 +434,24 @@ m2=7</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>256</x>
+      <x>242</x>
       <y>180</y>
-      <w>334</w>
-      <h>216</h>
+      <w>348</w>
+      <h>259</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;324.0;206.0</additional_attributes>
+    <additional_attributes>10.0;10.0;338.0;249.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>711</x>
+      <x>707</x>
       <y>180</y>
-      <w>46</w>
+      <w>43</w>
       <h>80</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;36.0;70.0</additional_attributes>
+    <additional_attributes>10.0;10.0;33.0;70.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
