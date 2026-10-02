@@ -402,7 +402,7 @@ These are simple immutable data carriers (Java `record`s) returned by services. 
 
 ## 4. Design pattern explanations
 
-MapleCFO uses **eight GoF patterns** (at least five are required), plus the MVC and Repository architectural patterns. Each one solves a specific problem in this application.
+MapleCFO uses **eight GoF patterns** (at least five are required), plus the MVC and Repository architectural patterns. Section 4.10 shows how the design follows the main software-design principles. Each one solves a specific problem in this application.
 
 ### 4.1 Facade: `MapleCfoFacade`
 
@@ -480,6 +480,19 @@ MapleCFO uses **eight GoF patterns** (at least five are required), plus the MVC 
 
 - **MVC**: *Model* = domain objects and services. *View* = the JavaFX `View` classes (and `CliRenderer` for text). *Controller* = the views' event handlers delegating to `MapleCfoFacade`. Views never contain financial logic.
 - **Repository / DAO**: `Repository<T,ID>` with SQLite implementations isolates SQL. Services can be tested with in-memory fakes.
+
+### 4.10 Software-design principles in the design
+
+| Principle | Where it shows up in MapleCFO |
+|---|---|
+| **Abstraction** | The agent sees every finance capability through one `FinanceTool` interface (name, schema, execute). The net-worth code works with `AssetComponent` and never needs to know whether it holds an `Account` or an `AccountGroup`. |
+| **Encapsulation** | Fields are private and changed only through methods: `Account.updateBalance()`, `CommandHistory.run()/undo()`, `Money.plus()/minus()` (immutable value object). The SQL lives only inside the `Sqlite*Repository` classes. |
+| **Separation of concerns** | The layers are kept apart: presentation (views, CLI), facade, deterministic services, agent, and persistence. The LLM only plans and explains, and all numbers come from services (D1). Prompt building, the LLM call and answer checking are three separate classes: `PromptBuilder`, `LlmClient` and `ResponseValidator`. |
+| **High cohesion** | Each service has one job: `FireCalculator` projects FIRE, `RecurringChargeDetector` finds subscriptions, `LimitsValidator` only checks limit files, and `ReminderService` only produces reminders. |
+| **Low coupling** | The GUI and CLI depend only on `MapleCfoFacade`. Services talk through `EventBus` events instead of calling each other: for example, `BudgetService` and `BalanceSyncService` react to `TRANSACTIONS_IMPORTED`. Automation classes reuse existing interfaces instead of adding new links. |
+| **Interfaces** | `LlmClient`, `FinanceTool`, `PayoffStrategy`, `CategorizationStrategy`, `LimitsProvider`, `FailureNotifier`, `FinanceEventListener`, `UndoableCommand` and `Repository<T,ID>`. |
+| **Dependency inversion** | High-level classes depend on interfaces, not concrete classes: `CfoAgent` depends on `LlmClient` (Claude or mock), services depend on `Repository` interfaces (SQLite or in-memory), and `LimitsService` depends on `LimitsProvider` (remote or bundled). Concrete classes are chosen at start-up, for example by `LlmClientFactory`. |
+| **Polymorphism** | `ToolRegistry.execute()` calls `execute()` on any `FinanceTool`, and each tool subclass supplies its own `doExecute()`. `DebtPayoffPlanner` calls `orderDebts()` on whichever strategy is set. `EventBus.publish()` calls `onEvent()` on every listener, and `CommandHistory` runs any `UndoableCommand`. |
 
 ---
 
