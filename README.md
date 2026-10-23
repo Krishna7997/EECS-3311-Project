@@ -33,6 +33,21 @@ EECS3311 Software Design (Fall 2026) course project by Krishna Patel.
 
 All diagrams are made in **[UMLet](https://www.umlet.com)**. Editable UMLet files are in [`docs/stage1/diagrams/uxf/`](docs/stage1/diagrams/uxf/) and the exported images in [`docs/stage1/diagrams/png/`](docs/stage1/diagrams/png/).
 
+## Build and test (Stage 2, in progress)
+Prerequisites: Java 21 (for example Temurin 21) and Maven 3.9+.
+
+```
+mvn test
+```
+
+The GUI and CLI launch commands will be added here as they are implemented.
+
+### Local configuration (API key)
+```
+cp .env.example .env
+```
+Then put your own key in `.env`. The `.env` file is git-ignored, so the key is never committed.
+
 ## Tech stack
 Java 21 · JavaFX (GUI) · picocli (CLI) · SQLite · Anthropic Claude API · GitHub Actions · JUnit 5 · KUMA
 
