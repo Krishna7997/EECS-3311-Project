@@ -49,7 +49,8 @@ public class Transaction {
         }
     }
 
-    static String normalise(String text) {
+    /** Lower-case letters and digits only, single spaces: "NETFLIX.COM  " becomes "netflix com". */
+    public static String normalise(String text) {
         return text.toLowerCase().replaceAll("[^a-z0-9]+", " ").trim();
     }
 
