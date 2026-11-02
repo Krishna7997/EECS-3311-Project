@@ -33,14 +33,38 @@ EECS3311 Software Design (Fall 2026) course project by Krishna Patel.
 
 All diagrams are made in **[UMLet](https://www.umlet.com)**. Editable UMLet files are in [`docs/stage1/diagrams/uxf/`](docs/stage1/diagrams/uxf/) and the exported images in [`docs/stage1/diagrams/png/`](docs/stage1/diagrams/png/).
 
-## Build and test (Stage 2, in progress)
+## Build and run (Stage 2, in progress)
 Prerequisites: Java 21 (for example Temurin 21) and Maven 3.9+.
 
 ```
-mvn test
+mvn test          # run the unit tests
+mvn package       # build target/maplecfo.jar (all libraries included)
 ```
 
-The GUI and CLI launch commands will be added here as they are implemented.
+### Command-line interface
+```
+java -jar target/maplecfo.jar --help
+java -jar target/maplecfo.jar            # interactive mode (undo/redo work across commands)
+```
+Data is stored locally in `~/.maplecfo/maplecfo.db` (change it with `--db <file>` or the `MAPLECFO_DB` environment variable).
+
+Example session with the fake sample data:
+```
+java -jar target/maplecfo.jar import sample-data/td_chequing_sample.csv -a chequing -p "TD bank account"
+java -jar target/maplecfo.jar import sample-data/rbc_visa_sample.csv -a visa -p RBC
+java -jar target/maplecfo.jar tx list --review
+java -jar target/maplecfo.jar budget set DINING 150 -m 2026-10
+java -jar target/maplecfo.jar budget status -m 2026-10
+java -jar target/maplecfo.jar recurring
+java -jar target/maplecfo.jar profile set --birth-year 2003 --resident-since 2010 --rrsp-limit 5200 --fhsa-opened 2025
+java -jar target/maplecfo.jar room
+java -jar target/maplecfo.jar room check TFSA 3000
+java -jar target/maplecfo.jar fire --invested 10000 --save 15000 --spend 40000 --age 23
+java -jar target/maplecfo.jar debt add "RBC Visa" --balance 2400 --apr 20.99 --min 60
+java -jar target/maplecfo.jar debt plan --compare --extra 200
+```
+
+The GUI launch command will be added here when the GUI is implemented.
 
 ### Local configuration (API key)
 ```
