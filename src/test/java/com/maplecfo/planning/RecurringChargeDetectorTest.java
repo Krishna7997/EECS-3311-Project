@@ -106,4 +106,26 @@ class RecurringChargeDetectorTest {
         assertEquals("netflix", RecurringChargeDetector.normaliseMerchant("NETFLIX.COM 866-579-7172"));
         assertEquals("rogers wireless", RecurringChargeDetector.normaliseMerchant("Rogers Wireless Inc #123"));
     }
+
+    @Test
+    void nextDateInThePastMovesForward() {
+        List<Transaction> txs = List.of(
+                tx("2026-07-25", "Wealthsimple", "-500.00"),
+                tx("2026-08-25", "Wealthsimple", "-500.00"),
+                tx("2026-09-25", "Wealthsimple", "-500.00"),
+                tx("2026-10-25", "Wealthsimple", "-500.00"));
+        assertEquals(LocalDate.of(2026, 11, 25), detector.detect(txs, LocalDate.of(2026, 11, 1)).get(0).nextExpectedDate());
+        assertEquals(LocalDate.of(2026, 12, 25), detector.detect(txs, LocalDate.of(2026, 11, 26)).get(0).nextExpectedDate());
+    }
+
+    @Test
+    void variableBillIsNotReportedAsAPriceIncrease() {
+        List<Transaction> txs = List.of(
+                tx("2026-06-20", "Toronto Hydro", "-61.00"),
+                tx("2026-07-20", "Toronto Hydro", "-88.40"),
+                tx("2026-08-19", "Toronto Hydro", "-95.10"));
+        RecurringCharge hydro = detector.detect(txs).get(0);
+        assertTrue(hydro.variableAmount());
+        assertFalse(hydro.priceIncreased());
+    }
 }

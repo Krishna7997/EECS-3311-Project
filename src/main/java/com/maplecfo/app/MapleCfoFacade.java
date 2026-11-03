@@ -160,7 +160,7 @@ public class MapleCfoFacade {
         LocalDate to = today();
         return recurring.detect(txService.findAll().stream()
                 .filter(t -> !t.getDate().isBefore(to.minusMonths(6)))
-                .toList());
+                .toList(), to);
     }
 
     public boolean isRecurringLowConfidence() {

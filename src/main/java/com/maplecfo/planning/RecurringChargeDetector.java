@@ -47,6 +47,14 @@ public class RecurringChargeDetector {
     }
 
     public List<RecurringCharge> detect(List<Transaction> txs) {
+        return detect(txs, null);
+    }
+
+    /**
+     * Same as {@link #detect(List)}, but a predicted next date that is already
+     * in the past is moved forward until it is on or after {@code today}.
+     */
+    public List<RecurringCharge> detect(List<Transaction> txs, LocalDate today) {
         Map<String, List<Transaction>> groups = new LinkedHashMap<>();
         for (Transaction t : txs) {
             if (t.isExpense()) {
@@ -61,7 +69,7 @@ public class RecurringChargeDetector {
         for (List<Transaction> group : groups.values()) {
             if (group.size() >= minOccurrences) {
                 group.sort(Comparator.comparing(Transaction::getDate));
-                frequencyOf(group).ifPresent(f -> result.add(build(group, f)));
+                frequencyOf(group).ifPresent(f -> result.add(build(group, f, today)));
             }
         }
         result.sort(Comparator.comparing(RecurringCharge::yearlyCost).reversed());
@@ -118,22 +126,30 @@ public class RecurringChargeDetector {
         };
     }
 
-    private RecurringCharge build(List<Transaction> sorted, Frequency f) {
+    private RecurringCharge build(List<Transaction> sorted, Frequency f, LocalDate today) {
         Transaction latest = sorted.get(sorted.size() - 1);
         List<Transaction> earlier = sorted.subList(0, sorted.size() - 1);
 
         Money average = averageOf(sorted);
         Money earlierAverage = averageOf(earlier);
-        boolean increased = latest.getAmount().abs()
-                .isGreaterThan(earlierAverage.times(1 + PRICE_INCREASE_THRESHOLD));
         boolean variable = spread(earlier, earlierAverage) > VARIABLE_AMOUNT_THRESHOLD;
+        // A bill that already varies (hydro, gas) has no fixed price, so "price went up" would be misleading.
+        boolean increased = !variable && latest.getAmount().abs()
+                .isGreaterThan(earlierAverage.times(1 + PRICE_INCREASE_THRESHOLD));
 
-        LocalDate next = switch (f) {
-            case WEEKLY -> latest.getDate().plusWeeks(1);
-            case MONTHLY -> latest.getDate().plusMonths(1);
-            case YEARLY -> latest.getDate().plusYears(1);
-        };
+        LocalDate next = step(latest.getDate(), f);
+        while (today != null && next.isBefore(today)) {
+            next = step(next, f);
+        }
         return new RecurringCharge(latest.getMerchant(), average, f, next, increased, variable, sorted);
+    }
+
+    private static LocalDate step(LocalDate d, Frequency f) {
+        return switch (f) {
+            case WEEKLY -> d.plusWeeks(1);
+            case MONTHLY -> d.plusMonths(1);
+            case YEARLY -> d.plusYears(1);
+        };
     }
 
     private static Money averageOf(List<Transaction> txs) {
