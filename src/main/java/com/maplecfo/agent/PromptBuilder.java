@@ -1,6 +1,8 @@
 package com.maplecfo.agent;
 
 import com.maplecfo.agent.llm.ChatMessage;
+import com.maplecfo.domain.Category;
+import com.maplecfo.domain.Transaction;
 import com.maplecfo.domain.UserProfile;
 
 import java.time.LocalDate;
@@ -37,5 +39,35 @@ public class PromptBuilder {
         msgs.addAll(m.all());
         msgs.add(ChatMessage.user(userMsg));
         return msgs;
+    }
+
+    // ------------------------------------------------------------ F02 categorization
+
+    public String buildCategorizationSystemPrompt() {
+        StringBuilder names = new StringBuilder();
+        for (Category c : Category.values()) {
+            if (c != Category.UNCATEGORIZED) names.append(names.length() > 0 ? ", " : "").append(c.name());
+        }
+        return "You categorize Canadian bank transactions. Reply with exactly one word from this list and nothing else: "
+                + names + ". If you are not sure, reply OTHER.";
+    }
+
+    public String buildCategorizationPrompt(Transaction t) {
+        return "Description: " + t.getDescription() + "\nAmount: " + t.getAmount()
+                + (t.isExpense() ? " (money out)" : " (money in)");
+    }
+
+    // ------------------------------------------------------------ F12 monthly summary
+
+    public String buildSummarySystemPrompt() {
+        return """
+                You write a short monthly money summary for a young person in Canada.
+                Use only the figures in the JSON you are given; do not calculate new numbers or add amounts.
+                Write 3 to 5 friendly sentences: how the month went, the biggest spending category, any budget
+                that went over, and one practical suggestion. No investment advice.""";
+    }
+
+    public String buildSummaryPrompt(String reportJson) {
+        return "Monthly figures:\n" + reportJson;
     }
 }

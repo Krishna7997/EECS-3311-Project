@@ -37,6 +37,8 @@ import com.maplecfo.planning.PayoffMethod;
 import com.maplecfo.planning.PayoffPlan;
 import com.maplecfo.planning.RecurringChargeDetector;
 import com.maplecfo.planning.RegisteredAccountService;
+import com.maplecfo.reports.MonthlyReport;
+import com.maplecfo.reports.ReportService;
 import com.maplecfo.services.TransactionService;
 
 import java.io.IOException;
@@ -68,6 +70,7 @@ public class MapleCfoFacade {
     private final EventBus eventBus;
     private final Clock clock;
     private CfoAgent agent;
+    private ReportService reports;
 
     public MapleCfoFacade(TransactionService txService, BudgetService budgets, RegisteredAccountService registered,
                           FireCalculator fire, DebtPayoffPlanner debtPlanner, DebtRepository debtRepo,
@@ -215,6 +218,16 @@ public class MapleCfoFacade {
     public PayoffPlan planDebtPayoff(PayoffMethod m, Money extra) {
         debtPlanner.setStrategy(m.toStrategy());
         return debtPlanner.plan(extra);
+    }
+
+    // ---------------------------------------------------------- F12 monthly summary
+
+    void attachReports(ReportService reports) {
+        this.reports = reports;
+    }
+
+    public MonthlyReport generateMonthlyReport(YearMonth m) {
+        return reports.buildMonthlyReport(m);
     }
 
     // ---------------------------------------------------------- F10 AI CFO agent

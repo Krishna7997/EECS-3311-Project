@@ -38,6 +38,7 @@ import java.util.concurrent.Callable;
                 PlanningCommands.DebtCmd.class,
                 PlanningCommands.RecurringCmd.class,
                 MapleCfoCli.AlertsCmd.class,
+                ReportCommands.class,
                 AgentCommands.AskCmd.class,
                 AgentCommands.ConfirmCmd.class,
                 AgentCommands.DismissCmd.class,

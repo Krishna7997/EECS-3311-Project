@@ -18,6 +18,10 @@ import com.maplecfo.agent.tools.RecurringChargesTool;
 import com.maplecfo.agent.tools.SpendingSummaryTool;
 import com.maplecfo.automation.limits.LimitsService;
 import com.maplecfo.categorization.CategorizationService;
+import com.maplecfo.categorization.LlmCategorizer;
+import com.maplecfo.categorization.RuleBasedCategorizer;
+import com.maplecfo.reports.ReportService;
+import com.maplecfo.reports.ReportSummarizer;
 import com.maplecfo.command.CommandHistory;
 import com.maplecfo.events.AlertService;
 import com.maplecfo.events.EventBus;
@@ -45,6 +49,7 @@ import com.maplecfo.services.TransactionService;
 
 import java.nio.file.Path;
 import java.time.Clock;
+import java.util.List;
 
 /**
  * Builds the whole application once (composition root): repositories,
@@ -89,7 +94,10 @@ public final class AppContext {
                 mappingRepo.save(preset);
             }
         }
-        CategorizationService categorizer = CategorizationService.rulesOnly();
+        PromptBuilder prompts = new PromptBuilder();
+        ResponseValidator validator = new ResponseValidator();
+        CategorizationService categorizer = new CategorizationService(RuleBasedCategorizer.withDefaultRules(),
+                List.of(new LlmCategorizer(llm, prompts)));
         categorizer.useRuleRepository(new SqliteCategoryRuleRepository(db));
         TransactionService txService = new TransactionService(mappingRepo, categorizer, txRepo, bus);
 
@@ -105,8 +113,11 @@ public final class AppContext {
 
         FireCalculator fire = new FireCalculator();
         RecurringChargeDetector recurring = new RecurringChargeDetector();
+        ReportService reports = new ReportService(new ReportSummarizer(llm, prompts, validator), txService, budgets,
+                recurring);
         MapleCfoFacade facade = new MapleCfoFacade(txService, budgets, registered, fire, planner, debtRepo,
                 profileRepo, recurring, alerts, new CommandHistory(), bus, clock);
+        facade.attachReports(reports);
 
         PendingActionStore pending = new PendingActionStore();
         ToolRegistry tools = new ToolRegistry();
@@ -117,8 +128,8 @@ public final class AppContext {
         tools.register(new FireProjectionTool(fire, profileRepo::load, clock));
         tools.register(new DebtPayoffTool(planner));
         tools.register(new ProposeActionTool(pending, budgets, clock));
-        facade.attachAgent(new CfoAgent(llm, tools, new ConversationMemory(10), new PromptBuilder(),
-                new ResponseValidator(), pending, profileRepo::load, clock));
+        facade.attachAgent(new CfoAgent(llm, tools, new ConversationMemory(10), prompts,
+                validator, pending, profileRepo::load, clock));
         return facade;
     }
 }
