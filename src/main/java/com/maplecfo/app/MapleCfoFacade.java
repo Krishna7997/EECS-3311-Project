@@ -71,6 +71,9 @@ public class MapleCfoFacade {
     private final Clock clock;
     private CfoAgent agent;
     private ReportService reports;
+    private com.maplecfo.planning.AccountService accounts;
+    private com.maplecfo.planning.NetWorthService netWorth;
+    private com.maplecfo.planning.GoalService goals;
 
     public MapleCfoFacade(TransactionService txService, BudgetService budgets, RegisteredAccountService registered,
                           FireCalculator fire, DebtPayoffPlanner debtPlanner, DebtRepository debtRepo,
@@ -218,6 +221,75 @@ public class MapleCfoFacade {
     public PayoffPlan planDebtPayoff(PayoffMethod m, Money extra) {
         debtPlanner.setStrategy(m.toStrategy());
         return debtPlanner.plan(extra);
+    }
+
+    // ---------------------------------------------------------- F03 accounts and net worth
+
+    void attachPlanning(com.maplecfo.planning.AccountService accounts, com.maplecfo.planning.NetWorthService netWorth,
+                        com.maplecfo.planning.GoalService goals) {
+        this.accounts = accounts;
+        this.netWorth = netWorth;
+        this.goals = goals;
+    }
+
+    /** Adds an account and stores a net worth snapshot. Returns warnings such as a duplicate name. */
+    public List<String> addAccount(com.maplecfo.domain.Account a) {
+        List<String> warnings = accounts.addAccount(a);
+        netWorth.recordSnapshot();
+        return warnings;
+    }
+
+    public void updateAccountBalance(String id, Money balance) {
+        accounts.updateBalance(id, balance);
+        netWorth.recordSnapshot();
+    }
+
+    public void removeAccount(String id) {
+        accounts.removeAccount(id);
+        netWorth.recordSnapshot();
+    }
+
+    public List<com.maplecfo.domain.Account> getAccounts() {
+        return accounts.getAccounts();
+    }
+
+    public com.maplecfo.domain.AccountGroup getAccountTree() {
+        return accounts.buildAccountTree();
+    }
+
+    public com.maplecfo.planning.NetWorthSnapshot getNetWorth() {
+        return netWorth.computeSnapshot();
+    }
+
+    public java.util.Map<LocalDate, Money> getNetWorthHistory() {
+        return netWorth.getHistory();
+    }
+
+    // ---------------------------------------------------------- F09 savings goals
+
+    /** Creates a goal through the undo history. */
+    public void createGoal(com.maplecfo.domain.SavingsGoal g) {
+        history.run(new com.maplecfo.command.CreateGoalCommand(goals, g));
+    }
+
+    public List<com.maplecfo.domain.SavingsGoal> getGoals() {
+        return goals.getGoals();
+    }
+
+    public com.maplecfo.domain.SavingsGoal recordGoalDeposit(String id, Money amount) {
+        return goals.recordDeposit(id, amount);
+    }
+
+    public com.maplecfo.planning.GoalForecast forecastGoal(String id) {
+        return goals.forecast(id);
+    }
+
+    public List<com.maplecfo.planning.GoalForecast> forecastGoals() {
+        return goals.forecastAll();
+    }
+
+    public void deleteGoal(String id) {
+        goals.deleteGoal(id);
     }
 
     // ---------------------------------------------------------- F12 monthly summary

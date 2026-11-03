@@ -99,4 +99,22 @@ class MapleCfoCliTest {
         assertEquals(List.of("debt", "add", "RBC Visa", "--apr", "20"),
                 MapleCfoCli.splitArgs("debt add \"RBC Visa\"  --apr 20"));
     }
+
+    @Test
+    void accountsNetWorthAndGoals() {
+        assertTrue(run("networth").contains("Add your first account"));
+        run("account", "add", "TD Chequing", "CHEQUING", "2500", "--bank", "TD");
+        run("account", "add", "RBC Visa", "CREDIT_CARD", "800");
+        assertTrue(run("account", "list").contains("td-chequing"));
+        String nw = run("networth");
+        assertTrue(nw.contains("Net worth: $1,700.00"), nw);
+        assertTrue(run("account", "update", "rbc-visa", "200").contains("Net worth is now $2,300.00"));
+
+        String added = run("goal", "add", "Emergency fund", "1000", "--by", "2027-10-21", "--saved", "900");
+        assertTrue(added.contains("emergency-fund"), added);
+        assertTrue(run("goal", "list").contains("Emergency fund"));
+        String dep = run("goal", "deposit", "emergency-fund", "100");
+        assertTrue(dep.contains("Goal reached: Emergency fund"), dep);
+        assertTrue(run("goal", "forecast", "Emergency fund").contains("is complete"));
+    }
 }

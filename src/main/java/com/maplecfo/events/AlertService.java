@@ -21,6 +21,7 @@ public class AlertService implements FinanceEventListener {
         bus.subscribe(EventType.CONTRIBUTION_WARNING, this);
         bus.subscribe(EventType.REMINDER_DUE, this);
         bus.subscribe(EventType.CONTRIBUTION_DETECTED, this);
+        bus.subscribe(EventType.GOAL_UPDATED, this);
     }
 
     @Override
@@ -30,11 +31,21 @@ public class AlertService implements FinanceEventListener {
             case CONTRIBUTION_WARNING -> contributionAlert(e);
             case REMINDER_DUE, CONTRIBUTION_DETECTED ->
                     new Alert(Alert.Severity.INFO, String.valueOf(e.payload()), e.type(), e.timestamp());
+            case GOAL_UPDATED -> goalAlert(e);
             default -> null;
         };
         if (alert != null) {
             alerts.add(alert);
         }
+    }
+
+    /** Only a goal that has just been reached produces an alert. */
+    private Alert goalAlert(FinanceEvent e) {
+        if (!(e.payload() instanceof com.maplecfo.domain.SavingsGoal g) || !g.isComplete()) {
+            return null;
+        }
+        return new Alert(Alert.Severity.INFO, "Goal reached: " + g.getName() + " (" + g.getSaved() + " of "
+                + g.getTarget() + ")", e.type(), e.timestamp());
     }
 
     private Alert budgetAlert(FinanceEvent e) {

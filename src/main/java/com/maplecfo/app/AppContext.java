@@ -39,6 +39,15 @@ import com.maplecfo.persistence.sqlite.SqliteMappingProfileRepository;
 import com.maplecfo.persistence.sqlite.SqliteProfileRepository;
 import com.maplecfo.persistence.sqlite.SqliteTransactionRepository;
 import com.maplecfo.persistence.TransactionRepository;
+import com.maplecfo.agent.tools.GoalForecastTool;
+import com.maplecfo.agent.tools.NetWorthTool;
+import com.maplecfo.persistence.sqlite.SqliteAccountRepository;
+import com.maplecfo.persistence.sqlite.SqliteGoalRepository;
+import com.maplecfo.persistence.sqlite.SqliteNetWorthHistoryRepository;
+import com.maplecfo.planning.AccountService;
+import com.maplecfo.planning.CashFlowForecaster;
+import com.maplecfo.planning.GoalService;
+import com.maplecfo.planning.NetWorthService;
 import com.maplecfo.planning.AvalancheStrategy;
 import com.maplecfo.planning.BudgetService;
 import com.maplecfo.planning.DebtPayoffPlanner;
@@ -119,6 +128,12 @@ public final class AppContext {
                 profileRepo, recurring, alerts, new CommandHistory(), bus, clock);
         facade.attachReports(reports);
 
+        AccountService accountService = new AccountService(new SqliteAccountRepository(db), bus);
+        NetWorthService netWorth = new NetWorthService(accountService, new SqliteNetWorthHistoryRepository(db), clock);
+        CashFlowForecaster cashFlow = new CashFlowForecaster(txService, recurring, clock);
+        GoalService goals = new GoalService(new SqliteGoalRepository(db), cashFlow, bus, clock);
+        facade.attachPlanning(accountService, netWorth, goals);
+
         PendingActionStore pending = new PendingActionStore();
         ToolRegistry tools = new ToolRegistry();
         tools.register(new SpendingSummaryTool(txService, clock));
@@ -127,6 +142,8 @@ public final class AppContext {
         tools.register(new ContributionRoomTool(registered, clock));
         tools.register(new FireProjectionTool(fire, profileRepo::load, clock));
         tools.register(new DebtPayoffTool(planner));
+        tools.register(new NetWorthTool(netWorth, accountService));
+        tools.register(new GoalForecastTool(goals));
         tools.register(new ProposeActionTool(pending, budgets, clock));
         facade.attachAgent(new CfoAgent(llm, tools, new ConversationMemory(10), prompts,
                 validator, pending, profileRepo::load, clock));

@@ -81,7 +81,14 @@ public class DatabaseManager {
               debit_column TEXT, credit_column TEXT, negate_amounts INTEGER NOT NULL, balance_column TEXT)""",
             """
             CREATE TABLE IF NOT EXISTS category_rules (
-              keyword TEXT PRIMARY KEY, category TEXT NOT NULL)"""
+              keyword TEXT PRIMARY KEY, category TEXT NOT NULL)""",
+            """
+            CREATE TABLE IF NOT EXISTS goals (
+              id TEXT PRIMARY KEY, name TEXT NOT NULL, target TEXT NOT NULL, saved TEXT NOT NULL,
+              deadline TEXT, linked_account_id TEXT)""",
+            """
+            CREATE TABLE IF NOT EXISTS net_worth_history (
+              date TEXT PRIMARY KEY, total TEXT NOT NULL)"""
         };
         try (Connection c = getConnection(); Statement s = c.createStatement()) {
             for (String sql : ddl) {
