@@ -11,8 +11,9 @@ import java.util.Optional;
 
 /**
  * Categorizes by keyword rules: rules learned from the user's corrections
- * first, then built-in rules for common Canadian merchants. Within each group
- * longer keywords win, so "uber eats" (DINING) beats "uber" (TRANSPORT).
+ * first, then built-in rules for common Canadian merchants, with generic
+ * transfer words last. Within each group longer keywords win, so "uber eats"
+ * (DINING) beats "uber" (TRANSPORT).
  */
 public class RuleBasedCategorizer implements CategorizationStrategy {
 
@@ -60,7 +61,9 @@ public class RuleBasedCategorizer implements CategorizationStrategy {
 
     public synchronized void addRule(CategoryRule rule) {
         rules.add(rule);
+        // learned rules first; generic payment words ("e-transfer") last, so "RENT - E-TRANSFER" is RENT
         rules.sort(Comparator.comparing((CategoryRule r) -> !r.learned())
+                .thenComparing(r -> r.category() == Category.TRANSFER)
                 .thenComparing(r -> -r.keyword().length()));
     }
 

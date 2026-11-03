@@ -1,6 +1,10 @@
 package com.maplecfo.app;
 
+import com.maplecfo.agent.AgentResponse;
+import com.maplecfo.agent.CfoAgent;
+import com.maplecfo.agent.llm.LlmClient;
 import com.maplecfo.command.CommandHistory;
+import com.maplecfo.command.UndoableCommand;
 import com.maplecfo.command.RecategorizeCommand;
 import com.maplecfo.command.SetBudgetCommand;
 import com.maplecfo.domain.AccountType;
@@ -63,6 +67,7 @@ public class MapleCfoFacade {
     private final CommandHistory history;
     private final EventBus eventBus;
     private final Clock clock;
+    private CfoAgent agent;
 
     public MapleCfoFacade(TransactionService txService, BudgetService budgets, RegisteredAccountService registered,
                           FireCalculator fire, DebtPayoffPlanner debtPlanner, DebtRepository debtRepo,
@@ -210,6 +215,48 @@ public class MapleCfoFacade {
     public PayoffPlan planDebtPayoff(PayoffMethod m, Money extra) {
         debtPlanner.setStrategy(m.toStrategy());
         return debtPlanner.plan(extra);
+    }
+
+    // ---------------------------------------------------------- F10 AI CFO agent
+
+    /** Connects the agent after construction (the agent's tools use the same services as this facade). */
+    void attachAgent(CfoAgent agent) {
+        this.agent = agent;
+    }
+
+    public AgentResponse askCfo(String message) {
+        return requireAgent().handle(message);
+    }
+
+    /** Runs a change the AI proposed, through the undo history. */
+    public String confirmProposedAction(String actionId) {
+        UndoableCommand c = requireAgent().getPendingActions().take(actionId)
+                .orElseThrow(() -> new NoSuchElementException("No pending action " + actionId));
+        history.run(c);
+        return c.describe();
+    }
+
+    public boolean dismissProposedAction(String actionId) {
+        return requireAgent().getPendingActions().take(actionId).isPresent();
+    }
+
+    public java.util.Map<String, String> getPendingActions() {
+        return requireAgent().getPendingActions().list();
+    }
+
+    public LlmClient getLlm() {
+        return requireAgent().getLlm();
+    }
+
+    public void clearConversation() {
+        requireAgent().getMemory().clear();
+    }
+
+    private CfoAgent requireAgent() {
+        if (agent == null) {
+            throw new IllegalStateException("The AI agent is not configured");
+        }
+        return agent;
     }
 
     // ---------------------------------------------------------- alerts and events

@@ -93,6 +93,12 @@ public class RegisteredAccountService {
         return new ContributionCheck(ContributionCheck.Status.OK, type, amount, room, Money.zero(), List.of());
     }
 
+    /** Profile fields still needed before room can be calculated for this account type. */
+    public List<String> missingProfileFields(AccountType type) {
+        requireRegistered(type);
+        return profileRepo.load().missingFieldsFor(type);
+    }
+
     public void recordContribution(ContributionRecord r) {
         contributionRepo.add(Objects.requireNonNull(r, "record"));
     }

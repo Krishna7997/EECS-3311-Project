@@ -88,4 +88,13 @@ class CategorizationServiceTest {
         assertEquals("starbucks", RuleBasedCategorizer.merchantKeyword("STARBUCKS #4521 TORONTO ON"));
         assertEquals("costco wholesale", RuleBasedCategorizer.merchantKeyword("COSTCO WHOLESALE W540"));
     }
+
+    @Test
+    void rentPaidByETransferIsRentNotATransfer() {
+        Transaction rent = tx("RENT - E-TRANSFER TO LANDLORD");
+        Transaction friend = tx("E-TRANSFER TO ALEX");
+        CategorizationService.rulesOnly().categorizeAll(List.of(rent, friend));
+        assertEquals(Category.RENT, rent.getCategory());
+        assertEquals(Category.TRANSFER, friend.getCategory());
+    }
 }

@@ -1,5 +1,21 @@
 package com.maplecfo.app;
 
+import com.maplecfo.agent.CfoAgent;
+import com.maplecfo.agent.ConversationMemory;
+import com.maplecfo.agent.PendingActionStore;
+import com.maplecfo.agent.PromptBuilder;
+import com.maplecfo.agent.ResponseValidator;
+import com.maplecfo.agent.ToolRegistry;
+import com.maplecfo.agent.llm.LlmClient;
+import com.maplecfo.agent.llm.LlmClientFactory;
+import com.maplecfo.agent.tools.BudgetStatusTool;
+import com.maplecfo.agent.tools.ContributionRoomTool;
+import com.maplecfo.agent.tools.DebtPayoffTool;
+import com.maplecfo.agent.tools.DemoRules;
+import com.maplecfo.agent.tools.FireProjectionTool;
+import com.maplecfo.agent.tools.ProposeActionTool;
+import com.maplecfo.agent.tools.RecurringChargesTool;
+import com.maplecfo.agent.tools.SpendingSummaryTool;
 import com.maplecfo.automation.limits.LimitsService;
 import com.maplecfo.categorization.CategorizationService;
 import com.maplecfo.command.CommandHistory;
@@ -50,10 +66,18 @@ public final class AppContext {
     }
 
     public static MapleCfoFacade create(Path databaseFile) {
-        return create(DatabaseManager.forFile(databaseFile), Clock.systemDefaultZone());
+        return create(DatabaseManager.forFile(databaseFile), Clock.systemDefaultZone(), AppConfig.load());
     }
 
     public static MapleCfoFacade create(DatabaseManager db, Clock clock) {
+        return create(db, clock, AppConfig.of(java.util.Map.of()));
+    }
+
+    public static MapleCfoFacade create(DatabaseManager db, Clock clock, AppConfig config) {
+        return create(db, clock, LlmClientFactory.create(config, DemoRules.forMapleCfo()));
+    }
+
+    public static MapleCfoFacade create(DatabaseManager db, Clock clock, LlmClient llm) {
         EventBus bus = new EventBus();
         AlertService alerts = new AlertService();
         alerts.register(bus);
@@ -79,7 +103,22 @@ public final class AppContext {
         DebtRepository debtRepo = new SqliteDebtRepository(db);
         DebtPayoffPlanner planner = new DebtPayoffPlanner(debtRepo, new AvalancheStrategy(), clock);
 
-        return new MapleCfoFacade(txService, budgets, registered, new FireCalculator(), planner, debtRepo,
-                profileRepo, new RecurringChargeDetector(), alerts, new CommandHistory(), bus, clock);
+        FireCalculator fire = new FireCalculator();
+        RecurringChargeDetector recurring = new RecurringChargeDetector();
+        MapleCfoFacade facade = new MapleCfoFacade(txService, budgets, registered, fire, planner, debtRepo,
+                profileRepo, recurring, alerts, new CommandHistory(), bus, clock);
+
+        PendingActionStore pending = new PendingActionStore();
+        ToolRegistry tools = new ToolRegistry();
+        tools.register(new SpendingSummaryTool(txService, clock));
+        tools.register(new BudgetStatusTool(budgets, clock));
+        tools.register(new RecurringChargesTool(txService, recurring, clock));
+        tools.register(new ContributionRoomTool(registered, clock));
+        tools.register(new FireProjectionTool(fire, profileRepo::load, clock));
+        tools.register(new DebtPayoffTool(planner));
+        tools.register(new ProposeActionTool(pending, budgets, clock));
+        facade.attachAgent(new CfoAgent(llm, tools, new ConversationMemory(10), new PromptBuilder(),
+                new ResponseValidator(), pending, profileRepo::load, clock));
+        return facade;
     }
 }
