@@ -21,6 +21,8 @@ final class AffordView implements View {
     private final TextField amount = Ui.field("e.g. 1,500");
     private final DatePicker date = new DatePicker();
     private final VBox result = new VBox();
+    private final TextField extra = Ui.field("e.g. 2,000");
+    private final VBox extraResult = new VBox();
     private final ScrollPane scroll;
 
     AffordView(MapleCfoFacade app, Nav nav) {
@@ -36,12 +38,22 @@ final class AffordView implements View {
         VBox ask = Ui.card("Can I afford it?", "MapleCFO uses your cash, what you usually have left each month, "
                 + "your savings goals and a one-month safety buffer.", null, form.grid, check);
         ask.setMaxWidth(560);
-        scroll = Ui.scroll(Ui.page(ask, result));
+
+        // F19: where could extra money go? Java splits it; the AI explains it.
+        Button plan = Ui.primary("Show options");
+        plan.setOnAction(e -> planExtra());
+        extra.setOnAction(e -> planExtra());
+        VBox extraCard = Ui.card("Have extra money?", "For example a tax refund or a bonus. MapleCFO splits it in the "
+                + "order personal-finance courses usually teach: expensive debt, an emergency fund, then FHSA, TFSA "
+                + "and RRSP room. Education only, not advice.", null,
+                new Ui.Form().add("How much extra? ($)", extra, null).grid, plan);
+        extraCard.setMaxWidth(560);
+        scroll = Ui.scroll(Ui.page(ask, result, extraCard, extraResult));
     }
 
     @Override public String id() { return Nav.AFFORD; }
     @Override public String title() { return "Can I afford it?"; }
-    @Override public String subtitle() { return "Check a purchase before you make it"; }
+    @Override public String subtitle() { return "Check a purchase before you make it, or see where extra money could go"; }
     @Override public String section() { return "Plan"; }
     @Override public String icon() { return Icons.CART; }
     @Override public Node root() { return scroll; }
@@ -102,6 +114,62 @@ final class AffordView implements View {
         }
         box.setMaxWidth(560);
         result.getChildren().setAll(box);
+    }
+
+    private void planExtra() {
+        Ui.attempt(() -> {
+            com.maplecfo.domain.Money amount = Ui.money(extra, "the amount");
+            com.maplecfo.planning.ExtraMoneyPlanner.Plan p = app.planExtraMoney(amount);
+            GridPane g = new GridPane();
+            g.setHgap(16);
+            g.setVgap(10);
+            int row = 0;
+            for (com.maplecfo.planning.ExtraMoneyPlanner.Step st : p.steps()) {
+                Label amt = new Label(st.amount().toString());
+                amt.getStyleClass().add(Styles.TEXT_BOLD);
+                Label target = new Label((row + 1) + ". " + st.target());
+                target.getStyleClass().add(Styles.TEXT_BOLD);
+                Label why = Ui.small(st.reason());
+                why.setWrapText(true);
+                VBox text = new VBox(2, target, why);
+                GridPane.setHgrow(text, javafx.scene.layout.Priority.ALWAYS);
+                GridPane.setHalignment(amt, javafx.geometry.HPos.RIGHT);
+                GridPane.setValignment(amt, javafx.geometry.VPos.TOP);
+                g.add(text, 0, row);
+                g.add(amt, 1, row);
+                row++;
+            }
+            if (p.leftover().isPositive()) {
+                line(g, row, "Left over for your goals or other savings", p.leftover().toString());
+            }
+            Label head = new Label("A common order for " + p.amount());
+            head.getStyleClass().add(Styles.TITLE_4);
+            Label facts = Ui.small("Based on: " + String.join(" · ", p.facts()));
+            facts.setWrapText(true);
+            Label ai = Ui.muted(app.getLlm().isMock() ? "Add your API key in .env to get an AI explanation."
+                    : "Asking the AI to explain this...");
+            ai.setWrapText(true);
+            VBox box = Ui.card(head, g, facts, ai);
+            box.setMaxWidth(560);
+            extraResult.getChildren().setAll(box);
+            if (!app.getLlm().isMock()) {
+                Thread worker = new Thread(() -> {
+                    String text;
+                    try {
+                        text = app.explainExtraMoney(amount).answer();
+                    } catch (RuntimeException ex) {
+                        text = "The AI explanation is not available right now: " + ex.getMessage();
+                    }
+                    String t = text;
+                    javafx.application.Platform.runLater(() -> {
+                        ai.setText(t);
+                        ai.getStyleClass().remove("text-muted");
+                    });
+                }, "ai-extra-money");
+                worker.setDaemon(true);
+                worker.start();
+            }
+        });
     }
 
     private static int line(GridPane g, int row, String label, String value) {

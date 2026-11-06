@@ -39,6 +39,7 @@ import java.util.concurrent.Callable;
                 AccountCommands.NetWorthCmd.class,
                 GoalCommands.class,
                 AccountCommands.AffordCmd.class,
+                AccountCommands.ExtraCmd.class,
                 PlanningCommands.FireCmd.class,
                 PlanningCommands.DebtCmd.class,
                 PlanningCommands.RecurringCmd.class,

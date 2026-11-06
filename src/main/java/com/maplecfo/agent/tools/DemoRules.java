@@ -18,6 +18,8 @@ public final class DemoRules {
 
     public static List<MockLlmClient.Rule> forMapleCfo() {
         List<MockLlmClient.Rule> rules = new ArrayList<>();
+        rules.add(new MockLlmClient.Rule(q -> (q.contains("extra") || q.matches(".*where (should|could|do) .*(put|go).*"))
+                && firstAmount(q).isPresent(), "extra_money_plan", DemoRules::amountArgs));
         rules.add(new MockLlmClient.Rule(q -> q.contains("afford"), "affordability", DemoRules::affordArgs));
         rules.add(new MockLlmClient.Rule(q -> q.contains("net worth") || q.contains("worth"), "net_worth", q -> MockLlmClient.args()));
         rules.add(new MockLlmClient.Rule(q -> q.contains("goal"), "goal_forecast", q -> MockLlmClient.args()));
@@ -79,6 +81,12 @@ public final class DemoRules {
         }
         if (q.contains("restaurant") || q.contains("eating out")) return com.maplecfo.domain.Category.DINING;
         return null;
+    }
+
+    private static ObjectNode amountArgs(String q) {
+        ObjectNode a = MockLlmClient.args();
+        firstAmount(q).ifPresent(v -> a.put("amount", v));
+        return a;
     }
 
     private static ObjectNode affordArgs(String q) {

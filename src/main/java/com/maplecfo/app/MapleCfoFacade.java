@@ -265,6 +265,26 @@ public class MapleCfoFacade {
         return filter.apply(txService.findAll());
     }
 
+    // ---------------------------------------------------------- F19 where to put extra money
+
+    private com.maplecfo.planning.ExtraMoneyPlanner extraMoney;
+
+    void attachExtraMoneyPlanner(com.maplecfo.planning.ExtraMoneyPlanner planner) {
+        this.extraMoney = planner;
+    }
+
+    /** The split of an extra amount, computed from your own data (no AI involved). */
+    public com.maplecfo.planning.ExtraMoneyPlanner.Plan planExtraMoney(Money amount) {
+        if (extraMoney == null) throw new IllegalStateException("The extra-money planner is not configured");
+        return extraMoney.plan(amount);
+    }
+
+    /** The AI agent explains the same plan in plain language (it calls the extra_money_plan tool). */
+    public com.maplecfo.agent.AgentResponse explainExtraMoney(Money amount) {
+        return askCfo("I have " + amount + " extra. Where could it go? Use the extra_money_plan tool with amount "
+                + amount.getAmount().toPlainString() + " and explain the order and the trade-offs simply.");
+    }
+
     // ---------------------------------------------------------- F18 plain-English transaction search
 
     private com.maplecfo.agent.TransactionQueryParser queryParser;

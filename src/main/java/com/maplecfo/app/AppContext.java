@@ -44,6 +44,7 @@ import com.maplecfo.persistence.sqlite.SqliteTransactionRepository;
 import com.maplecfo.persistence.TransactionRepository;
 import com.maplecfo.agent.tools.AffordabilityTool;
 import com.maplecfo.agent.tools.GoalForecastTool;
+import com.maplecfo.planning.ExtraMoneyPlanner;
 import com.maplecfo.planning.AffordabilityAnalyzer;
 import com.maplecfo.automation.BalanceSyncService;
 import com.maplecfo.automation.ContributionDetector;
@@ -178,6 +179,9 @@ public final class AppContext {
         tools.register(new NetWorthTool(netWorth, accountService));
         tools.register(new GoalForecastTool(goals));
         tools.register(new AffordabilityTool(affordability, clock));
+        ExtraMoneyPlanner extraMoney = new ExtraMoneyPlanner(registered, debtRepo, accountService, cashFlow, clock);
+        tools.register(new com.maplecfo.agent.tools.ExtraMoneyTool(extraMoney));
+        facade.attachExtraMoneyPlanner(extraMoney);
         tools.register(new ProposeActionTool(pending, budgets, clock));
         new ContributionDetector(txService, registered, pending, bus).withAccounts(accountService, netWorth).register();
         new BalanceSyncService(accountService, debtRepo, netWorth).register(bus);

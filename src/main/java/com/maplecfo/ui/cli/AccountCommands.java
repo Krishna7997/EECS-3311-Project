@@ -170,4 +170,33 @@ final class AccountCommands {
             return 0;
         }
     }
+
+    @Command(name = "extra", description = "Where could extra money go? e.g. extra 2000 (F19). Education only, not advice.")
+    static class ExtraCmd implements Callable<Integer> {
+        @CommandLine.ParentCommand MapleCfoCli root;
+        @CommandLine.Spec CommandLine.Model.CommandSpec spec;
+        @Parameters(description = "The extra amount") Money amount;
+        @Option(names = "--no-ai", description = "Only the numbers, without the AI explanation") boolean noAi;
+
+        @Override
+        public Integer call() {
+            PrintWriter out = spec.commandLine().getOut();
+            com.maplecfo.planning.ExtraMoneyPlanner.Plan p = root.facade().planExtraMoney(amount);
+            List<List<String>> rows = new ArrayList<>();
+            int n = 1;
+            for (com.maplecfo.planning.ExtraMoneyPlanner.Step s : p.steps()) {
+                rows.add(List.of(String.valueOf(n++), s.target(), s.amount().toString()));
+            }
+            out.println("A common order for " + p.amount() + " (education, not advice):");
+            out.print(root.renderer().table(List.of("#", "Where", ">Amount"), rows));
+            if (p.leftover().isPositive()) out.println("Left over: " + p.leftover());
+            for (com.maplecfo.planning.ExtraMoneyPlanner.Step s : p.steps()) out.println("  - " + s.target() + ": " + s.reason());
+            out.println("Based on: " + String.join("; ", p.facts()));
+            if (!noAi && !root.facade().getLlm().isMock()) {
+                out.println();
+                out.println(root.facade().explainExtraMoney(amount).answer());
+            }
+            return 0;
+        }
+    }
 }
