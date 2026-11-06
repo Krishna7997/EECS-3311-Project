@@ -29,13 +29,21 @@ final class TransactionCommands {
 
         @Parameters(index = "0", description = "CSV file") Path file;
         @Option(names = {"-a", "--account"}, required = true, description = "Account id, e.g. chequing") String account;
-        @Option(names = {"-p", "--profile"}, required = true, description = "Mapping profile (see: maplecfo profiles)")
+        @Option(names = {"-p", "--profile"},
+                description = "Bank format (see: maplecfo profiles). Leave it out to detect it automatically.")
         String profile;
 
         @Override
         public Integer call() throws Exception {
             PrintWriter out = spec.commandLine().getOut();
-            ImportResult r = root.facade().importTransactions(file, account, profile);
+            String format = profile;
+            if (format == null || format.isBlank()) {
+                format = root.facade().detectImportFormat(file).orElseThrow(() ->
+                        new com.maplecfo.importer.MappingMismatchException("Could not recognise this file's columns. "
+                                + "Pick the format with -p (see: maplecfo profiles)."));
+                out.println("Detected format: " + format);
+            }
+            ImportResult r = root.facade().importTransactions(file, account, format);
             out.println("Imported " + r.imported() + " transactions into '" + account + "'.");
             out.println("Duplicates skipped: " + r.duplicatesSkipped() + "   Need review: " + r.uncategorized());
             if (!r.rejectedRows().isEmpty()) {

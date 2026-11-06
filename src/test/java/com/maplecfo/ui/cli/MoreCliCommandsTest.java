@@ -121,4 +121,18 @@ class MoreCliCommandsTest {
         assertTrue(fail("account", "update", "nope", "5").contains("No account 'nope'"));
         assertTrue(fail("no-such-command").length() > 0);
     }
+
+    @Test
+    void importDetectsTheBankFormat() throws Exception {
+        String rbc = run("import", "sample-data/rbc_visa_sample.csv", "-a", "visa");
+        assertTrue(rbc.contains("Detected format: RBC"), rbc);
+        String generic = run("import", "sample-data/savings_generic_sample.csv", "-a", "savings");
+        assertTrue(generic.contains("Detected format: Generic"), generic);
+        String td = run("import", "sample-data/td_chequing_sample.csv", "-a", "chequing");
+        assertTrue(td.contains("Detected format: TD bank account") && td.contains("Duplicates skipped: 136"), td);
+
+        Path odd = dir.resolve("odd.csv");
+        java.nio.file.Files.writeString(odd, "foo;bar\n1;2\n");
+        assertTrue(fail("import", odd.toString(), "-a", "chequing").contains("Could not recognise"));
+    }
 }

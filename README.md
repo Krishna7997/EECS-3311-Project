@@ -58,8 +58,8 @@ Data is stored locally in `~/.maplecfo/maplecfo.db` (change it with `--db <file>
 Example session with the fake sample data:
 ```
 # F01/F02 import and categorise
-java -jar target/maplecfo.jar import sample-data/td_chequing_sample.csv -a chequing -p "TD bank account"
-java -jar target/maplecfo.jar import sample-data/rbc_visa_sample.csv -a visa -p RBC
+java -jar target/maplecfo.jar import sample-data/td_chequing_sample.csv -a chequing      # bank format detected automatically
+java -jar target/maplecfo.jar import sample-data/rbc_visa_sample.csv -a visa -p RBC         # or choose it with -p
 java -jar target/maplecfo.jar tx list --review
 # F03 net worth, F09 goals, F11 affordability
 java -jar target/maplecfo.jar account add "TD Chequing" CHEQUING 2500 --bank TD

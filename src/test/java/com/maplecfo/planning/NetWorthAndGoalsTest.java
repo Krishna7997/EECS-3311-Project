@@ -178,4 +178,15 @@ class NetWorthAndGoalsTest {
         assertTrue(r.toolsUsed().contains("goal_forecast"), r.toolsUsed().toString());
         assertTrue(r.answer().contains("Not on track"), r.answer());
     }
+
+    @Test
+    void importWithAutomaticFormat() throws Exception {
+        assertEquals(java.util.Optional.of("RBC"), app.detectImportFormat(Path.of("sample-data/rbc_visa_sample.csv")));
+        assertEquals(136, app.importTransactionsAuto(Path.of("sample-data/td_chequing_sample.csv"), "chequing")
+                .imported());
+        Path odd = dir.resolve("odd.csv");
+        java.nio.file.Files.writeString(odd, "just one column\n");
+        assertThrows(com.maplecfo.importer.MappingMismatchException.class,
+                () -> app.importTransactionsAuto(odd, "chequing"));
+    }
 }

@@ -35,6 +35,7 @@ final class TransactionsView implements View {
     private final ComboBox<Category> newCategory = new ComboBox<>();
     private final Label status = Ui.muted("");
     private YearMonth month;
+    static final String AUTO = "Detect automatically";
 
     TransactionsView(MapleCfoFacade app) {
         this.app = app;
@@ -88,8 +89,11 @@ final class TransactionsView implements View {
     @Override
     public void refresh() {
         String selected = profile.getValue();
-        profile.getItems().setAll(app.getMappingProfiles().stream().map(ColumnMapping::profileName).toList());
-        profile.setValue(selected != null ? selected : profile.getItems().isEmpty() ? null : profile.getItems().get(0));
+        List<String> formats = new java.util.ArrayList<>();
+        formats.add(AUTO);
+        app.getMappingProfiles().stream().map(ColumnMapping::profileName).forEach(formats::add);
+        profile.getItems().setAll(formats);
+        profile.setValue(selected != null && formats.contains(selected) ? selected : AUTO);
 
         List<Transaction> rows;
         String q = search.getText() == null ? "" : search.getText().trim();
@@ -120,8 +124,16 @@ final class TransactionsView implements View {
     void importFile(File f) {
         if (accountId.getText().isBlank()) throw new IllegalArgumentException("Enter the account id to import into");
         try {
-            ImportResult r = app.importTransactions(f.toPath(), accountId.getText().trim(), profile.getValue());
-            status.setText(r.toString());
+            String format = profile.getValue();
+            String how = "";
+            if (format == null || AUTO.equals(format)) {
+                format = app.detectImportFormat(f.toPath()).orElseThrow(() -> new IllegalArgumentException(
+                        "MapleCFO could not recognise the columns in " + f.getName()
+                                + ". Choose the bank format from the list and try again."));
+                how = " (detected automatically)";
+            }
+            ImportResult r = app.importTransactions(f.toPath(), accountId.getText().trim(), format);
+            status.setText(f.getName() + " — format: " + format + how + ". " + r);
             if (!r.rejectedRows().isEmpty()) {
                 Ui.info("Imported " + r.imported() + " rows. " + r.rejectedRows().size()
                         + " rows could not be read:\n" + String.join("\n", r.rejectedRows()));

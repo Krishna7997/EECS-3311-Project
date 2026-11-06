@@ -106,6 +106,23 @@ public class MapleCfoFacade {
         return txService.importFrom(p, accountId, profile);
     }
 
+    /** Which saved bank format fits this file, by its columns (F01, also used by F13 auto-import). */
+    public java.util.Optional<String> detectImportFormat(Path p) throws IOException {
+        return txService.detectProfile(p).map(ColumnMapping::profileName);
+    }
+
+    /**
+     * Imports a file after detecting its bank format automatically.
+     *
+     * @throws com.maplecfo.importer.MappingMismatchException when no saved format fits the file
+     */
+    public ImportResult importTransactionsAuto(Path p, String accountId) throws IOException {
+        String format = detectImportFormat(p).orElseThrow(() -> new com.maplecfo.importer.MappingMismatchException(
+                "MapleCFO could not recognise this file's columns. Choose the bank format yourself, "
+                        + "or save a new mapping for this bank."));
+        return importTransactions(p, accountId, format);
+    }
+
     public void saveMappingProfile(ColumnMapping m) {
         txService.saveMappingProfile(m);
     }
