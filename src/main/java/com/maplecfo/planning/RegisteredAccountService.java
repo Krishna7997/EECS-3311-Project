@@ -103,6 +103,10 @@ public class RegisteredAccountService {
         contributionRepo.add(Objects.requireNonNull(r, "record"));
     }
 
+    public List<ContributionRecord> getContributions(AccountType type) {
+        return contributionRepo.findByType(type);
+    }
+
     /** Removes a logged record (used to undo a confirmed contribution). */
     public void removeContribution(ContributionRecord r) {
         contributionRepo.remove(Objects.requireNonNull(r, "record"));

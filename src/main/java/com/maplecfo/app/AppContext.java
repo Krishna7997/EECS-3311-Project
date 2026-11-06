@@ -42,6 +42,10 @@ import com.maplecfo.persistence.TransactionRepository;
 import com.maplecfo.agent.tools.AffordabilityTool;
 import com.maplecfo.agent.tools.GoalForecastTool;
 import com.maplecfo.planning.AffordabilityAnalyzer;
+import com.maplecfo.automation.BalanceSyncService;
+import com.maplecfo.automation.ContributionDetector;
+import com.maplecfo.automation.ReminderService;
+import com.maplecfo.planning.RrspRoomEstimator;
 import com.maplecfo.agent.tools.NetWorthTool;
 import com.maplecfo.persistence.sqlite.SqliteAccountRepository;
 import com.maplecfo.persistence.sqlite.SqliteGoalRepository;
@@ -76,6 +80,15 @@ public final class AppContext {
             return Path.of(env);
         }
         return Path.of(System.getProperty("user.home"), ".maplecfo", "maplecfo.db");
+    }
+
+    /** Folder watched for new bank CSVs (F13): ~/.maplecfo/inbox (override with MAPLECFO_INBOX). */
+    public static Path defaultImportFolder() {
+        String env = System.getenv("MAPLECFO_INBOX");
+        if (env != null && !env.isBlank()) {
+            return Path.of(env);
+        }
+        return Path.of(System.getProperty("user.home"), ".maplecfo", "inbox");
     }
 
     private AppContext() {
@@ -116,7 +129,8 @@ public final class AppContext {
         budgets.register();
 
         ProfileRepository profileRepo = new SqliteProfileRepository(db);
-        RegisteredAccountService registered = new RegisteredAccountService(LimitsService.bundledOnly(), profileRepo,
+        LimitsService limits = LimitsService.bundledOnly();
+        RegisteredAccountService registered = new RegisteredAccountService(limits, profileRepo,
                 new SqliteContributionRepository(db), bus);
 
         DebtRepository debtRepo = new SqliteDebtRepository(db);
@@ -149,6 +163,10 @@ public final class AppContext {
         tools.register(new GoalForecastTool(goals));
         tools.register(new AffordabilityTool(affordability, clock));
         tools.register(new ProposeActionTool(pending, budgets, clock));
+        new ContributionDetector(txService, registered, pending, bus).register();
+        new BalanceSyncService(accountService, debtRepo, netWorth).register(bus);
+        facade.attachAutomation(new ReminderService(txService, bus, clock), new RrspRoomEstimator(txService, limits));
+
         facade.attachAgent(new CfoAgent(llm, tools, new ConversationMemory(10), prompts,
                 validator, pending, profileRepo::load, clock));
         return facade;

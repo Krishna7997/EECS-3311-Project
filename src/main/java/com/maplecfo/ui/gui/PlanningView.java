@@ -153,11 +153,23 @@ final class PlanningView implements View {
             roomResult.setText("Recorded " + amt + " to " + roomType.getValue() + ".");
             refresh();
         }));
+        Button estimate = new Button("Estimate RRSP limit from my pay");
+        Label estimateText = Ui.muted("");
+        estimate.setOnAction(e -> Ui.attempt(() -> {
+            var est = app.estimateRrspRoom(app.today().getYear());
+            estimateText.setText(est.status() == com.maplecfo.planning.RrspRoomEstimator.Status.UNKNOWN
+                    ? est.explanation() : "About " + est.estimate() + ". " + est.explanation()
+                    + " Press Save profile to use it.");
+            if (est.status() == com.maplecfo.planning.RrspRoomEstimator.Status.ESTIMATED && rrspLimit.getText().isBlank()) {
+                rrspLimit.setText(est.estimate().getAmount().toPlainString());
+            }
+        }));
         ScrollPane sp = new ScrollPane(Ui.page(
                 Ui.card(Ui.heading("Contribution room this year"), roomBox),
                 Ui.card(Ui.heading("Your profile (used to calculate room)"),
                         Ui.row(birthYear, residentSince, rrspLimit, fhsaOpened, saveProfile),
-                        Ui.muted("The RRSP deduction limit is on your latest CRA Notice of Assessment.")),
+                        Ui.muted("The RRSP deduction limit is on your latest CRA Notice of Assessment."),
+                        Ui.row(estimate), estimateText),
                 Ui.card(Ui.heading("Check or record a contribution"), Ui.row(roomType, roomAmount, check, log), roomResult)));
         sp.setFitToWidth(true);
         return sp;

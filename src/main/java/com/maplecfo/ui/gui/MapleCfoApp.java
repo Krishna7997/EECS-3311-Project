@@ -50,7 +50,31 @@ public class MapleCfoApp extends Application {
         stage.setWidth(1150);
         stage.setHeight(780);
         stage.show();
+        startAutomation();
         refreshCurrent();
+    }
+
+    private com.maplecfo.automation.ImportFolderWatcher watcher;
+    private final Label autoImport = new Label();
+
+    /** F13: watch the inbox folder for bank CSVs and raise any reminders that are due. */
+    private void startAutomation() {
+        try {
+            java.nio.file.Path inbox = AppContext.defaultImportFolder();
+            watcher = app.newImportWatcher(inbox, "chequing");
+            watcher.start();
+            autoImport.setText("Auto-import folder: " + inbox);
+        } catch (Exception e) {
+            autoImport.setText("Auto-import is off: " + e.getMessage());
+        }
+        app.checkReminders();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        if (watcher != null) {
+            watcher.close();
+        }
     }
 
     /** Builds the window content (package-private so a smoke test can render it without a Stage). */
@@ -87,7 +111,8 @@ public class MapleCfoApp extends Application {
         mode.getStyleClass().add("muted");
         Label brand = new Label("MapleCFO");
         brand.getStyleClass().add("brand");
-        HBox top = new HBox(8, brand, grow, undoLabel, undo, redo, mode);
+        autoImport.getStyleClass().add("muted");
+        HBox top = new HBox(8, brand, autoImport, grow, undoLabel, undo, redo, mode);
         top.getStyleClass().add("toolbar");
 
         BorderPane root = new BorderPane(tabs);

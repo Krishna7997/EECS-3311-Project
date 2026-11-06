@@ -75,6 +75,8 @@ public class MapleCfoFacade {
     private com.maplecfo.planning.NetWorthService netWorth;
     private com.maplecfo.planning.GoalService goals;
     private com.maplecfo.planning.AffordabilityAnalyzer affordability;
+    private com.maplecfo.automation.ReminderService reminders;
+    private com.maplecfo.planning.RrspRoomEstimator rrspEstimator;
 
     public MapleCfoFacade(TransactionService txService, BudgetService budgets, RegisteredAccountService registered,
                           FireCalculator fire, DebtPayoffPlanner debtPlanner, DebtRepository debtRepo,
@@ -300,6 +302,34 @@ public class MapleCfoFacade {
     /** "Can I afford this amount by this date?" */
     public com.maplecfo.planning.AffordabilityResult checkAffordability(Money amount, LocalDate date) {
         return affordability.analyze(amount, date);
+    }
+
+    // ---------------------------------------------------------- F13 / F14 automation
+
+    void attachAutomation(com.maplecfo.automation.ReminderService reminders,
+                          com.maplecfo.planning.RrspRoomEstimator rrspEstimator) {
+        this.reminders = reminders;
+        this.rrspEstimator = rrspEstimator;
+    }
+
+    /**
+     * Creates a watcher for a folder of bank CSVs. Each processed file raises an AUTO_IMPORTED alert.
+     * Call scanOnce() for a single pass or start() to keep watching.
+     */
+    public com.maplecfo.automation.ImportFolderWatcher newImportWatcher(Path folder, String defaultAccountId) {
+        return new com.maplecfo.automation.ImportFolderWatcher(folder, txService,
+                () -> accounts.getAccounts().stream().map(com.maplecfo.domain.Account::getId).toList(),
+                defaultAccountId,
+                o -> eventBus.publish(com.maplecfo.events.FinanceEvent.of(EventType.AUTO_IMPORTED, o.message())));
+    }
+
+    /** Raises any reminders that are due ("no import in 30 days", "summary ready"). */
+    public List<String> checkReminders() {
+        return reminders.checkDue();
+    }
+
+    public com.maplecfo.planning.RrspRoomEstimator.Estimate estimateRrspRoom(int year) {
+        return rrspEstimator.estimate(year);
     }
 
     // ---------------------------------------------------------- F12 monthly summary

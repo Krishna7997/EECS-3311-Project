@@ -35,6 +35,8 @@ final class DashboardView implements View {
     private final VBox budgetBox = new VBox(6);
     private final VBox goalBox = new VBox(6);
     private final ListView<String> alerts = new ListView<>();
+    private final VBox pendingBox = new VBox(6);
+    private final VBox pendingCard;
     private final LineChart<String, Number> history = new LineChart<>(new CategoryAxis(), new NumberAxis());
     private final ScrollPane root;
 
@@ -58,7 +60,9 @@ final class DashboardView implements View {
         half.setPercentWidth(50);
         grid.getColumnConstraints().addAll(half, half);
 
-        root = new ScrollPane(Ui.page(grid, Ui.card(Ui.heading("Alerts"), alerts), history));
+        pendingCard = Ui.card(Ui.heading("Waiting for your OK"), pendingBox,
+                Ui.muted("Found automatically (for example a TFSA transfer in your latest import). Nothing is saved until you confirm."));
+        root = new ScrollPane(Ui.page(grid, pendingCard, Ui.card(Ui.heading("Alerts"), alerts), history));
         root.setFitToWidth(true);
     }
 
@@ -110,6 +114,17 @@ final class DashboardView implements View {
             goalBox.getChildren().add(Ui.row(fixed(f.goal().getName()), bar,
                     Ui.muted(f.isComplete() ? "done" : f.onTrack() ? "on track" : "behind")));
         }
+
+        pendingBox.getChildren().clear();
+        app.getPendingActions().forEach((id, text) -> {
+            javafx.scene.control.Button ok = new javafx.scene.control.Button("Confirm");
+            ok.setOnAction(e -> Ui.attempt(() -> { app.confirmProposedAction(id); refresh(); }));
+            javafx.scene.control.Button no = new javafx.scene.control.Button("Dismiss");
+            no.setOnAction(e -> Ui.attempt(() -> { app.dismissProposedAction(id); refresh(); }));
+            pendingBox.getChildren().add(Ui.row(new Label(id + ": " + text), ok, no));
+        });
+        pendingCard.setVisible(!pendingBox.getChildren().isEmpty());
+        pendingCard.setManaged(!pendingBox.getChildren().isEmpty());
 
         alerts.getItems().setAll(app.getAlerts().stream()
                 .map(a -> a.severity() + ": " + a.message()).toList().reversed());

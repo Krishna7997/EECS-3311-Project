@@ -23,7 +23,7 @@ import java.util.concurrent.Callable;
  * The MapleCFO command-line interface (picocli). Run with no arguments for an
  * interactive session, where undo and redo work across commands.
  */
-@Command(name = "maplecfo", mixinStandardHelpOptions = true, version = "MapleCFO 0.5",
+@Command(name = "maplecfo", mixinStandardHelpOptions = true, version = "MapleCFO 0.6",
         description = "MapleCFO: your AI money CFO for Canada.",
         subcommands = {
                 TransactionCommands.ImportCmd.class,
@@ -47,6 +47,9 @@ import java.util.concurrent.Callable;
                 AgentCommands.ConfirmCmd.class,
                 AgentCommands.DismissCmd.class,
                 AgentCommands.AiStatusCmd.class,
+                AutomationCommands.WatchCmd.class,
+                AutomationCommands.RemindersCmd.class,
+                AutomationCommands.RrspEstimateCmd.class,
                 MapleCfoCli.GuiCmd.class,
                 CommandLine.HelpCommand.class
         })
@@ -58,6 +61,8 @@ public class MapleCfoCli implements Callable<Integer> {
     private MapleCfoFacade facade;
     private final CliRenderer renderer = new CliRenderer();
     private int alertsShown;
+    private boolean interactive;
+    private boolean confirmHintShown;
 
     public static void main(String[] args) {
         CommandLine cl = newCommandLine(new MapleCfoCli());
@@ -115,6 +120,11 @@ public class MapleCfoCli implements Callable<Integer> {
         for (int i = alertsShown; i < all.size(); i++) {
             Alert a = all.get(i);
             out.println("[" + a.severity() + "] " + a.message());
+            if (!interactive && !confirmHintShown && a.source() == com.maplecfo.events.EventType.CONTRIBUTION_DETECTED) {
+                confirmHintShown = true;
+                out.println("  (Proposals are kept while MapleCFO is open: run maplecfo with no arguments, "
+                        + "or use the GUI, to confirm them.)");
+            }
         }
         alertsShown = all.size();
     }
@@ -124,7 +134,10 @@ public class MapleCfoCli implements Callable<Integer> {
     public Integer call() throws IOException {
         CommandLine cl = newCommandLine(this);
         PrintWriter out = cl.getOut();
+        interactive = true;
         out.println("MapleCFO interactive mode. Type 'help' for commands, 'exit' to quit.");
+        facade().checkReminders();
+        printNewAlerts(out);
         out.flush();
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
         String line;

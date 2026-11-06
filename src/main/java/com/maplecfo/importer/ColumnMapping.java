@@ -63,6 +63,26 @@ public record ColumnMapping(String profileName, boolean hasHeader, String dateCo
         return true;
     }
 
+    /**
+     * Whether a file starting with this row looks like it was made for this profile. Header profiles
+     * need their column names; headerless ones need the right columns and a date that parses (F13).
+     */
+    public boolean matchesFirstRow(List<String> firstRow) {
+        if (!isValidFor(firstRow)) {
+            return false;
+        }
+        if (hasHeader) {
+            return true;
+        }
+        try {
+            java.time.LocalDate.parse(firstRow.get(indexOf(firstRow, dateColumn)).trim(),
+                    java.time.format.DateTimeFormatter.ofPattern(dateFormat));
+            return true;
+        } catch (RuntimeException e) {
+            return false;
+        }
+    }
+
     /** Position of a column: by header name (case-insensitive) or by 1-based number for headerless files. */
     int indexOf(List<String> header, String column) {
         if (column == null || column.isBlank()) {

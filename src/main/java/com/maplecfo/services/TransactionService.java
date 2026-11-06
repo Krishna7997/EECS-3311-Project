@@ -78,11 +78,25 @@ public class TransactionService {
         int uncategorized = (int) fresh.stream().filter(t -> t.getCategory() == Category.UNCATEGORIZED).count();
 
         ImportResult result = new ImportResult(accountId, fresh.size(), duplicates, adapter.getRejectedRows(),
-                uncategorized, adapter.getLastBalance().orElse(null));
+                uncategorized, adapter.getLastBalance().orElse(null),
+                fresh.stream().map(Transaction::getId).toList());
         if (!fresh.isEmpty() || result.latestBalanceIfKnown().isPresent()) {
             eventBus.publish(FinanceEvent.of(EventType.TRANSACTIONS_IMPORTED, result));
         }
         return result;
+    }
+
+    /** Finds the saved profile that fits a file's columns (header profiles are tried first). F13. */
+    public Optional<ColumnMapping> detectProfile(Path file) throws IOException {
+        List<List<String>> rows = com.maplecfo.importer.CsvReader.read(file);
+        if (rows.isEmpty()) {
+            return Optional.empty();
+        }
+        List<String> first = rows.get(0);
+        return mappings.findAll().stream()
+                .sorted(java.util.Comparator.comparing((ColumnMapping m) -> !m.hasHeader()))
+                .filter(m -> m.matchesFirstRow(first))
+                .findFirst();
     }
 
     /** Saves a new or edited column-mapping profile. */

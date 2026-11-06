@@ -22,6 +22,7 @@ public class AlertService implements FinanceEventListener {
         bus.subscribe(EventType.REMINDER_DUE, this);
         bus.subscribe(EventType.CONTRIBUTION_DETECTED, this);
         bus.subscribe(EventType.GOAL_UPDATED, this);
+        bus.subscribe(EventType.AUTO_IMPORTED, this);
     }
 
     @Override
@@ -29,7 +30,7 @@ public class AlertService implements FinanceEventListener {
         Alert alert = switch (e.type()) {
             case BUDGET_WARNING, BUDGET_EXCEEDED -> budgetAlert(e);
             case CONTRIBUTION_WARNING -> contributionAlert(e);
-            case REMINDER_DUE, CONTRIBUTION_DETECTED ->
+            case REMINDER_DUE, CONTRIBUTION_DETECTED, AUTO_IMPORTED ->
                     new Alert(Alert.Severity.INFO, String.valueOf(e.payload()), e.type(), e.timestamp());
             case GOAL_UPDATED -> goalAlert(e);
             default -> null;

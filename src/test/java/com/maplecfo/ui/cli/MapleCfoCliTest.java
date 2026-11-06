@@ -126,4 +126,16 @@ class MapleCfoCliTest {
         assertTrue(r.contains("Verdict: YES"), r);
         assertTrue(run("afford", "900000").contains("Verdict: NO"));
     }
+
+    @Test
+    void watchOnceRemindersAndRrspEstimate() throws Exception {
+        Path inbox = java.nio.file.Files.createDirectories(dir.resolve("inbox"));
+        java.nio.file.Files.copy(Path.of("sample-data/td_chequing_sample.csv"), inbox.resolve("oct.csv"));
+        String w = run("watch", "--once", "--folder", inbox.toString());
+        assertTrue(w.contains("oct.csv → chequing (TD bank account): 136 imported"), w);
+        assertTrue(w.contains("Detected a $500.00 TFSA contribution"), w);
+        assertTrue(w.contains("run maplecfo with no arguments"), w);
+        assertTrue(run("reminders").contains("September summary is ready"));
+        assertTrue(run("rrsp-estimate", "-y", "2027").contains("Estimated RRSP room for 2027: $8,164.80"));
+    }
 }

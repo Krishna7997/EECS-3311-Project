@@ -7,10 +7,16 @@ import java.util.Optional;
 
 /** Summary shown after an import (F01). */
 public record ImportResult(String accountId, int imported, int duplicatesSkipped, List<String> rejectedRows,
-                           int uncategorized, Money latestBalance) {
+                           int uncategorized, Money latestBalance, List<String> importedIds) {
 
     public ImportResult {
         rejectedRows = List.copyOf(rejectedRows);
+        importedIds = importedIds == null ? List.of() : List.copyOf(importedIds);
+    }
+
+    public ImportResult(String accountId, int imported, int duplicatesSkipped, List<String> rejectedRows,
+                        int uncategorized, Money latestBalance) {
+        this(accountId, imported, duplicatesSkipped, rejectedRows, uncategorized, latestBalance, List.of());
     }
 
     public Optional<Money> latestBalanceIfKnown() {
