@@ -79,7 +79,9 @@ class AutomationTest {
             w.start();
             Files.copy(TD, inbox.resolve("new_download.csv"));
             long until = System.currentTimeMillis() + 30_000; // macOS polls folders every ~10 s
-            while (app.getTransactions(java.time.YearMonth.of(2026, 10)).isEmpty() && System.currentTimeMillis() < until) {
+            // wait for the whole import to finish (its alert), not just the first rows
+            while (app.getAlerts().stream().noneMatch(a -> a.source() == EventType.AUTO_IMPORTED)
+                    && System.currentTimeMillis() < until) {
                 Thread.sleep(200);
             }
         }

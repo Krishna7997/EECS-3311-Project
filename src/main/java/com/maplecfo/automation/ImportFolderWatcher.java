@@ -160,6 +160,11 @@ public class ImportFolderWatcher implements AutoCloseable {
         }
         if (thread != null) {
             thread.interrupt();
+            try {
+                thread.join(5_000); // let a running import finish before the database is closed
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
     }
 }
