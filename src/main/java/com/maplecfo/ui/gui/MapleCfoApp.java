@@ -193,7 +193,12 @@ public class MapleCfoApp extends Application implements Nav {
             });
         }
 
-        Scene scene = new Scene(root);
+        // pop-ups (forms, confirmations) open inside the window, on top of the page
+        atlantafx.base.controls.ModalPane modal = new atlantafx.base.controls.ModalPane();
+        modal.setPersistent(true);
+        Ui.useModalPane(modal);
+        StackPane layers = new StackPane(root, modal);
+        Scene scene = new Scene(layers);
         scene.getStylesheets().add(stylesheet());
         scene.getAccelerators().put(new KeyCodeCombination(KeyCode.Z, KeyCombination.SHORTCUT_DOWN), undo::fire);
         scene.getAccelerators().put(new KeyCodeCombination(KeyCode.Z, KeyCombination.SHORTCUT_DOWN,

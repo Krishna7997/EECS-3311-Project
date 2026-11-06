@@ -220,8 +220,7 @@ final class TransactionsView implements View {
             if (fmt == null) throw new IllegalArgumentException("Choose the bank format for this file.");
             ImportResult r = app.importTransactions(f.toPath(), acc, fmt);
             showResult(f.getName(), fmt, r);
-        });
-        refresh();
+        }, this::refresh);
     }
 
     private static String guessAccount(String fileName, List<String> ids) {

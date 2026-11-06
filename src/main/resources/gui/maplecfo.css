@@ -149,3 +149,13 @@
 
 /* monthly check-in */
 .checkin-card { -fx-border-color: -color-accent-muted; -fx-border-width: 1.5; }
+
+/* in-window pop-ups */
+.popup { -fx-effect: dropshadow(gaussian, rgba(10, 14, 30, 0.28), 30, 0, 0, 8); -fx-background-radius: 14; -fx-border-radius: 14; }
+.form-answer { -fx-background-color: #eef4ff; -fx-text-fill: #1f3d7a; -fx-padding: 10 12 10 12; -fx-background-radius: 8;
+    -fx-font-size: 14px; }
+
+/* live room check in the contribution form */
+.room-ok { -fx-background-color: -color-success-subtle; -fx-text-fill: -color-success-fg; -fx-padding: 8 10 8 10; -fx-background-radius: 8; }
+.room-over { -fx-background-color: -color-danger-subtle; -fx-text-fill: -color-danger-fg; -fx-padding: 8 10 8 10; -fx-background-radius: 8; }
+.room-info { -fx-background-color: #eef4ff; -fx-text-fill: #1f3d7a; -fx-padding: 8 10 8 10; -fx-background-radius: 8; }

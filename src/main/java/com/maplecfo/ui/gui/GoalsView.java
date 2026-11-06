@@ -74,10 +74,10 @@ final class GoalsView implements View {
         Button delete = Ui.flat("Delete");
         delete.getStyleClass().add(Styles.DANGER);
         delete.setOnAction(e -> {
-            if (Ui.confirm("Delete the goal \"" + g.getName() + "\"?")) {
+            Ui.confirm("Delete the goal \"" + g.getName() + "\"?", "Delete", () -> {
                 Ui.attempt(() -> app.deleteGoal(g.getId()));
                 refresh();
-            }
+            });
         });
         VBox card = Ui.card(top, new VBox(0, amount, of), bar, forecast, Ui.row(deposit, delete));
         return card;
@@ -99,15 +99,13 @@ final class GoalsView implements View {
             String id = Ui.uniqueId(name.getText().trim(), app.getGoals().stream().map(SavingsGoal::getId).toList());
             app.createGoal(new SavingsGoal(id, name.getText().trim(), Ui.money(target, "the target amount"),
                     Ui.moneyOrZero(saved, "the amount already saved"), deadline.getValue(), null));
-        });
-        refresh();
+        }, this::refresh);
     }
 
     private void depositDialog(SavingsGoal g) {
         TextField amount = Ui.field("e.g. 200");
         Ui.Form form = new Ui.Form().add("Amount ($)", amount, "Money you have put aside for this goal.");
         Ui.dialog("Add money to " + g.getName(), null, form, "Add",
-                () -> app.recordGoalDeposit(g.getId(), Ui.money(amount, "an amount")));
-        refresh();
+                () -> app.recordGoalDeposit(g.getId(), Ui.money(amount, "an amount")), this::refresh);
     }
 }

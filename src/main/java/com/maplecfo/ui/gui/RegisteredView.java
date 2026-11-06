@@ -85,13 +85,11 @@ final class RegisteredView implements View {
         ContributionRoom r = app.getContributionRoom(t, year);
         Label available = Ui.big(r.available().toString());
         Label chip = r.isOverContributed() ? Ui.chip("Over the limit", "bad") : Ui.chip("Room left", "ok");
-        Button check = Ui.secondary("Check an amount");
-        check.setOnAction(e -> checkDialog(t));
-        Button record = Ui.flat("Record a contribution");
+        Button record = Ui.primary("Add a contribution", Icons.PLUS);
         record.setOnAction(e -> recordDialog(t));
         card = Ui.card(Ui.row(name, Ui.spacer(), chip), Ui.small(explain(t)),
                 new VBox(0, available, Ui.muted("available in " + year)),
-                Ui.small("Limit " + r.limit() + " · used " + r.used()), Ui.row(check, record));
+                Ui.small("Limit " + r.limit() + " · used " + r.used()), Ui.row(record));
         if (r.isOverContributed()) {
             card.getChildren().add(Ui.banner("CRA charges 1% a month on the extra amount. Withdraw it soon.", "bad"));
         }
@@ -142,38 +140,67 @@ final class RegisteredView implements View {
         return card;
     }
 
-    private void checkDialog(AccountType t) {
-        TextField amount = Ui.field("e.g. 3,000");
-        Ui.Form form = new Ui.Form().add("Amount you plan to put in ($)", amount, null);
-        String[] answer = new String[1];
-        boolean ok = Ui.dialog("Check a " + t + " contribution", "Nothing is saved; this only checks the amount.",
-                form, "Check", () -> {
-                    ContributionCheck c = app.checkContribution(t, Ui.money(amount, "an amount"));
-                    answer[0] = switch (c.status()) {
-                        case OK -> "Yes, " + c.amount() + " fits. You would have " + c.roomAfter() + " left.";
-                        case OVER -> "No: that is " + c.excess() + " more than your " + t + " room ("
-                                + c.room().available() + "). CRA charges 1% a month on the extra.";
-                        case UNKNOWN -> "Fill in your details first.";
-                    };
-                });
-        if (ok) Ui.info(answer[0]);
-        refresh();
-    }
-
-    private void recordDialog(AccountType t) {
+    /** Package-private so a smoke test can open it. */
+    void recordDialog(AccountType t) {
         TextField amount = Ui.field("e.g. 500");
         DatePicker date = new DatePicker(app.today());
         CheckBox withdrawal = new CheckBox("This was a withdrawal");
+        // the room check happens while typing, so there is no separate "check" step
+        javafx.scene.control.Label preview = new javafx.scene.control.Label();
+        preview.setWrapText(true);
+        preview.setMaxWidth(Double.MAX_VALUE);
+        preview.managedProperty().bind(preview.visibleProperty());
+        preview.setVisible(false);
+        Runnable update = () -> {
+            preview.getStyleClass().removeAll("room-ok", "room-over", "room-info");
+            String text = amount.getText() == null ? "" : amount.getText().trim();
+            if (text.isEmpty()) {
+                preview.setVisible(false);
+                return;
+            }
+            try {
+                Money m = Ui.money(amount, "an amount");
+                if (withdrawal.isSelected()) {
+                    preview.setText(t == AccountType.TFSA ? "Taking out " + m + " gives you that room back next year."
+                            : "Withdrawals don't give " + t + " room back.");
+                    preview.getStyleClass().add("room-info");
+                } else {
+                    ContributionCheck c = app.checkContribution(t, m);
+                    switch (c.status()) {
+                        case OK -> {
+                            preview.setText("✓ Fits. You'll have " + c.roomAfter() + " of " + t + " room left this year.");
+                            preview.getStyleClass().add("room-ok");
+                        }
+                        case OVER -> {
+                            preview.setText("⚠ That's " + c.excess() + " more than your room (" + c.room().available()
+                                    + "). CRA charges 1% a month on the extra. Put in at most " + c.room().available() + ".");
+                            preview.getStyleClass().add("room-over");
+                        }
+                        case UNKNOWN -> {
+                            preview.setText("Fill in your details on this page to check the room.");
+                            preview.getStyleClass().add("room-info");
+                        }
+                    }
+                }
+                preview.setVisible(true);
+            } catch (RuntimeException ex) {
+                preview.setText(Ui.message(ex));
+                preview.getStyleClass().add("room-info");
+                preview.setVisible(true);
+            }
+        };
+        amount.textProperty().addListener((o, a, b) -> update.run());
+        withdrawal.selectedProperty().addListener((o, a, b) -> update.run());
         Ui.Form form = new Ui.Form()
                 .add("Amount ($)", amount, null)
+                .note(preview)
                 .add("Date", date, null)
-                .add("", withdrawal, "Withdrawals give the room back next year (TFSA).");
-        Ui.dialog("Record a " + t + " contribution", null, form, "Record", () -> {
+                .note(withdrawal);
+        Ui.dialog("Add a " + t + " contribution", "MapleCFO checks your room as you type.", form, "Save", () -> {
             Money m = Ui.money(amount, "an amount");
             if (date.getValue() == null) throw new IllegalArgumentException("Choose the date.");
             app.recordContribution(new ContributionRecord(t, date.getValue(), m,
                     withdrawal.isSelected() ? ContributionKind.WITHDRAWAL : ContributionKind.CONTRIBUTION));
-        });
-        refresh();
+        }, this::refresh);
     }
 }

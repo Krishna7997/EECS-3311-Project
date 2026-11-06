@@ -36,10 +36,10 @@ final class DebtView implements View {
             Button rm = Ui.flat("Remove");
             rm.getStyleClass().add(Styles.DANGER);
             rm.setOnAction(e -> {
-                if (Ui.confirm("Remove " + d.getName() + "?")) {
+                Ui.confirm("Remove " + d.getName() + "?", "Remove", () -> {
                     Ui.attempt(() -> app.removeDebt(d.getId()));
                     refresh();
-                }
+                });
             });
             return rm;
         }, 100));
@@ -130,7 +130,6 @@ final class DebtView implements View {
             }
             app.addDebt(name.getText().trim(), Ui.money(owed, "the amount owed"), rate,
                     Ui.money(min, "the minimum payment"));
-        });
-        refresh();
+        }, this::refresh);
     }
 }

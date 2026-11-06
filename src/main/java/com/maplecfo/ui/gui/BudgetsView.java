@@ -168,7 +168,6 @@ final class BudgetsView implements View {
                     Money m = Ui.money(limit, "a monthly limit");
                     if (!m.isPositive()) throw new IllegalArgumentException("The limit must be more than $0.");
                     app.setBudget(category.getValue(), m, month);
-                });
-        refresh();
+                }, this::refresh);
     }
 }

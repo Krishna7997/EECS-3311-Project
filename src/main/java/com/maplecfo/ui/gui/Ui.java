@@ -224,6 +224,16 @@ final class Ui {
             grid.getColumnConstraints().add(c);
         }
 
+        /** A full-width line without a label, e.g. a live check under a field. */
+        Form note(Node node) {
+            if (node instanceof Region r) r.setMaxWidth(Double.MAX_VALUE);
+            grid.add(node, 0, row++);
+            Region gap = new Region();
+            gap.setMinHeight(8);
+            grid.add(gap, 0, row++);
+            return this;
+        }
+
         Form add(String label, Node control, String help) {
             Label l = new Label(label);
             l.getStyleClass().add("form-label");
@@ -246,46 +256,149 @@ final class Ui {
         void run() throws Exception;
     }
 
+    /** Like {@link Action} but returns a message to show in the pop-up (used for "check" pop-ups). */
+    @FunctionalInterface
+    interface Check {
+        String run() throws Exception;
+    }
+
+    /** The in-window overlay used for pop-ups (set by the main window). */
+    private static atlantafx.base.controls.ModalPane modal;
+
+    static void useModalPane(atlantafx.base.controls.ModalPane pane) {
+        modal = pane;
+    }
+
     /**
-     * Shows a small dialog with a form. The OK button runs the action; if the action fails (for example
-     * a missing amount) the message is shown in the dialog and it stays open so the user can fix it.
-     *
-     * @return true when the action ran successfully
+     * Shows a pop-up form inside the main window (no separate window). OK runs the action; if it fails,
+     * the message is shown in the pop-up and it stays open so the user can fix the input.
+     * {@code onDone} runs after a successful OK.
      */
-    static boolean dialog(String title, String intro, Form form, String okText, Action action) {
-        Dialog<ButtonType> d = new Dialog<>();
-        d.setTitle(title);
-        d.setHeaderText(null);
+    static void dialog(String title, String intro, Form form, String okText, Action action, Runnable onDone) {
+        popup(title, intro, form.grid, okText, popupError -> {
+            action.run();
+            return null;
+        }, onDone, false);
+    }
+
+    /** A pop-up that shows its answer inside itself and stays open, e.g. "Check an amount". */
+    static void check(String title, String intro, Form form, String okText, Check check) {
+        popup(title, intro, form.grid, okText, popupError -> check.run(), null, true);
+    }
+
+    private interface PopupAction {
+        String run(Label error) throws Exception;
+    }
+
+    private static void popup(String title, String intro, Node body, String okText, PopupAction action,
+                              Runnable onDone, boolean stayOpen) {
         Label heading = new Label(title);
         heading.getStyleClass().add(Styles.TITLE_3);
+        heading.setWrapText(true);
         Label error = new Label();
-        error.getStyleClass().addAll("form-error");
+        error.getStyleClass().add("form-error");
         error.setWrapText(true);
-        error.setManaged(false);
+        error.setMaxWidth(Double.MAX_VALUE);
+        error.managedProperty().bind(error.visibleProperty());
         error.setVisible(false);
-        VBox content = new VBox(12, heading);
-        if (intro != null && !intro.isBlank()) content.getChildren().add(muted(intro));
-        content.getChildren().addAll(form.grid, error);
-        content.setPadding(new Insets(8, 4, 0, 4));
-        content.setPrefWidth(440);
-        d.getDialogPane().setContent(content);
-        ButtonType ok = new ButtonType(okText, ButtonBar.ButtonData.OK_DONE);
-        d.getDialogPane().getButtonTypes().addAll(ok, ButtonType.CANCEL);
-        d.getDialogPane().getStylesheets().add(MapleCfoApp.stylesheet());
-        Button okButton = (Button) d.getDialogPane().lookupButton(ok);
-        okButton.getStyleClass().add(Styles.ACCENT);
-        okButton.addEventFilter(ActionEvent.ACTION, ev -> {
+        Label answer = new Label();
+        answer.getStyleClass().add("form-answer");
+        answer.setWrapText(true);
+        answer.setMaxWidth(Double.MAX_VALUE);
+        answer.managedProperty().bind(answer.visibleProperty());
+        answer.setVisible(false);
+
+        Button cancel = secondary(stayOpen ? "Close" : "Cancel");
+        Button ok = primary(okText);
+        ok.setDefaultButton(true);
+        HBox buttons = new HBox(10, spacer(), cancel, ok);
+        buttons.setAlignment(Pos.CENTER_RIGHT);
+
+        VBox card = new VBox(14, heading);
+        if (intro != null && !intro.isBlank()) card.getChildren().add(muted(intro));
+        card.getChildren().addAll(body, error, answer, buttons);
+        card.getStyleClass().addAll("card", "popup");
+        card.setPadding(new Insets(24, 26, 20, 26));
+        card.setMaxWidth(480);
+        card.setPrefWidth(480);
+        card.setMaxHeight(Region.USE_PREF_SIZE);
+
+        Runnable close = () -> {
+            if (modal != null) modal.hide(true);
+        };
+        cancel.setOnAction(e -> close.run());
+        card.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.ESCAPE) close.run();
+        });
+        ok.setOnAction(e -> {
             try {
-                action.run();
+                error.setVisible(false);
+                String msg = action.run(error);
+                if (stayOpen) {
+                    answer.setText(msg);
+                    answer.setVisible(true);
+                } else {
+                    close.run();
+                    if (onDone != null) onDone.run();
+                }
             } catch (Exception ex) {
+                answer.setVisible(false);
                 error.setText(message(ex));
-                error.setManaged(true);
                 error.setVisible(true);
-                ev.consume();
-                d.getDialogPane().getScene().getWindow().sizeToScene();
             }
         });
-        return d.showAndWait().filter(b -> b == ok).isPresent();
+
+        if (modal == null) {
+            // no main window (e.g. a smoke test): fall back to a normal dialog window
+            Dialog<ButtonType> d = new Dialog<>();
+            d.setTitle(title);
+            d.getDialogPane().setContent(card);
+            d.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+            d.getDialogPane().getStylesheets().add(MapleCfoApp.stylesheet());
+            cancel.setOnAction(e -> d.close());
+            d.show();
+            return;
+        }
+        modal.show(card);
+        javafx.application.Platform.runLater(() -> {
+            Node first = body.lookup(".text-field");
+            (first != null ? first : ok).requestFocus();
+        });
+    }
+
+    /** A short message in a pop-up with one OK button. */
+    static void info(String msg) {
+        popup("MapleCFO", null, muted(msg), "OK", e -> null, null, false);
+    }
+
+    static void error(Throwable e) {
+        Label l = new Label(message(e));
+        l.setWrapText(true);
+        l.getStyleClass().add("form-error");
+        popup("Something needs your attention", null, l, "OK", x -> null, null, false);
+    }
+
+    /** Asks before doing something that cannot be undone; runs onYes only if the user agrees. */
+    static void confirm(String msg, String okText, Runnable onYes) {
+        popup("Are you sure?", null, muted(msg), okText, e -> null, onYes, false);
+    }
+
+    /** Runs an action and shows any error in a pop-up instead of crashing. */
+    static void attempt(Action action) {
+        try {
+            action.run();
+        } catch (Exception e) {
+            error(e);
+        }
+    }
+
+    /** Makes an id like "td-chequing" from a name, adding -2, -3... if it is already used. */
+    static String uniqueId(String name, Collection<String> taken) {
+        String base = name.toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("(^-|-$)", "");
+        if (base.isEmpty()) base = "item";
+        String id = base;
+        for (int i = 2; taken.contains(id); i++) id = base + "-" + i;
+        return id;
     }
 
     static TextField field(String prompt) {
@@ -331,45 +444,6 @@ final class Ui {
     static String message(Throwable e) {
         String msg = e.getMessage();
         return msg == null || msg.isBlank() ? "Something went wrong (" + e.getClass().getSimpleName() + ")." : msg;
-    }
-
-    static void error(Throwable e) {
-        Alert a = new Alert(Alert.AlertType.WARNING, message(e));
-        a.setHeaderText(null);
-        a.setTitle("MapleCFO");
-        a.showAndWait();
-    }
-
-    static void info(String msg) {
-        Alert a = new Alert(Alert.AlertType.INFORMATION, msg);
-        a.setHeaderText(null);
-        a.setTitle("MapleCFO");
-        a.showAndWait();
-    }
-
-    static boolean confirm(String msg) {
-        Alert a = new Alert(Alert.AlertType.CONFIRMATION, msg, ButtonType.OK, ButtonType.CANCEL);
-        a.setHeaderText(null);
-        a.setTitle("MapleCFO");
-        return a.showAndWait().filter(b -> b == ButtonType.OK).isPresent();
-    }
-
-    /** Runs an action and shows any error in a dialog instead of crashing. */
-    static void attempt(Action action) {
-        try {
-            action.run();
-        } catch (Exception e) {
-            error(e);
-        }
-    }
-
-    /** Makes an id like "td-chequing" from a name, adding -2, -3... if it is already used. */
-    static String uniqueId(String name, Collection<String> taken) {
-        String base = name.toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("(^-|-$)", "");
-        if (base.isEmpty()) base = "item";
-        String id = base;
-        for (int i = 2; taken.contains(id); i++) id = base + "-" + i;
-        return id;
     }
 
     // ------------------------------------------------------------------ tables

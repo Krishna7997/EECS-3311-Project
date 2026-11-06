@@ -89,10 +89,10 @@ final class AccountsView implements View {
         Button remove = Ui.flat("Remove");
         remove.getStyleClass().add(atlantafx.base.theme.Styles.DANGER);
         remove.setOnAction(e -> {
-            if (Ui.confirm("Remove " + a.getName() + "? Its transactions stay.")) {
+            Ui.confirm("Remove " + a.getName() + "? Its transactions stay.", "Remove", () -> {
                 Ui.attempt(() -> app.removeAccount(a.getId()));
                 refresh();
-            }
+            });
         });
         return new HBox(4, update, remove);
     }
@@ -113,15 +113,17 @@ final class AccountsView implements View {
                 .add("Type", type, null)
                 .add("Current balance ($)", balance, "For a credit card or loan, enter the amount you owe as a positive number.")
                 .add("Bank", bank, null);
+        List<String> warnings = new java.util.ArrayList<>();
         Ui.dialog("Add an account", null, form, "Add account", () -> {
             if (name.getText().isBlank()) throw new IllegalArgumentException("Give the account a name.");
             if (type.getValue() == null) throw new IllegalArgumentException("Choose the account type.");
             String id = Ui.uniqueId(name.getText().trim(), app.getAccounts().stream().map(Account::getId).toList());
-            List<String> warnings = app.addAccount(new Account(id, name.getText().trim(), type.getValue(),
-                    bank.getText().isBlank() ? "—" : bank.getText().trim(), Ui.money(balance, "the current balance")));
+            warnings.addAll(app.addAccount(new Account(id, name.getText().trim(), type.getValue(),
+                    bank.getText().isBlank() ? "—" : bank.getText().trim(), Ui.money(balance, "the current balance"))));
+        }, () -> {
+            refresh();
             if (!warnings.isEmpty()) Ui.info(String.join("\n", warnings));
         });
-        refresh();
     }
 
     private void updateDialog(Account a) {
@@ -130,7 +132,6 @@ final class AccountsView implements View {
         Ui.Form form = new Ui.Form().add("New balance ($)", balance,
                 a.isLiability() ? "The amount you owe now, as a positive number." : null);
         Ui.dialog("Update " + a.getName(), null, form, "Save",
-                () -> app.updateAccountBalance(a.getId(), Ui.money(balance, "the new balance")));
-        refresh();
+                () -> app.updateAccountBalance(a.getId(), Ui.money(balance, "the new balance")), this::refresh);
     }
 }
