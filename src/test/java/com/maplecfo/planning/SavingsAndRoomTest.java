@@ -110,4 +110,48 @@ class SavingsAndRoomTest {
         Money room = app.getContributionRoom(AccountType.TFSA, 2026).available();
         assertEquals(ContributionCheck.Status.OVER, app.previewContribution(AccountType.TFSA, room.plus(Money.of(1))).status());
     }
+
+    @Test
+    void withdrawingTheExcessClearsAnOverContribution() {
+        app.saveProfile(new UserProfile(2003, "ON", 2003, null, null, null));
+        Money room = app.getContributionRoom(AccountType.TFSA, 2026).available();
+        app.recordContribution(new ContributionRecord(AccountType.TFSA, LocalDate.of(2026, 3, 1),
+                room.plus(Money.of(1000)), ContributionKind.CONTRIBUTION));
+        ContributionRoom over = app.getContributionRoom(AccountType.TFSA, 2026);
+        assertEquals(Money.of(-1000), over.available());
+        assertTrue(over.isOverContributed());
+
+        app.recordContribution(new ContributionRecord(AccountType.TFSA, LocalDate.of(2026, 4, 1), Money.of(400),
+                ContributionKind.WITHDRAWAL));
+        assertEquals(Money.of(-600), app.getContributionRoom(AccountType.TFSA, 2026).available(),
+                "part of the excess is gone");
+
+        app.recordContribution(new ContributionRecord(AccountType.TFSA, LocalDate.of(2026, 5, 1), Money.of(1600),
+                ContributionKind.WITHDRAWAL));
+        ContributionRoom fixed = app.getContributionRoom(AccountType.TFSA, 2026);
+        assertEquals(Money.zero(), fixed.available(), "no longer over, but no new room until January");
+        assertFalse(fixed.isOverContributed());
+    }
+
+    @Test
+    void aWithdrawalWithoutExcessGivesRoomBackOnlyNextYear() {
+        app.saveProfile(new UserProfile(2003, "ON", 2003, null, null, null));
+        Money before = app.getContributionRoom(AccountType.TFSA, 2026).available();
+        app.recordContribution(new ContributionRecord(AccountType.TFSA, LocalDate.of(2026, 3, 1), Money.of(5000),
+                ContributionKind.CONTRIBUTION));
+        app.recordContribution(new ContributionRecord(AccountType.TFSA, LocalDate.of(2026, 6, 1), Money.of(2000),
+                ContributionKind.WITHDRAWAL));
+        assertEquals(before.minus(Money.of(5000)), app.getContributionRoom(AccountType.TFSA, 2026).available());
+    }
+
+    @Test
+    void rrspExcessAlsoGoesAwayWhenWithdrawn() {
+        app.saveProfile(new UserProfile(2003, "ON", 2003, null, Money.of(5000), null));
+        app.recordContribution(new ContributionRecord(AccountType.RRSP, LocalDate.of(2026, 2, 1), Money.of(8000),
+                ContributionKind.CONTRIBUTION));
+        assertTrue(app.getContributionRoom(AccountType.RRSP, 2026).isOverContributed());
+        app.recordContribution(new ContributionRecord(AccountType.RRSP, LocalDate.of(2026, 3, 1), Money.of(3000),
+                ContributionKind.WITHDRAWAL));
+        assertEquals(Money.zero(), app.getContributionRoom(AccountType.RRSP, 2026).available());
+    }
 }

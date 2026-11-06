@@ -168,7 +168,8 @@ public class RegisteredAccountService {
             }
         }
         Money limit = created.plus(restored);
-        return new ContributionRoom(AccountType.TFSA, year, limit, contributed, limit.minus(contributed));
+        return new ContributionRoom(AccountType.TFSA, year, limit, contributed,
+                offsetExcess(limit.minus(contributed), withdrawalsIn(records, year)));
     }
 
     private ContributionRoom fhsaRoom(UserProfile p, ContributionLimits limits,
@@ -186,7 +187,7 @@ public class RegisteredAccountService {
                     .max(Money.zero());
             if (y == year) {
                 return new ContributionRoom(AccountType.FHSA, year, room, contributedThisYear,
-                        room.minus(contributedThisYear));
+                        offsetExcess(room.minus(contributedThisYear), withdrawalsIn(records, year)));
             }
             carry = limits.fhsaAnnualLimit().plus(carry).minus(contributedThisYear)
                     .max(Money.zero()).min(limits.fhsaCarryForwardMax());
@@ -197,7 +198,26 @@ public class RegisteredAccountService {
     private ContributionRoom rrspRoom(UserProfile p, List<ContributionRecord> records, int year) {
         Money limit = p.getRrspDeductionLimit();
         Money used = contributionsIn(records, year);
-        return new ContributionRoom(AccountType.RRSP, year, limit, used, limit.minus(used));
+        return new ContributionRoom(AccountType.RRSP, year, limit, used,
+                offsetExcess(limit.minus(used), withdrawalsIn(records, year)));
+    }
+
+    private static Money withdrawalsIn(List<ContributionRecord> records, int year) {
+        Money w = Money.zero();
+        for (ContributionRecord r : records) {
+            if (r.kind() == ContributionKind.WITHDRAWAL && r.date().getYear() == year) w = w.plus(r.amount());
+        }
+        return w;
+    }
+
+    /**
+     * CRA rule: a withdrawal in the same year removes an excess (over-contribution) right away, but it does
+     * not create new room. (For a TFSA the withdrawn amount comes back as room next January.)
+     * So withdrawals can bring a negative "available" up to zero, never above it.
+     */
+    private static Money offsetExcess(Money available, Money withdrawnThisYear) {
+        if (!available.isNegative()) return available;
+        return available.plus(withdrawnThisYear).min(Money.zero());
     }
 
     private static Money contributionsIn(List<ContributionRecord> records, int year) {

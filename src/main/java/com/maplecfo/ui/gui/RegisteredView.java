@@ -95,6 +95,10 @@ final class RegisteredView implements View {
                 new VBox(0, available, Ui.muted("available in " + year)),
                 Ui.small("Limit " + r.limit() + " · used " + r.used()),
                 Ui.small("This year: put in " + totals[0] + " · taken out " + totals[1]), Ui.row(record, history));
+        if (t == AccountType.TFSA && totals[1].isPositive() && !r.isOverLimit()) {
+            card.getChildren().add(Ui.small("The " + totals[1] + " you took out comes back as room on January 1, "
+                    + (year + 1) + "."));
+        }
         if (r.isOverContributed()) {
             card.getChildren().add(Ui.banner("CRA charges 1% a month on the extra amount. Withdraw it soon.", "bad"));
         } else if (r.isOverLimit()) {
