@@ -17,6 +17,7 @@
     <jackson.version>2.18.2</jackson.version>
     <sqlite.version>3.47.1.0</sqlite.version>
     <picocli.version>4.7.6</picocli.version>
+    <javafx.version>21.0.5</javafx.version>
   </properties>
 
   <dependencies>
@@ -34,6 +35,12 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
       <version>${jackson.version}</version>
+    </dependency>
+    <!-- GUI (JavaFX). Maven picks the native files for the computer that builds the jar. -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>${javafx.version}</version>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>

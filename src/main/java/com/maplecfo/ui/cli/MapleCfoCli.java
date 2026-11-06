@@ -47,6 +47,7 @@ import java.util.concurrent.Callable;
                 AgentCommands.ConfirmCmd.class,
                 AgentCommands.DismissCmd.class,
                 AgentCommands.AiStatusCmd.class,
+                MapleCfoCli.GuiCmd.class,
                 CommandLine.HelpCommand.class
         })
 public class MapleCfoCli implements Callable<Integer> {
@@ -211,6 +212,15 @@ public class MapleCfoCli implements Callable<Integer> {
             }
             all.forEach(a -> out.println("[" + a.severity() + "] " + a.message()));
             root.alertsShown = all.size();
+            return 0;
+        }
+    }
+
+    @Command(name = "gui", description = "Open the MapleCFO window (JavaFX).")
+    static class GuiCmd implements Callable<Integer> {
+        @Override
+        public Integer call() {
+            com.maplecfo.ui.gui.GuiLauncher.main(new String[0]);
             return 0;
         }
     }

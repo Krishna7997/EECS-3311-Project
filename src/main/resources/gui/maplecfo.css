@@ -1,0 +1,62 @@
+/* MapleCFO GUI theme: calm neutrals with a maple-red accent. */
+.root {
+    -fx-font-family: "System";
+    -fx-font-size: 13px;
+    -fx-background-color: #f6f5f3;
+    -fx-accent: #b3261e;
+    -fx-focus-color: #b3261e;
+}
+.toolbar {
+    -fx-padding: 8 16 8 16;
+    -fx-alignment: center-left;
+    -fx-background-color: #ffffff;
+    -fx-border-color: transparent transparent #e2dfda transparent;
+}
+.brand {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #b3261e;
+}
+.heading {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2b2a28;
+}
+.big-number {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2b2a28;
+}
+.muted {
+    -fx-text-fill: #6d6a65;
+}
+.card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8;
+    -fx-border-color: #e2dfda;
+    -fx-border-radius: 8;
+}
+.progress-bar > .bar {
+    -fx-background-color: #2e7d5b;
+    -fx-background-insets: 1;
+}
+.progress-bar.near > .bar {
+    -fx-background-color: #c98a16;
+}
+.progress-bar.over > .bar {
+    -fx-background-color: #b3261e;
+}
+.chat-user {
+    -fx-background-color: #f1e3e1;
+    -fx-background-radius: 8;
+    -fx-padding: 8;
+}
+.chat-ai {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2dfda;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 8;
+}
+.verdict-yes { -fx-text-fill: #2e7d5b; -fx-font-weight: bold; }
+.verdict-no { -fx-text-fill: #b3261e; -fx-font-weight: bold; }
