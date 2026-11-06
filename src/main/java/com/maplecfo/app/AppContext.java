@@ -186,6 +186,7 @@ public final class AppContext {
         facade.attachAutomation(new ReminderService(txService, bus, clock, settings), new RrspRoomEstimator(txService, limits),
                 limits);
 
+        facade.attachQueryParser(new com.maplecfo.agent.TransactionQueryParser(llm, prompts));
         facade.attachFormatReader(new com.maplecfo.importer.AiFormatReader(llm, prompts));
         facade.attachAgent(new CfoAgent(llm, tools, new ConversationMemory(10), prompts,
                 validator, pending, profileRepo::load, clock));

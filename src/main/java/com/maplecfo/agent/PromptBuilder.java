@@ -96,4 +96,22 @@ public class PromptBuilder {
     public String buildFormatPrompt(List<String> firstLines) {
         return "First lines of the file:\n" + String.join("\n", firstLines);
     }
+
+    // ------------------------------------------------------------ F18 plain-English transaction search
+
+    public String buildTransactionQuerySystemPrompt(LocalDate today, List<String> accountIds) {
+        StringBuilder names = new StringBuilder();
+        for (Category c : Category.values()) names.append(names.length() > 0 ? ", " : "").append(c.name());
+        return """
+                You turn a question about bank transactions into a search filter. Today is %s.
+                Reply with only one JSON object, no other text:
+                {"from": "YYYY-MM-DD" or null, "to": "YYYY-MM-DD" or null, "account": one of [%s] or null,
+                 "category": one of [%s] or null, "direction": "IN", "OUT" or null,
+                 "min": number or null, "max": number or null,
+                 "text": merchant or words to find in the description, or null}
+                "In October" means the whole month of the most recent October up to today. "Over $30" sets min,
+                "under $30" sets max. Spending, purchases and payments are OUT; deposits, pay and refunds are IN.
+                Use text only for a merchant or payee name (e.g. "uber eats"), never for a category word.
+                Leave every field you are not sure about null.""".formatted(today, String.join(", ", accountIds), names);
+    }
 }

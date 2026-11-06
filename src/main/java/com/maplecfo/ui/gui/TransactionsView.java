@@ -127,6 +127,19 @@ final class TransactionsView implements View {
             updatingFilters = false;
             refresh();
         });
+        // F18: ask in plain English; the answer fills in the filters below so you can see and change them
+        TextField ask = Ui.field("Ask, e.g. Uber Eats over $30 in October");
+        HBox.setHgrow(ask, Priority.ALWAYS);
+        ask.setMaxWidth(Double.MAX_VALUE);
+        Button askBtn = Ui.secondary("Find");
+        askBtn.setGraphic(Icons.of(Icons.SPARK, 14));
+        askBtn.setDefaultButton(false);
+        Runnable runAsk = () -> askInPlainEnglish(ask.getText(), askBtn);
+        askBtn.setOnAction(e -> runAsk.run());
+        ask.setOnAction(e -> runAsk.run());
+        HBox askRow = new HBox(8, ask, askBtn);
+        askRow.setAlignment(Pos.CENTER_LEFT);
+
         javafx.scene.layout.FlowPane filters = new javafx.scene.layout.FlowPane(8, 8, Ui.small("Filter:"),
                 accountFilter, categoryFilter, directionFilter, fromDate, toDate, minAmount, maxAmount, clear);
         filters.setAlignment(Pos.CENTER_LEFT);
@@ -142,7 +155,7 @@ final class TransactionsView implements View {
         Label hint = Ui.small("Change a category with the drop-down in the table. MapleCFO remembers the merchant "
                 + "for next time, and Undo at the top reverts it.");
         resultBox.managedProperty().bind(javafx.beans.binding.Bindings.isNotEmpty(resultBox.getChildren()));
-        root = Ui.page(toolbar, filters, resultBox, body, Ui.row(totalsLabel, Ui.spacer()), hint);
+        root = Ui.page(toolbar, askRow, filters, resultBox, body, Ui.row(totalsLabel, Ui.spacer()), hint);
     }
 
     @Override public String id() { return Nav.TRANSACTIONS; }
@@ -332,6 +345,58 @@ final class TransactionsView implements View {
             ImportResult r = app.importTransactions(f.toPath(), acc, fmt);
             showResult(f.getName(), fmt, r);
         }, this::refresh);
+    }
+
+    /** F18: the question becomes filters (by the AI, in the background), which the user can then adjust. */
+    private void askInPlainEnglish(String question, Button button) {
+        if (question == null || question.isBlank()) return;
+        button.setDisable(true);
+        Thread worker = new Thread(() -> {
+            try {
+                com.maplecfo.agent.TransactionQueryParser.ParsedQuery q = app.understandTransactionQuery(question);
+                javafx.application.Platform.runLater(() -> {
+                    button.setDisable(false);
+                    applyFilter(q.filter());
+                    Button close = Ui.flat("×");
+                    close.setOnAction(e -> resultBox.getChildren().clear());
+                    resultBox.getChildren().setAll(Ui.banner(q.explanation() + (q.byAi() ? "  (understood by the AI)"
+                            : "  (keyword rules: add your API key for full questions)"), "info", close));
+                });
+            } catch (Exception ex) {
+                javafx.application.Platform.runLater(() -> {
+                    button.setDisable(false);
+                    Ui.error(ex);
+                });
+            }
+        }, "ai-transaction-search");
+        worker.setDaemon(true);
+        worker.start();
+    }
+
+    /** Shows a filter in the filter controls, then refreshes once. */
+    void applyFilter(com.maplecfo.services.TransactionFilter f) {
+        updatingFilters = true;
+        allBtn.setSelected(true);
+        if (f.accountId() != null && !accountFilter.getItems().contains(f.accountId())) {
+            accountFilter.getItems().add(f.accountId());
+        }
+        accountFilter.setValue(f.accountId() == null ? ALL_ACCOUNTS : f.accountId());
+        categoryFilter.setValue(f.category() == null ? ALL_CATEGORIES : Ui.pretty(f.category()));
+        directionFilter.setValue(f.direction() == null ? "Money in and out"
+                : f.direction() == com.maplecfo.services.TransactionFilter.Direction.IN ? "Money in" : "Money out");
+        fromDate.setValue(f.from());
+        toDate.setValue(f.to());
+        if (f.from() == null && f.to() == null) {
+            // no dates in the question: search everything, shown as "from the first transaction"
+            app.searchTransactions("").stream().map(Transaction::getDate).min(java.time.LocalDate::compareTo)
+                    .ifPresent(fromDate::setValue);
+        }
+        minAmount.setText(f.minAmount() == null ? "" : f.minAmount().getAmount().toPlainString());
+        maxAmount.setText(f.maxAmount() == null ? "" : f.maxAmount().getAmount().toPlainString());
+        search.setText(f.text() == null ? "" : f.text());
+        if (f.from() != null) month = YearMonth.from(f.from());
+        updatingFilters = false;
+        refresh();
     }
 
     /** Asks the AI in the background (it takes a few seconds), then shows its suggestion. */

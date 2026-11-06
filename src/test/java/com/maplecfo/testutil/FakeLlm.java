@@ -22,6 +22,12 @@ public class FakeLlm implements LlmClient {
         this.replies.addAll(List.of(replies));
     }
 
+    /** Adds replies after the ones given so far (e.g. after an import that asked about unknown shops). */
+    public void then(Object... more) {
+        replies.clear();
+        replies.addAll(List.of(more));
+    }
+
     @Override
     public LlmResponse chat(List<ChatMessage> messages, List<ToolSchema> tools) {
         received.add(messages);

@@ -45,6 +45,22 @@ public record TransactionFilter(LocalDate from, LocalDate to, String accountId, 
         return new TransactionFilter(from, to, accountId, category, direction, minAmount, maxAmount, t);
     }
 
+    /** Plain-language description, e.g. "dining, money out, $30.00 or more, 2026-10-01 to 2026-10-31". */
+    public String describe() {
+        java.util.List<String> parts = new java.util.ArrayList<>();
+        if (text != null && !text.isBlank()) parts.add("\"" + text.trim() + "\"");
+        if (category != null) parts.add(category.name().toLowerCase().replace('_', ' '));
+        if (direction != null) parts.add(direction == Direction.IN ? "money in" : "money out");
+        if (accountId != null && !accountId.isBlank()) parts.add("account " + accountId);
+        if (minAmount != null && maxAmount != null) parts.add("between " + minAmount + " and " + maxAmount);
+        else if (minAmount != null) parts.add(minAmount + " or more");
+        else if (maxAmount != null) parts.add("up to " + maxAmount);
+        if (from != null && to != null) parts.add(from + " to " + to);
+        else if (from != null) parts.add("from " + from);
+        else if (to != null) parts.add("until " + to);
+        return parts.isEmpty() ? "all transactions" : String.join(", ", parts);
+    }
+
     public boolean matches(Transaction t) {
         if (from != null && t.getDate().isBefore(from)) return false;
         if (to != null && t.getDate().isAfter(to)) return false;

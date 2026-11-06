@@ -122,7 +122,7 @@ final class TransactionCommands {
     }
 
     @Command(name = "tx", description = "List, search and correct transactions (F02).",
-            subcommands = {TxCmd.ListCmd.class, TxCmd.SearchCmd.class, TxCmd.RecategorizeCmd.class})
+            subcommands = {TxCmd.ListCmd.class, TxCmd.FindCmd.class, TxCmd.SearchCmd.class, TxCmd.RecategorizeCmd.class})
     static class TxCmd {
         @CommandLine.ParentCommand MapleCfoCli root;
 
@@ -172,6 +172,27 @@ final class TransactionCommands {
                     txs = parent.root.facade().findTransactions(f);
                 }
                 java.io.PrintWriter pw = spec.commandLine().getOut();
+                print(parent.root, pw, txs, limit);
+                com.maplecfo.domain.Money[] t = com.maplecfo.services.TransactionFilter.totals(txs);
+                pw.println(txs.size() + " transactions  ·  money in " + t[0] + "  ·  money out " + t[1]);
+                return 0;
+            }
+        }
+
+        @Command(name = "find", description = "Ask in plain English, e.g. tx find uber eats over 30 in october (F18).")
+        static class FindCmd implements Callable<Integer> {
+            @CommandLine.ParentCommand TxCmd parent;
+            @CommandLine.Spec CommandLine.Model.CommandSpec spec;
+            @Parameters(arity = "1..*", description = "What you are looking for") List<String> words;
+            @Option(names = "--limit", defaultValue = "25") int limit;
+
+            @Override
+            public Integer call() {
+                java.io.PrintWriter pw = spec.commandLine().getOut();
+                com.maplecfo.agent.TransactionQueryParser.ParsedQuery q =
+                        parent.root.facade().understandTransactionQuery(String.join(" ", words));
+                pw.println(q.explanation() + (q.byAi() ? "  [understood by the AI]" : "  [keyword rules, demo mode]"));
+                List<Transaction> txs = parent.root.facade().findTransactions(q.filter());
                 print(parent.root, pw, txs, limit);
                 com.maplecfo.domain.Money[] t = com.maplecfo.services.TransactionFilter.totals(txs);
                 pw.println(txs.size() + " transactions  ·  money in " + t[0] + "  ·  money out " + t[1]);

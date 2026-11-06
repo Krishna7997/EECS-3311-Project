@@ -265,6 +265,23 @@ public class MapleCfoFacade {
         return filter.apply(txService.findAll());
     }
 
+    // ---------------------------------------------------------- F18 plain-English transaction search
+
+    private com.maplecfo.agent.TransactionQueryParser queryParser;
+
+    void attachQueryParser(com.maplecfo.agent.TransactionQueryParser parser) {
+        this.queryParser = parser;
+    }
+
+    /** "Uber Eats over $30 in October" as a checked filter (the AI fills it in; keyword rules in demo mode). */
+    public com.maplecfo.agent.TransactionQueryParser.ParsedQuery understandTransactionQuery(String question) {
+        if (queryParser == null) throw new IllegalStateException("The transaction search is not configured");
+        java.util.Set<String> ids = new java.util.TreeSet<>();
+        txService.findAll().forEach(t -> ids.add(t.getAccountId()));
+        if (accounts != null) getAccounts().forEach(a -> ids.add(a.getId()));
+        return queryParser.parse(question, List.copyOf(ids), today());
+    }
+
     /** All imported transactions of one account, newest first. */
     public List<Transaction> getAccountActivity(String accountId) {
         return txService.findAll().stream().filter(t -> t.getAccountId().equalsIgnoreCase(accountId))
