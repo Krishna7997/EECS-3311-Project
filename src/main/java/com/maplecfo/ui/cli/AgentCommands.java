@@ -91,4 +91,30 @@ final class AgentCommands {
             return 0;
         }
     }
+
+    @Command(name = "review", description = "AI monthly review: what happened, a to-do list and proposed budgets for "
+            + "next month (F17). Use interactive mode to confirm the proposals.")
+    static class ReviewCmd implements Callable<Integer> {
+        @CommandLine.ParentCommand MapleCfoCli root;
+        @CommandLine.Spec CommandLine.Model.CommandSpec spec;
+        @CommandLine.Option(names = {"-m", "--month"}, description = "Month to review (default: last month)")
+        java.time.YearMonth month;
+
+        @Override
+        public Integer call() {
+            PrintWriter out = spec.commandLine().getOut();
+            java.time.YearMonth m = month != null ? month : java.time.YearMonth.from(root.facade().today()).minusMonths(1);
+            out.println(root.facade().getLlm().isMock() ? "(Demo mode: fixed steps instead of the AI.)"
+                    : "Reviewing " + m + " with the AI (this takes a few seconds)...");
+            com.maplecfo.agent.MonthlyReviewService.MonthlyReview r = root.facade().runMonthlyReview(m);
+            out.println(r.text());
+            out.println("  [tools used: " + String.join(", ", r.toolsUsed()) + "]");
+            if (!r.proposals().isEmpty()) {
+                out.println("Proposed changes (nothing changes until you confirm):");
+                r.proposals().forEach((id, d) -> out.println("  " + id + ": " + d + "   ->  confirm " + id + "  or  dismiss " + id));
+            }
+            root.printNewAlerts(out);
+            return 0;
+        }
+    }
 }

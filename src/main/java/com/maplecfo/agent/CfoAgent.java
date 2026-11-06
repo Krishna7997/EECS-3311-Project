@@ -53,8 +53,18 @@ public class CfoAgent {
             return new AgentResponse("Please type a question.", List.of(), null, true);
         }
         String system = promptBuilder.buildSystemPrompt(profile.get(), LocalDate.now(clock));
-        Turn t = runLoop(promptBuilder.buildMessages(system, memory, userMessage));
-        return finish(userMessage, t);
+        Turn t = runLoop(promptBuilder.buildMessages(system, memory, userMessage), MAX_STEPS);
+        return finish(userMessage, t, true);
+    }
+
+    /**
+     * A longer task such as the monthly review (F17): more steps are allowed because the model gathers data with
+     * several tools, then proposes changes, then answers. It is not added to the chat history.
+     */
+    public AgentResponse runTask(String instruction, int maxSteps) {
+        String system = promptBuilder.buildSystemPrompt(profile.get(), LocalDate.now(clock));
+        List<ChatMessage> start = new ArrayList<>(List.of(ChatMessage.system(system), ChatMessage.user(instruction)));
+        return finish(instruction, runLoop(start, maxSteps), false);
     }
 
     /** Bookkeeping for one user message. */
@@ -63,16 +73,17 @@ public class CfoAgent {
         final Set<String> toolsUsed = new LinkedHashSet<>();
         final List<String> evidence = new ArrayList<>();
         String pendingActionId;
+        final List<String> pendingActionIds = new ArrayList<>();
         String finalText;
         String failure;
     }
 
-    private Turn runLoop(List<ChatMessage> start) {
+    private Turn runLoop(List<ChatMessage> start, int maxSteps) {
         Turn t = new Turn();
         List<ChatMessage> msgs = new ArrayList<>(start);
         t.msgs = msgs;
         try {
-            for (int step = 0; step < MAX_STEPS; step++) {
+            for (int step = 0; step < maxSteps; step++) {
                 LlmResponse r = llm.chat(msgs, tools.schemas());
                 if (!r.hasToolCalls()) {
                     t.finalText = r.text();
@@ -85,21 +96,22 @@ public class CfoAgent {
                     t.evidence.add(result.toJson());
                     if (result.success() && result.data().hasNonNull("action_id")) {
                         t.pendingActionId = result.data().get("action_id").asText();
+                        t.pendingActionIds.add(t.pendingActionId);
                     }
                     msgs.add(ChatMessage.toolResult(call.id(), result.toJson(), !result.success()));
                 }
             }
-            t.failure = "I couldn't finish this within " + MAX_STEPS + " steps. Try asking a more specific question.";
+            t.failure = "I couldn't finish this within " + maxSteps + " steps. Try asking a more specific question.";
         } catch (LlmException e) {
             t.failure = "The AI model is unavailable right now: " + e.getMessage();
         }
         return t;
     }
 
-    private AgentResponse finish(String userMessage, Turn t) {
+    private AgentResponse finish(String userMessage, Turn t, boolean remember) {
         List<ChatMessage> msgs = t.msgs;
         if (t.failure != null) {
-            return new AgentResponse(t.failure, List.copyOf(t.toolsUsed), t.pendingActionId, true);
+            return new AgentResponse(t.failure, List.copyOf(t.toolsUsed), t.pendingActionId, true, t.pendingActionIds);
         }
         List<String> evidence = new ArrayList<>(t.evidence);
         evidence.add(userMessage);
@@ -129,9 +141,12 @@ public class CfoAgent {
                     + " against your data, so please double-check those amounts.)";
         }
         answer = validator.appendDisclaimer(answer);
-        memory.add(ChatMessage.user(userMessage));
-        memory.add(ChatMessage.assistant(answer));
-        return new AgentResponse(answer, List.copyOf(t.toolsUsed), t.pendingActionId, report.grounded());
+        if (remember) {
+            memory.add(ChatMessage.user(userMessage));
+            memory.add(ChatMessage.assistant(answer));
+        }
+        return new AgentResponse(answer, List.copyOf(t.toolsUsed), t.pendingActionId, report.grounded(),
+                t.pendingActionIds);
     }
 
     public PendingActionStore getPendingActions() {

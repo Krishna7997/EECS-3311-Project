@@ -91,8 +91,8 @@ final class HomeView implements View {
                         + "your import folder: " + app.getImportFolder().getFileName() + ".", "Import", Nav.TRANSACTIONS),
                 checkRow("2", "Update balances that aren't imported", "Investments, TFSA, RRSP, FHSA and loans.",
                         "Accounts", Nav.ACCOUNTS),
-                checkRow("3", "Look over your budgets", "See what went over last month and adjust.", "Budgets",
-                        Nav.BUDGETS),
+                checkRow("3", "Review last month and plan budgets", "On Monthly report, press AI review: it "
+                        + "proposes next month's budgets for you to confirm.", "Review", Nav.REPORT),
                 checkRow("4", "Check your TFSA, RRSP and FHSA room", "Confirm any contributions MapleCFO found.",
                         "Room", Nav.REGISTERED));
         Button done = Ui.primary("Mark as done", Icons.CHECK);

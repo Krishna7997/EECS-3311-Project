@@ -332,7 +332,8 @@ final class Ui {
         card.getChildren().addAll(body, error, answer, buttons);
         card.getStyleClass().addAll("card", "popup");
         card.setPadding(new Insets(24, 26, 20, 26));
-        double w = body instanceof TableView<?> || body.lookup(".table-view") != null ? 760 : 480;
+        double w = body instanceof TableView<?> || body.lookup(".table-view") != null
+                || body.getStyleClass().contains("wide-popup") ? 760 : 480;
         card.setMaxWidth(w);
         card.setPrefWidth(w);
         card.setMaxHeight(Region.USE_PREF_SIZE);

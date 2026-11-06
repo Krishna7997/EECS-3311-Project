@@ -127,11 +127,14 @@ final class AffordView implements View {
             for (com.maplecfo.planning.ExtraMoneyPlanner.Step st : p.steps()) {
                 Label amt = new Label(st.amount().toString());
                 amt.getStyleClass().add(Styles.TEXT_BOLD);
+                amt.setMinWidth(javafx.scene.layout.Region.USE_PREF_SIZE);
                 Label target = new Label((row + 1) + ". " + st.target());
                 target.getStyleClass().add(Styles.TEXT_BOLD);
                 Label why = Ui.small(st.reason());
                 why.setWrapText(true);
                 VBox text = new VBox(2, target, why);
+                text.setMinWidth(0);
+                text.setMaxWidth(Double.MAX_VALUE);
                 GridPane.setHgrow(text, javafx.scene.layout.Priority.ALWAYS);
                 GridPane.setHalignment(amt, javafx.geometry.HPos.RIGHT);
                 GridPane.setValignment(amt, javafx.geometry.VPos.TOP);

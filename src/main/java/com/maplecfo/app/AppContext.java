@@ -182,6 +182,8 @@ public final class AppContext {
         ExtraMoneyPlanner extraMoney = new ExtraMoneyPlanner(registered, debtRepo, accountService, cashFlow, clock);
         tools.register(new com.maplecfo.agent.tools.ExtraMoneyTool(extraMoney));
         facade.attachExtraMoneyPlanner(extraMoney);
+        com.maplecfo.planning.BudgetPlanner budgetPlanner = new com.maplecfo.planning.BudgetPlanner(txService, budgets);
+        tools.register(new com.maplecfo.agent.tools.BudgetSuggestionTool(budgetPlanner, clock));
         tools.register(new ProposeActionTool(pending, budgets, clock));
         new ContributionDetector(txService, registered, pending, bus).withAccounts(accountService, netWorth).register();
         new BalanceSyncService(accountService, debtRepo, netWorth).register(bus);
@@ -192,8 +194,11 @@ public final class AppContext {
 
         facade.attachQueryParser(new com.maplecfo.agent.TransactionQueryParser(llm, prompts));
         facade.attachFormatReader(new com.maplecfo.importer.AiFormatReader(llm, prompts));
-        facade.attachAgent(new CfoAgent(llm, tools, new ConversationMemory(10), prompts,
-                validator, pending, profileRepo::load, clock));
+        CfoAgent agent = new CfoAgent(llm, tools, new ConversationMemory(10), prompts,
+                validator, pending, profileRepo::load, clock);
+        facade.attachAgent(agent);
+        facade.attachMonthlyReview(new com.maplecfo.agent.MonthlyReviewService(agent, tools, budgetPlanner),
+                budgetPlanner);
         return facade;
     }
 }

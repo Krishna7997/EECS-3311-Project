@@ -49,6 +49,7 @@ import java.util.concurrent.Callable;
                 AgentCommands.ConfirmCmd.class,
                 AgentCommands.DismissCmd.class,
                 AgentCommands.AiStatusCmd.class,
+                AgentCommands.ReviewCmd.class,
                 AutomationCommands.WatchCmd.class,
                 AutomationCommands.RemindersCmd.class,
                 AutomationCommands.InboxCmd.class,

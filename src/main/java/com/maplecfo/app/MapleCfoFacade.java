@@ -265,6 +265,33 @@ public class MapleCfoFacade {
         return filter.apply(txService.findAll());
     }
 
+    // ---------------------------------------------------------- F17 AI monthly review
+
+    private com.maplecfo.agent.MonthlyReviewService monthlyReview;
+
+    private com.maplecfo.planning.BudgetPlanner budgetPlanner;
+
+    void attachMonthlyReview(com.maplecfo.agent.MonthlyReviewService review, com.maplecfo.planning.BudgetPlanner planner) {
+        this.monthlyReview = review;
+        this.budgetPlanner = planner;
+    }
+
+    /** Suggested budgets for a month from the three months before it (rounded up to $10). */
+
+    /**
+     * The AI reviews a month and proposes next month's budgets. The proposals wait in {@link #getPendingActions()}
+     * until the user confirms or dismisses each one.
+     */
+    public List<com.maplecfo.planning.BudgetPlanner.Suggestion> suggestBudgets(YearMonth month) {
+        if (budgetPlanner == null) throw new IllegalStateException("The budget planner is not configured");
+        return budgetPlanner.suggest(month);
+    }
+
+    public com.maplecfo.agent.MonthlyReviewService.MonthlyReview runMonthlyReview(YearMonth month) {
+        if (monthlyReview == null) throw new IllegalStateException("The monthly review is not configured");
+        return monthlyReview.review(month);
+    }
+
     // ---------------------------------------------------------- F19 where to put extra money
 
     private com.maplecfo.planning.ExtraMoneyPlanner extraMoney;

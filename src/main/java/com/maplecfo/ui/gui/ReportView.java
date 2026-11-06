@@ -34,6 +34,7 @@ final class ReportView implements View {
     private final VBox details = new VBox(4);
     private final PieChart pie = new PieChart();
     private final Button generate = Ui.primary("Create report", Icons.SPARK);
+    private final Button reviewBtn = Ui.secondary("AI review & next month's budgets");
     private YearMonth month;
 
     ReportView(MapleCfoFacade app, Nav nav) {
@@ -54,6 +55,7 @@ final class ReportView implements View {
         monthLabel.setMinWidth(130);
         monthLabel.setAlignment(javafx.geometry.Pos.CENTER);
         generate.setOnAction(e -> generateAsync());
+        reviewBtn.setOnAction(e -> reviewAsync());
 
         ResponsiveGrid figures = new ResponsiveGrid(200, 16, Ui.stat("Income", income, null),
                 Ui.stat("Spending", spending, null), Ui.stat("Saved", saved, rate));
@@ -69,10 +71,78 @@ final class ReportView implements View {
                         + "money went and a short summary written by the AI.", create);
         javafx.scene.layout.StackPane holder = new javafx.scene.layout.StackPane(placeholder);
         this.holder = holder;
-        root = Ui.scroll(Ui.page(Ui.row(prev, monthLabel, next, Ui.spacer(), generate), holder));
+        reviewBtn.setGraphic(Icons.of(Icons.SPARK, 14));
+        root = Ui.scroll(Ui.page(Ui.row(prev, monthLabel, next, Ui.spacer(), reviewBtn, generate), holder));
     }
 
     private final javafx.scene.layout.StackPane holder;
+
+    /** F17: the AI reviews the month in the background (several tool calls), then the proposals can be confirmed. */
+    private void reviewAsync() {
+        reviewBtn.setDisable(true);
+        reviewBtn.setText("Reviewing " + month + "...");
+        YearMonth m = month;
+        Thread worker = new Thread(() -> {
+            try {
+                com.maplecfo.agent.MonthlyReviewService.MonthlyReview r = app.runMonthlyReview(m);
+                javafx.application.Platform.runLater(() -> showReview(r));
+            } catch (Exception ex) {
+                javafx.application.Platform.runLater(() -> Ui.error(ex));
+            } finally {
+                javafx.application.Platform.runLater(() -> {
+                    reviewBtn.setDisable(false);
+                    reviewBtn.setText("AI review & next month's budgets");
+                });
+            }
+        }, "ai-monthly-review");
+        worker.setDaemon(true);
+        worker.start();
+    }
+
+    void showReview(com.maplecfo.agent.MonthlyReviewService.MonthlyReview r) {
+        Label text = new Label(r.text());
+        text.setWrapText(true);
+        text.setStyle("-fx-font-size: 14px; -fx-line-spacing: 3px;");
+        VBox body = new VBox(12, text);
+        if (!r.proposals().isEmpty()) {
+            Label head = new Label("Proposed for " + r.month().plusMonths(1) + " (nothing changes until you confirm)");
+            head.getStyleClass().add(atlantafx.base.theme.Styles.TEXT_BOLD);
+            head.setWrapText(true);
+            body.getChildren().add(head);
+            r.proposals().forEach((id, description) -> {
+                Label d = new Label(description);
+                d.setWrapText(true);
+                d.setMinWidth(0);
+                javafx.scene.layout.HBox.setHgrow(d, javafx.scene.layout.Priority.ALWAYS);
+                d.setMaxWidth(Double.MAX_VALUE);
+                Button ok = Ui.primary("Confirm");
+                Button no = Ui.secondary("Dismiss");
+                javafx.scene.layout.HBox row = new javafx.scene.layout.HBox(8, d, no, ok);
+                row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+                ok.setOnAction(e -> Ui.attempt(() -> {
+                    app.confirmProposedAction(id);
+                    row.getChildren().setAll(d, Ui.chip("Applied", "ok"));
+                }));
+                no.setOnAction(e -> {
+                    app.dismissProposedAction(id);
+                    row.getChildren().setAll(d, Ui.chip("Dismissed", "neutral"));
+                });
+                body.getChildren().add(row);
+            });
+        }
+        Label how = Ui.small((r.byAi() ? "Planned and written by the AI" : "Demo mode: fixed steps, no AI wording")
+                + " · tools used: " + String.join(", ", r.toolsUsed())
+                + (r.grounded() ? "" : " · some amounts could not be checked"));
+        how.setWrapText(true);
+        body.getChildren().add(how);
+        body.setPadding(new javafx.geometry.Insets(0, 12, 0, 0));
+        javafx.scene.control.ScrollPane scroll = new javafx.scene.control.ScrollPane(body);
+        scroll.setFitToWidth(true);
+        scroll.setPrefViewportHeight(460);
+        scroll.setMaxHeight(520);
+        scroll.getStyleClass().addAll("edge-to-edge", "wide-popup");
+        Ui.view("Review of " + r.month(), null, scroll);
+    }
     private YearMonth shown;
 
     @Override public String id() { return Nav.REPORT; }

@@ -94,7 +94,7 @@ final class AutomationCommands {
             out.println("  1. Import last month's CSV from each bank:   import <file> -a <account>   (or save it in: "
                     + root.facade().getImportFolder() + ")");
             out.println("  2. Update balances that are not imported:     account update <account> <balance>");
-            out.println("  3. Look over your budgets:                    budget status");
+            out.println("  3. Review last month, plan budgets:          review   (or: budget status)");
             out.println("  4. Confirm detected contributions, check room: ai   then   room");
             out.println("Then run: checkin --done");
             return 0;

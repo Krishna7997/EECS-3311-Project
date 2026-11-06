@@ -12,6 +12,10 @@ EECS3311 Software Design (Fall 2026) course project by Krishna Patel.
 - 🔄 **Auto-sync:** save bank CSVs into a folder and everything updates itself, including balances, debts, detected contributions and reminders
 - 📅 **Self-updating CRA limits**, kept correct by a weekly GitHub Actions bot that opens a pull request (or an issue if something looks wrong)
 - 🤖 **AI CFO chat** answers questions like *"Can I afford a $2,000 trip in December?"* by calling finance tools and explaining the results
+- 🗓️ **AI monthly review** (F17): the agent gathers the month's figures with several tools, writes a to-do list and proposes next month's budgets for you to confirm
+- 🔎 **Ask your transactions** (F18): *"Uber Eats over $30 in October"* becomes filters you can see and change
+- 🏦 **Any bank's CSV** (F16): if the format is unknown, the AI reads the first lines and proposes the columns; you check a preview before it is saved
+- 💡 **Extra money?** (F19): a refund or bonus is split between expensive debt, an emergency fund and FHSA/TFSA/RRSP room, and the AI explains why (education, not advice)
 
 ## How the AI stays honest
 - All numbers come from tested Java code. The AI only plans and explains.
@@ -104,6 +108,12 @@ java -jar target/maplecfo.jar debt plan --compare --extra 200
 java -jar target/maplecfo.jar ask "How much did I spend on dining last month?"
 java -jar target/maplecfo.jar ask "Can I afford a 1500 dollar trip by March?"
 java -jar target/maplecfo.jar report -m 2026-09
+# F16-F19 new AI features (with a key in .env; F17-F19 also work in demo mode with fixed rules)
+java -jar target/maplecfo.jar learn-format sample-data/demo/errors/unknown_bank_format.csv --name Tangerine   # preview
+java -jar target/maplecfo.jar learn-format sample-data/demo/errors/unknown_bank_format.csv --name Tangerine --save -a chequing
+java -jar target/maplecfo.jar review -m 2026-10            # AI monthly review + proposed budgets (confirm in interactive mode)
+java -jar target/maplecfo.jar tx find uber eats over 30 in october
+java -jar target/maplecfo.jar extra 3000
 # F13 auto-import and reminders, F15 limits
 java -jar target/maplecfo.jar inbox ~/Downloads/bank          # choose the folder MapleCFO watches for CSVs
 java -jar target/maplecfo.jar watch --once
