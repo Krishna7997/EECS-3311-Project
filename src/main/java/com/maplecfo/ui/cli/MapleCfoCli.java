@@ -28,6 +28,7 @@ import java.util.concurrent.Callable;
         subcommands = {
                 TransactionCommands.ImportCmd.class,
                 TransactionCommands.ProfilesCmd.class,
+                TransactionCommands.LearnFormatCmd.class,
                 TransactionCommands.TxCmd.class,
                 MapleCfoCli.UndoCmd.class,
                 MapleCfoCli.RedoCmd.class,

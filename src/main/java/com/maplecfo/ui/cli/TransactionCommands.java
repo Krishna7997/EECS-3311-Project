@@ -40,7 +40,8 @@ final class TransactionCommands {
             if (format == null || format.isBlank()) {
                 format = root.facade().detectImportFormat(file).orElseThrow(() ->
                         new com.maplecfo.importer.MappingMismatchException("Could not recognise this file's columns. "
-                                + "Pick the format with -p (see: maplecfo profiles)."));
+                                + "Pick the format with -p (see: maplecfo profiles), or let the AI read it: "
+                                + "learn-format " + file + " -a " + account));
                 out.println("Detected format: " + format);
             }
             ImportResult r = root.facade().importTransactions(file, account, format);
@@ -52,6 +53,51 @@ final class TransactionCommands {
             }
             r.latestBalanceIfKnown().ifPresent(b -> out.println("Latest balance in file: " + b));
             root.printNewAlerts(out);
+            return 0;
+        }
+    }
+
+    @Command(name = "learn-format", description = "Let the AI work out a bank format MapleCFO doesn't know (F16). "
+            + "Shows a preview; add --save to keep it (and import the file when -a is given).")
+    static class LearnFormatCmd implements Callable<Integer> {
+        @CommandLine.ParentCommand MapleCfoCli root;
+        @CommandLine.Spec CommandLine.Model.CommandSpec spec;
+
+        @Parameters(index = "0", description = "CSV file") Path file;
+        @Option(names = "--name", description = "Name for the new format, e.g. Tangerine") String name;
+        @Option(names = "--save", description = "Save the format (only after checking the preview)") boolean save;
+        @Option(names = {"-a", "--account"}, description = "With --save: also import the file into this account") String account;
+
+        @Override
+        public Integer call() throws Exception {
+            PrintWriter out = spec.commandLine().getOut();
+            com.maplecfo.importer.AiFormatReader.Proposal p = root.facade().proposeImportFormat(file, name);
+            out.println("AI suggestion for " + file.getFileName() + " (format \"" + p.mapping().profileName() + "\"):");
+            if (!p.explanation().isBlank()) out.println("  " + p.explanation());
+            out.println("  Reads " + p.describeColumns());
+            out.println("  Test read: " + p.rowsRead() + " rows OK, " + p.rowsRejected().size() + " rejected");
+            p.rowsRejected().stream().limit(5).forEach(r -> out.println("    " + r));
+            List<List<String>> rows = new ArrayList<>();
+            p.preview().forEach(t -> rows.add(List.of(t.getDate().toString(), t.getDescription(), t.getAmount().toString())));
+            out.print(root.renderer().table(List.of("Date", "Description", "Amount"), rows));
+            if (!p.looksRight()) {
+                out.println("This does not look right, so it was not saved. Choose the format with -p instead.");
+                return 1;
+            }
+            if (!save) {
+                out.println("Looks right? Run again with --save" + (account == null ? " -a <account>" : " -a " + account)
+                        + " to keep this format and import the file.");
+                return 0;
+            }
+            if (account == null) {
+                root.facade().saveMappingProfile(p.mapping());
+                out.println("Saved format \"" + p.mapping().profileName() + "\". Files like this are now detected automatically.");
+            } else {
+                ImportResult r = root.facade().saveFormatAndImport(p, file, account);
+                out.println("Saved format \"" + p.mapping().profileName() + "\" and imported " + r.imported()
+                        + " transactions into '" + account + "'.");
+                root.printNewAlerts(out);
+            }
             return 0;
         }
     }

@@ -312,6 +312,17 @@ final class TransactionsView implements View {
         Ui.Form form = new Ui.Form()
                 .add("Account", account, "Which account is this file from? Type a short name like chequing or visa.")
                 .add("Bank format", format, help);
+        if (detected == null) {
+            // F16: let the AI work out the columns of a bank MapleCFO doesn't know yet
+            Button ai = Ui.secondary("Let the AI read this file");
+            ai.setGraphic(Icons.of(Icons.SPARK, 14));
+            boolean demo = app.getLlm().isMock();
+            ai.setDisable(demo);
+            Label why = Ui.small(demo ? "Needs your API key in .env (demo mode now)."
+                    : "The AI looks at the first lines and suggests how to read them. You check a preview first.");
+            ai.setOnAction(e -> readWithAi(f, () -> account.getEditor().getText(), ai));
+            form.note(new VBox(4, ai, why));
+        }
         String detectedFinal = detected;
         Ui.dialog("Import " + f.getName(), null, form, "Import", () -> {
             String acc = account.getEditor().getText() == null ? "" : account.getEditor().getText().trim();
@@ -320,6 +331,60 @@ final class TransactionsView implements View {
             if (fmt == null) throw new IllegalArgumentException("Choose the bank format for this file.");
             ImportResult r = app.importTransactions(f.toPath(), acc, fmt);
             showResult(f.getName(), fmt, r);
+        }, this::refresh);
+    }
+
+    /** Asks the AI in the background (it takes a few seconds), then shows its suggestion. */
+    private void readWithAi(File f, java.util.function.Supplier<String> account, Button button) {
+        button.setDisable(true);
+        button.setText("Reading the file...");
+        String acc = account.get() == null || account.get().isBlank() ? "chequing" : account.get().trim();
+        Thread worker = new Thread(() -> {
+            try {
+                com.maplecfo.importer.AiFormatReader.Proposal p = app.proposeImportFormat(f.toPath(), null);
+                javafx.application.Platform.runLater(() -> aiFormatDialog(f, p, acc));
+            } catch (Exception ex) {
+                javafx.application.Platform.runLater(() -> Ui.error(ex));
+            }
+        }, "ai-format-reader");
+        worker.setDaemon(true);
+        worker.start();
+    }
+
+    /** F16: the AI's suggestion with a preview; nothing is saved unless the user accepts it. */
+    void aiFormatDialog(File f, com.maplecfo.importer.AiFormatReader.Proposal p, String account) {
+        TextField name = Ui.field("e.g. Tangerine");
+        name.setText(p.mapping().profileName());
+        TextField acc = Ui.field("e.g. chequing");
+        acc.setText(account);
+        TableView<Transaction> preview = Ui.table("No rows could be read.");
+        preview.getColumns().add(Ui.column("Date", Transaction::getDate, 100));
+        preview.getColumns().add(Ui.column("Description", Transaction::getDescription, 260));
+        preview.getColumns().add(Ui.moneyColumn("Amount", Transaction::getAmount, 110, true));
+        preview.getItems().setAll(p.preview());
+        Ui.fitRows(preview, 5);
+        String result = "Test read of the whole file: " + p.rowsRead() + " rows OK"
+                + (p.rowsRejected().isEmpty() ? "." : ", " + p.rowsRejected().size() + " could not be read.");
+        Ui.Form form = new Ui.Form()
+                .note(Ui.banner((p.explanation().isBlank() ? "" : p.explanation() + " ") + "It reads the "
+                        + p.describeColumns() + ".", "info"))
+                .note(Ui.banner(result, p.looksRight() ? "ok" : "warn"))
+                .add("First rows", preview, "Check that dates, descriptions and amounts (money out is negative) look right.")
+                .add("Save this format as", name, "Next time a file like this is detected automatically.")
+                .add("Account", acc, "Which account this file is from.");
+        Ui.dialog("AI suggestion for " + f.getName(), null, form, "Save format and import", () -> {
+            if (!p.looksRight()) {
+                throw new IllegalArgumentException("Too many rows could not be read, so this format was not saved. "
+                        + "Choose the bank format yourself.");
+            }
+            String n = name.getText() == null ? "" : name.getText().trim();
+            if (n.isEmpty()) throw new IllegalArgumentException("Give the format a name.");
+            boolean taken = app.getMappingProfiles().stream().anyMatch(m -> m.profileName().equalsIgnoreCase(n));
+            if (taken) throw new IllegalArgumentException("A format called " + n + " already exists. Choose another name.");
+            String a = acc.getText() == null ? "" : acc.getText().trim();
+            if (a.isEmpty()) throw new IllegalArgumentException("Enter the account this file belongs to.");
+            ImportResult r = app.saveFormatAndImport(p.named(n), f.toPath(), a);
+            showResult(f.getName(), n, r);
         }, this::refresh);
     }
 

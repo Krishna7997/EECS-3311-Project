@@ -131,6 +131,37 @@ public class MapleCfoFacade {
         return txService.getMappingProfiles();
     }
 
+    // ---------------------------------------------------------- F16 AI reads an unknown bank format
+
+    private com.maplecfo.importer.AiFormatReader formatReader;
+
+    void attachFormatReader(com.maplecfo.importer.AiFormatReader reader) {
+        this.formatReader = reader;
+    }
+
+    /**
+     * Asks the AI how to read a file no saved format fits. Nothing is saved: show the proposal to the user and call
+     * {@link #saveFormatAndImport} only if they accept it.
+     *
+     * @param name what to call the new format (e.g. the bank's name); a number is added if the name is taken
+     */
+    public com.maplecfo.importer.AiFormatReader.Proposal proposeImportFormat(Path p, String name) throws IOException {
+        if (formatReader == null) throw new IllegalStateException("The AI format reader is not configured");
+        String base = name == null || name.isBlank() ? "From " + p.getFileName() : name.trim();
+        java.util.Set<String> taken = new java.util.HashSet<>();
+        getMappingProfiles().forEach(m -> taken.add(m.profileName().toLowerCase()));
+        String unique = base;
+        for (int i = 2; taken.contains(unique.toLowerCase()); i++) unique = base + " (" + i + ")";
+        return formatReader.propose(p, unique);
+    }
+
+    /** Saves the format the user accepted, then imports the file with it. */
+    public ImportResult saveFormatAndImport(com.maplecfo.importer.AiFormatReader.Proposal proposal, Path p,
+                                            String accountId) throws IOException {
+        saveMappingProfile(proposal.mapping());
+        return importTransactions(p, accountId, proposal.mapping().profileName());
+    }
+
     public List<Transaction> getTransactions(YearMonth m) {
         return m == null ? txService.findAll() : txService.findByMonth(m);
     }

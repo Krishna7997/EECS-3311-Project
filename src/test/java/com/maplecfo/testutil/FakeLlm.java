@@ -17,7 +17,7 @@ public class FakeLlm implements LlmClient {
     private final Deque<Object> replies = new ArrayDeque<>();
     public final List<List<ChatMessage>> received = new ArrayList<>();
 
-    /** Each reply is a String (text answer) or an LlmException (thrown). */
+    /** Each reply is a String (text answer), an LlmResponse (e.g. tool calls) or an LlmException (thrown). */
     public FakeLlm(Object... replies) {
         this.replies.addAll(List.of(replies));
     }
@@ -27,6 +27,7 @@ public class FakeLlm implements LlmClient {
         received.add(messages);
         Object r = replies.isEmpty() ? "" : replies.poll();
         if (r instanceof LlmException e) throw e;
+        if (r instanceof LlmResponse resp) return resp;
         return LlmResponse.text((String) r);
     }
 

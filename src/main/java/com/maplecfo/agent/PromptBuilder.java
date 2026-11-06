@@ -70,4 +70,30 @@ public class PromptBuilder {
     public String buildSummaryPrompt(String reportJson) {
         return "Monthly figures:\n" + reportJson;
     }
+
+    // ------------------------------------------------------------ F16 AI reads an unknown bank CSV
+
+    public String buildFormatSystemPrompt() {
+        return """
+                You read the first lines of a CSV file exported from a Canadian bank or credit card and describe its
+                columns so a program can import it. Reply with only one JSON object, no other text:
+                {"hasHeader": true or false,
+                 "dateColumn": "...", "dateFormat": "Java DateTimeFormatter pattern, e.g. MM/dd/yyyy or yyyy-MM-dd",
+                 "descriptionColumn": "...",
+                 "amountColumn": "..." or null,
+                 "debitColumn": "..." or null, "creditColumn": "..." or null,
+                 "negateAmounts": true or false,
+                 "balanceColumn": "..." or null,
+                 "explanation": "one short sentence"}
+                Name each column by its exact header text. If the first line is data, not a header, set hasHeader to
+                false and name columns by their position as a string: "1", "2", ...
+                Use amountColumn when one column holds signed amounts. Use debitColumn (money out) and creditColumn
+                (money in) when they are separate columns; then amountColumn is null.
+                negateAmounts is true only when purchases appear as positive numbers in amountColumn.
+                Use the most specific description column (merchant or payee name).""";
+    }
+
+    public String buildFormatPrompt(List<String> firstLines) {
+        return "First lines of the file:\n" + String.join("\n", firstLines);
+    }
 }

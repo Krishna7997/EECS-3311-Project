@@ -37,6 +37,12 @@ public record ColumnMapping(String profileName, boolean hasHeader, String dateCo
         }
     }
 
+    /** The same mapping saved under another name. */
+    public ColumnMapping withName(String name) {
+        return new ColumnMapping(name, hasHeader, dateColumn, dateFormat, descriptionColumn, amountColumn, debitColumn,
+                creditColumn, negateAmounts, balanceColumn);
+    }
+
     public boolean usesSingleAmount() {
         return amountColumn != null && !amountColumn.isBlank();
     }
