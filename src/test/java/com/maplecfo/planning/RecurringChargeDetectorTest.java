@@ -128,4 +128,40 @@ class RecurringChargeDetectorTest {
         assertTrue(hydro.variableAmount());
         assertFalse(hydro.priceIncreased());
     }
+
+    @Test
+    void priceChangeFromMonthsAgoIsAPriceIncreaseNotAVariableAmount() {
+        List<Transaction> txs = List.of(
+                tx("2026-04-03", "Netflix.com", "-16.99"),
+                tx("2026-05-03", "Netflix.com", "-16.99"),
+                tx("2026-06-03", "Netflix.com", "-16.99"),
+                tx("2026-07-03", "Netflix.com", "-18.99"),
+                tx("2026-08-03", "Netflix.com", "-18.99"),
+                tx("2026-09-03", "Netflix.com", "-18.99"));
+        RecurringCharge netflix = detector.detect(txs).get(0);
+        assertTrue(netflix.priceIncreased());
+        assertFalse(netflix.variableAmount());
+        assertEquals(Money.of("18.99"), netflix.averageAmount(), "the yearly cost uses the new price");
+    }
+
+    @Test
+    void aPriceDropIsNotAnIncrease() {
+        List<Transaction> txs = List.of(
+                tx("2026-05-12", "Rogers", "-82.00"),
+                tx("2026-06-12", "Rogers", "-82.00"),
+                tx("2026-07-12", "Rogers", "-75.00"),
+                tx("2026-08-12", "Rogers", "-75.00"));
+        assertFalse(detector.detect(txs).get(0).priceIncreased());
+    }
+
+    @Test
+    void chargeThatMissedTwoDatesIsTreatedAsCancelled() {
+        List<Transaction> txs = List.of(
+                tx("2026-02-11", "Disney Plus", "-11.99"),
+                tx("2026-03-11", "Disney Plus", "-11.99"),
+                tx("2026-04-11", "Disney Plus", "-11.99"));
+        assertEquals(1, detector.detect(txs, LocalDate.of(2026, 5, 20)).size(), "one missed date: maybe late");
+        assertTrue(detector.detect(txs, LocalDate.of(2026, 6, 20)).isEmpty(), "two missed dates: cancelled");
+        assertEquals(1, detector.detect(txs).size(), "without today nothing is dropped");
+    }
 }

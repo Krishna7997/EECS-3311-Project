@@ -65,7 +65,7 @@ final class SubscriptionsView implements View {
                     + "missing. Import more months for better results.", "warn"));
         }
         table.getItems().setAll(charges);
-        content.getChildren().add(Ui.card("Repeating charges", "Sorted by name. Rent and bills are included.",
+        content.getChildren().add(Ui.card("Repeating charges", "Biggest yearly cost first. Rent and bills are included.",
                 null, table));
     }
 }

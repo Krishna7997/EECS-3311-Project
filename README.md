@@ -67,6 +67,10 @@ java -jar target/maplecfo.jar            # interactive mode (undo/redo and AI pr
 ```
 Data is stored locally in `~/.maplecfo/maplecfo.db` (change it with `--db <file>` or the `MAPLECFO_DB` environment variable).
 
+**Demo dataset:** `sample-data/demo/load-demo.sh` loads 22 months of fake data (8 accounts, budgets, goals, debts,
+TFSA/RRSP/FHSA history) into a separate `~/.maplecfo/demo.db`; then run the app with
+`MAPLECFO_DB=~/.maplecfo/demo.db java -jar target/maplecfo.jar gui`. See [`sample-data/README.md`](sample-data/README.md).
+
 Example session with the fake sample data:
 ```
 # F01/F02 import and categorise

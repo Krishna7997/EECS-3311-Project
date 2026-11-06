@@ -190,11 +190,11 @@ public class MapleCfoFacade {
 
     // ---------------------------------------------------------- F05 recurring charges
 
-    /** Recurring charges found in the last six months of transactions. */
+    /** Recurring charges found in the last twelve months of transactions (so a price change earlier this year still shows). */
     public List<RecurringCharge> getRecurringCharges() {
         LocalDate to = today();
         return recurring.detect(txService.findAll().stream()
-                .filter(t -> !t.getDate().isBefore(to.minusMonths(6)))
+                .filter(t -> !t.getDate().isBefore(to.minusMonths(12)))
                 .toList(), to);
     }
 

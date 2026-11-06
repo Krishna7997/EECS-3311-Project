@@ -69,7 +69,8 @@ public class RecurringChargeDetector {
         for (List<Transaction> group : groups.values()) {
             if (group.size() >= minOccurrences) {
                 group.sort(Comparator.comparing(Transaction::getDate));
-                frequencyOf(group).ifPresent(f -> result.add(build(group, f, today)));
+                frequencyOf(group).filter(f -> !isStopped(group, f, today))
+                        .ifPresent(f -> result.add(build(group, f, today)));
             }
         }
         result.sort(Comparator.comparing(RecurringCharge::yearlyCost).reversed());
@@ -137,11 +138,40 @@ public class RecurringChargeDetector {
         boolean increased = !variable && latest.getAmount().abs()
                 .isGreaterThan(earlierAverage.times(1 + PRICE_INCREASE_THRESHOLD));
 
+        // A price change that already happened a few months ago shows up as a step: the latest charges share
+        // one price and the ones before share a lower one (Netflix 16.99 x5, then 18.99 x4). Without this check
+        // the mix of the two prices looked like a "variable amount".
+        int samePrice = 1;
+        while (samePrice < sorted.size()
+                && sorted.get(sorted.size() - 1 - samePrice).getAmount().abs().equals(latest.getAmount().abs())) {
+            samePrice++;
+        }
+        if (samePrice < sorted.size()) {
+            List<Transaction> before = sorted.subList(0, sorted.size() - samePrice);
+            Money beforeAverage = averageOf(before);
+            if (spread(before, beforeAverage) <= VARIABLE_AMOUNT_THRESHOLD / 2 && latest.getAmount().abs()
+                    .isGreaterThan(beforeAverage.times(1 + PRICE_INCREASE_THRESHOLD))) {
+                increased = true;
+                variable = false;
+            }
+        }
+
         LocalDate next = step(latest.getDate(), f);
         while (today != null && next.isBefore(today)) {
             next = step(next, f);
         }
-        return new RecurringCharge(latest.getMerchant(), average, f, next, increased, variable, sorted);
+        // after a price increase the new price is what you will pay from now on
+        Money usual = increased ? latest.getAmount().abs() : average;
+        return new RecurringCharge(latest.getMerchant(), usual, f, next, increased, variable, sorted);
+    }
+
+    /** A charge that missed two expected dates was most likely cancelled, so it is no longer listed. */
+    private static boolean isStopped(List<Transaction> sorted, Frequency f, LocalDate today) {
+        if (today == null) {
+            return false;
+        }
+        LocalDate last = sorted.get(sorted.size() - 1).getDate();
+        return step(step(last, f), f).isBefore(today);
     }
 
     private static LocalDate step(LocalDate d, Frequency f) {

@@ -56,7 +56,7 @@ public class ReportSummarizer {
                 sb.append(" Your biggest category was ").append(e.getKey()).append(" at ").append(e.getValue()).append('.'));
         Money change = r.spendingChange();
         if (!change.isZero()) {
-            sb.append(" That is ").append(change.abs()).append(change.isPositive() ? " more" : " less")
+            sb.append(" In total you spent ").append(change.abs()).append(change.isPositive() ? " more" : " less")
                     .append(" than last month.");
         }
         List<BudgetStatus> over = r.budgets().stream().filter(BudgetStatus::isExceeded).toList();
@@ -68,10 +68,17 @@ public class ReportSummarizer {
         if (!r.priceIncreases().isEmpty()) {
             sb.append(" Price increases: ").append(String.join(", ", r.priceIncreases())).append('.');
         }
-        Category top = r.spendingByCategory().entrySet().stream().filter(e -> e.getKey() != Category.RENT)
+        Category top = r.spendingByCategory().entrySet().stream()
+                .filter(e -> e.getKey() != Category.RENT && e.getKey() != Category.UNCATEGORIZED)
                 .max(Map.Entry.comparingByValue()).map(Map.Entry::getKey).orElse(null);
         if (top != null) {
-            sb.append(" Tip: setting a monthly budget for ").append(top).append(" is the easiest place to save.");
+            BudgetStatus budget = r.budgets().stream().filter(s -> s.budget().category() == top).findFirst().orElse(null);
+            if (budget == null) {
+                sb.append(" Tip: setting a monthly budget for ").append(top).append(" is the easiest place to save.");
+            } else if (budget.isExceeded()) {
+                sb.append(" Tip: ").append(top).append(" is your biggest cost after rent; staying within its ")
+                        .append(budget.budget().limit()).append(" budget is the easiest place to save.");
+            }
         }
         return sb.toString();
     }

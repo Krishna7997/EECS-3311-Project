@@ -7,8 +7,8 @@ import java.util.Objects;
 /**
  * A subscription or other repeating charge found by the detector (F05).
  *
- * @param averageAmount  positive average charge
- * @param priceIncreased the latest charge is more than 5% above the earlier average
+ * @param averageAmount  positive usual charge: the average, or the new price after a price increase
+ * @param priceIncreased the price went up by more than 5%: the latest charge compared with the earlier ones, or a step from one stable price to a higher one
  * @param variableAmount the amounts vary (for example a utility bill), so the average is an estimate
  */
 public record RecurringCharge(String merchant, Money averageAmount, Frequency frequency,
