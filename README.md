@@ -45,8 +45,18 @@ mvn package       # build target/maplecfo.jar (all libraries included)
 ```
 java -jar target/maplecfo.jar gui
 ```
-Tabs: Dashboard · Ask MapleCFO (AI chat) · Transactions · Budgets · Accounts & Goals (net worth, goals, "Can I afford it?") · Planning (subscriptions, TFSA/RRSP/FHSA, debt payoff, FIRE) · Monthly Report.
-Undo/Redo are in the top bar (Cmd/Ctrl+Z, Cmd/Ctrl+Shift+Z). While the window is open, CSV files saved into `~/.maplecfo/inbox` are imported automatically.
+The window has a sidebar with one page per feature:
+
+| Group | Pages |
+|---|---|
+| — | **Home** (getting-started checklist, this month's numbers, things that need your OK, quick question box) · **Ask MapleCFO** (AI chat) |
+| Money | **Transactions** (import a bank CSV, fix categories in the table) · **Budgets** · **Subscriptions & bills** · **Accounts & net worth** |
+| Plan | **Savings goals** · **Can I afford it?** · **TFSA · RRSP · FHSA** · **Debt payoff** · **Retirement (FIRE)** |
+| Reports | **Monthly report** · **Settings** (AI status, automatic import folder, contribution limits, reminders) |
+
+New items are added with a button that opens a short form (for example **Add account**, **New goal**, **Set a budget**).
+Undo/Redo are at the top right (Cmd/Ctrl+Z, Cmd/Ctrl+Shift+Z). While the window is open, CSV files saved into
+`~/.maplecfo/inbox` are imported automatically. The look uses the open-source AtlantaFX theme.
 
 ### Command-line interface
 ```

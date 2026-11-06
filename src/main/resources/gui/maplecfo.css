@@ -1,196 +1,148 @@
 /*
- * MapleCFO GUI theme: a modern finance-app look.
- * Light neutral background, white cards, a dark sidebar and a maple-red accent.
+ * MapleCFO theme on top of AtlantaFX "Primer Light".
+ * The controls (buttons, inputs, tables, dialogs) come from AtlantaFX; this file adds the
+ * maple-red accent, the dark sidebar, cards, chips and a few page-level styles.
  */
-.root {
-    -accent: #c8102e;
-    -accent-dark: #a00d24;
-    -accent-soft: #fde8eb;
-    -ink: #1f2430;
-    -ink-2: #5b6170;
-    -ink-3: #8a90a0;
-    -line: #e6e8ee;
-    -bg: #f4f5f8;
-    -ok: #1f8a5b;
-    -ok-soft: #e3f4ec;
-    -warn: #b7791f;
-    -warn-soft: #fdf1dc;
-    -bad: #c8102e;
-    -bad-soft: #fde8eb;
-    -info: #2f6fdb;
-    -info-soft: #e6eefc;
-    -fx-font-family: "System";
-    -fx-font-size: 13.5px;
-    -fx-accent: -accent;
-    -fx-focus-color: -accent;
-    -fx-faint-focus-color: transparent;
-    -fx-text-background-color: -ink;
+.root, .dialog-pane {
+    -color-accent-fg: #b4142c;
+    -color-accent-emphasis: #c8102e;
+    -color-accent-muted: #f2a3ae;
+    -color-accent-subtle: #fdeef0;
+    -color-accent-0: #fff0f2;
+    -color-accent-1: #fdd5db;
+    -color-accent-2: #f9aab6;
+    -color-accent-3: #f27a8d;
+    -color-accent-4: #e64a64;
+    -color-accent-5: #d62244;
+    -color-accent-6: #b4142c;
+    -color-accent-7: #940f24;
+    -color-accent-8: #730b1c;
+    -color-accent-9: #520713;
+    -color-bg-app: #f5f6f8;
+    -fx-font-size: 14px;
 }
-.label { -fx-text-fill: -ink; }
-.app-root, .content, .page { -fx-background-color: -bg; }
-.scroll-pane, .scroll-pane > .viewport { -fx-background-color: transparent; -fx-background-insets: 0; -fx-padding: 0; }
+.app-root, .content, .page, .page-scroll, .page-scroll > .viewport { -fx-background-color: -color-bg-app; }
+.page-scroll, .chat-scroll { -fx-background-insets: 0; -fx-padding: 0; -fx-border-width: 0; }
+.chat-scroll, .chat-scroll > .viewport { -fx-background-color: transparent; }
 
 /* ---------- sidebar ---------- */
-.sidebar {
-    -fx-background-color: #161a23;
-    -fx-padding: 20 12 16 12;
-    -fx-pref-width: 232;
-    -fx-min-width: 232;
-}
-.brand-row { -fx-alignment: center-left; -fx-padding: 0 8 18 8; }
+.sidebar-scroll, .sidebar-scroll > .viewport { -fx-background-color: #14181f; -fx-border-width: 0; -fx-padding: 0; }
+.sidebar { -fx-background-color: #14181f; -fx-padding: 18 12 16 12; -fx-pref-width: 236; -fx-min-width: 236; }
+.brand-row { -fx-padding: 0 8 14 8; }
 .sidebar .brand { -fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; }
-.brand-icon .icon { -fx-background-color: -accent; }
+.brand-icon { -fx-background-color: #e8213f; }
+.nav-section { -fx-text-fill: #6b7385; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 14 12 4 12; }
 .sidebar .nav-item {
     -fx-background-color: transparent;
-    -fx-text-fill: #b7bccb;
+    -fx-text-fill: #c3c8d4;
     -fx-font-size: 14px;
     -fx-alignment: center-left;
-    -fx-padding: 10 12 10 12;
+    -fx-padding: 9 12 9 12;
     -fx-background-radius: 8;
+    -fx-border-width: 0;
     -fx-graphic-text-gap: 12;
     -fx-cursor: hand;
 }
-.nav-item .icon { -fx-background-color: #8a90a0; }
-.sidebar .nav-item:hover { -fx-background-color: #222736; -fx-text-fill: white; }
-.sidebar .nav-item:selected { -fx-background-color: -accent; -fx-text-fill: white; -fx-font-weight: bold; }
-.nav-item:selected .icon, .nav-item:hover .icon { -fx-background-color: white; }
-.sidebar .sidebar-note { -fx-text-fill: #7d8394; -fx-font-size: 11.5px; -fx-padding: 8 8 0 8; }
-.sidebar .chip { -fx-translate-x: 6; }
+.sidebar .nav-item .icon { -fx-background-color: #7d8597; }
+.sidebar .nav-item:hover { -fx-background-color: #222836; -fx-text-fill: white; }
+.sidebar .nav-item:selected { -fx-background-color: #c8102e; -fx-text-fill: white; -fx-font-weight: bold; }
+.sidebar .nav-item:selected .icon, .sidebar .nav-item:hover .icon { -fx-background-color: white; }
+.sidebar-status { -fx-padding: 12 8 0 8; }
+.sidebar .sidebar-note { -fx-text-fill: #8a92a3; -fx-font-size: 12px; }
 
 /* ---------- page header ---------- */
-.page-header { -fx-padding: 22 24 14 24; -fx-alignment: center-left; -fx-background-color: -bg; }
-.page-title { -fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: -ink; }
-.page-subtitle { -fx-font-size: 13px; -fx-text-fill: -ink-2; }
-.undo-hint { -fx-text-fill: -ink-3; -fx-font-size: 12px; }
+.page-header { -fx-padding: 24 28 16 28; -fx-background-color: -color-bg-app; }
+.page-title { -fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: -color-fg-default; }
+.page-subtitle { -fx-font-size: 14px; -fx-text-fill: -color-fg-muted; }
+.undo-hint { -fx-text-fill: -color-fg-subtle; -fx-font-size: 12px; }
+.month-label { -fx-alignment: center; }
 
-/* ---------- cards and text ---------- */
+/* ---------- cards ---------- */
 .card {
-    -fx-background-color: white;
+    -fx-background-color: -color-bg-default;
     -fx-background-radius: 12;
-    -fx-border-color: -line;
+    -fx-border-color: -color-border-muted;
     -fx-border-radius: 12;
-    -fx-effect: dropshadow(gaussian, rgba(20, 24, 40, 0.06), 12, 0, 0, 3);
+    -fx-effect: dropshadow(gaussian, rgba(20, 24, 40, 0.05), 10, 0, 0, 2);
 }
-.heading { -fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: -ink; }
-.big-number { -fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: -ink; }
-.muted { -fx-text-fill: -ink-2; }
-.stat-caption { -fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: -ink-3; }
-.stat-value { -fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: -ink; }
-.stat-value.positive { -fx-text-fill: -ok; }
-.stat-value.negative { -fx-text-fill: -bad; }
+.card-title { -fx-font-weight: bold; }
+.stat-caption { -fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: -color-fg-subtle; }
+.big-number, .stat-value { -fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: -color-fg-default; }
+.positive { -fx-text-fill: -color-success-fg; }
+.negative { -fx-text-fill: -color-danger-fg; }
+.list-row { -fx-padding: 10 0 10 0; -fx-border-color: transparent transparent -color-border-muted transparent; }
+.empty-state { -fx-spacing: 12; }
+.empty-icon { -fx-background-color: -color-accent-emphasis; }
+.form-label { -fx-font-weight: bold; -fx-font-size: 13px; -fx-padding: 0 0 2 0; }
+.form-error { -fx-text-fill: -color-danger-fg; -fx-background-color: -color-danger-subtle; -fx-padding: 8 10 8 10;
+    -fx-background-radius: 6; }
+.path-field { -fx-font-family: "monospace"; -fx-font-size: 12px; }
 
-/* ---------- chips ---------- */
-.chip { -fx-padding: 3 10 3 10; -fx-background-radius: 999; -fx-font-size: 11.5px; -fx-font-weight: bold; }
-.chip-ok { -fx-background-color: -ok-soft; -fx-text-fill: -ok; }
-.chip-warn { -fx-background-color: -warn-soft; -fx-text-fill: -warn; }
-.chip-bad { -fx-background-color: -bad-soft; -fx-text-fill: -bad; }
-.chip-info { -fx-background-color: -info-soft; -fx-text-fill: -info; }
-.verdict-yes { -fx-text-fill: -ok; -fx-font-weight: bold; }
-.verdict-no { -fx-text-fill: -bad; -fx-font-weight: bold; }
+/* ---------- chips and banners ---------- */
+.chip { -fx-padding: 3 10 3 10; -fx-background-radius: 999; -fx-font-size: 12px; -fx-font-weight: bold; }
+.chip-ok { -fx-background-color: -color-success-subtle; -fx-text-fill: -color-success-fg; }
+.chip-warn { -fx-background-color: -color-warning-subtle; -fx-text-fill: -color-warning-fg; }
+.chip-bad { -fx-background-color: -color-danger-subtle; -fx-text-fill: -color-danger-fg; }
+.chip-info { -fx-background-color: #e8f0fe; -fx-text-fill: #1f5fc9; }
+.chip-neutral { -fx-background-color: -color-neutral-subtle; -fx-text-fill: -color-fg-muted; }
+.banner { -fx-background-radius: 10; -fx-border-radius: 10; }
+.banner-ok { -fx-background-color: -color-success-subtle; -fx-border-color: -color-success-muted; }
+.banner-warn { -fx-background-color: -color-warning-subtle; -fx-border-color: -color-warning-muted; }
+.banner-bad { -fx-background-color: -color-danger-subtle; -fx-border-color: -color-danger-muted; }
+.banner-info { -fx-background-color: #eef4ff; -fx-border-color: #c9dafc; }
 
-/* ---------- buttons ---------- */
-.button {
-    -fx-background-color: white;
-    -fx-border-color: -line;
-    -fx-border-radius: 8;
-    -fx-background-radius: 8;
-    -fx-text-fill: -ink;
-    -fx-padding: 7 14 7 14;
-    -fx-cursor: hand;
-}
-.button:hover { -fx-background-color: #f0f1f5; }
-.button:pressed { -fx-background-color: #e6e8ee; }
-.button.primary { -fx-background-color: -accent; -fx-border-color: -accent; -fx-text-fill: white; -fx-font-weight: bold; }
-.button.primary:hover { -fx-background-color: -accent-dark; -fx-border-color: -accent-dark; }
-.button.ghost { -fx-background-color: transparent; -fx-border-color: -line; }
-.button:disabled { -fx-opacity: 0.45; }
-
-/* ---------- inputs ---------- */
-.text-field, .combo-box, .date-picker, .date-picker > .text-field {
-    -fx-background-color: white;
-    -fx-background-radius: 8;
-    -fx-border-color: -line;
-    -fx-border-radius: 8;
-    -fx-padding: 5 8 5 8;
-}
-.date-picker > .text-field { -fx-border-width: 0; }
-.text-field:focused, .combo-box:focused, .date-picker:focused { -fx-border-color: -accent; }
-.combo-box .list-cell { -fx-padding: 1 4 1 2; }
-.check-box > .box { -fx-background-radius: 4; -fx-border-radius: 4; }
-
-/* ---------- tables and lists ---------- */
-.table-view, .list-view {
-    -fx-background-color: white;
-    -fx-background-radius: 12;
-    -fx-border-color: -line;
-    -fx-border-radius: 12;
-    -fx-padding: 4;
-}
-.table-view .column-header-background { -fx-background-color: white; -fx-background-radius: 12 12 0 0; }
-.table-view .column-header, .table-view .filler {
-    -fx-background-color: white;
-    -fx-border-color: transparent transparent -line transparent;
-    -fx-size: 36;
-}
-.table-view .column-header .label { -fx-text-fill: -ink-3; -fx-font-size: 11.5px; -fx-font-weight: bold; -fx-alignment: center-left; }
-.table-row-cell { -fx-background-color: white; -fx-border-color: transparent transparent #f1f2f6 transparent; -fx-cell-size: 34; }
-.table-row-cell:hover { -fx-background-color: #f8f9fb; }
-.table-row-cell:selected { -fx-background-color: -accent-soft; }
-.table-row-cell:selected .text { -fx-fill: -ink; }
-.table-cell { -fx-border-color: transparent; -fx-padding: 0 8 0 8; -fx-alignment: center-left; }
-.table-view .placeholder .label { -fx-text-fill: -ink-3; }
-.list-cell { -fx-background-color: white; -fx-padding: 8 10 8 10; -fx-border-color: transparent transparent #f1f2f6 transparent; }
-.list-cell:empty { -fx-border-color: transparent; }
-.list-view .placeholder .label { -fx-text-fill: -ink-3; }
+/* ---------- getting started ---------- */
+.step-row { -fx-padding: 12 0 12 0; -fx-border-color: transparent transparent -color-border-muted transparent; }
+.step-badge { -fx-min-width: 30; -fx-min-height: 30; -fx-max-width: 30; -fx-max-height: 30; -fx-alignment: center;
+    -fx-background-radius: 999; -fx-font-weight: bold; }
+.step-todo { -fx-background-color: -color-accent-subtle; -fx-text-fill: -color-accent-fg; }
+.step-done { -fx-background-color: -color-success-emphasis; }
+.step-done .icon { -fx-background-color: white; }
+.step-title { -fx-font-weight: bold; }
+.step-title-done { -fx-text-fill: -color-fg-muted; -fx-strikethrough: true; }
 
 /* ---------- progress bars ---------- */
-.progress-bar { -fx-pref-height: 10; }
-.progress-bar > .track { -fx-background-color: #eceef3; -fx-background-radius: 999; -fx-background-insets: 0; }
-.progress-bar > .bar { -fx-background-color: -ok; -fx-background-radius: 999; -fx-background-insets: 0; -fx-padding: 5; }
-.progress-bar.near > .bar { -fx-background-color: #e0a12b; }
-.progress-bar.over > .bar { -fx-background-color: -bad; }
+.progress-bar > .track { -fx-background-radius: 999; }
+.progress-bar > .bar { -fx-background-color: -color-success-emphasis; -fx-background-radius: 999; }
+.progress-bar.near > .bar { -fx-background-color: -color-warning-emphasis; }
+.progress-bar.over > .bar { -fx-background-color: -color-danger-emphasis; }
+.progress-bar.plain > .bar { -fx-background-color: -fx-accent; }
 
-/* ---------- inner tabs (Planning) ---------- */
-.tab-pane > .tab-header-area { -fx-padding: 0 24 8 24; }
-.tab-pane > .tab-header-area > .tab-header-background { -fx-background-color: -bg; }
-.tab-pane .tab {
-    -fx-background-color: transparent;
-    -fx-background-radius: 999;
-    -fx-padding: 6 14 6 14;
-    -fx-cursor: hand;
-}
-.tab-pane .tab .tab-label { -fx-text-fill: -ink-2; -fx-font-size: 13px; }
-.tab-pane .tab:selected { -fx-background-color: white; -fx-border-color: -line; -fx-border-radius: 999; }
-.tab-pane .tab:selected .tab-label { -fx-text-fill: -ink; -fx-font-weight: bold; }
-.tab-pane .tab:selected .focus-indicator { -fx-border-color: transparent; }
-.tab-pane > .tab-content-area { -fx-background-color: -bg; }
+/* ---------- tables ---------- */
+.data-table { -fx-background-radius: 10; -fx-border-radius: 10; }
+.data-table .table-cell { -fx-padding: 6 10 6 10; }
+.money-in { -fx-text-fill: -color-success-fg; }
+.category-box.needs-review { -fx-border-color: -color-warning-emphasis; -fx-border-radius: 6; }
 
-/* ---------- charts ---------- */
-.chart { -fx-padding: 8; }
-.chart-plot-background { -fx-background-color: white; }
-.chart-vertical-grid-lines { -fx-stroke: transparent; }
-.chart-horizontal-grid-lines { -fx-stroke: #eef0f4; }
-.chart-series-line { -fx-stroke: -accent; -fx-stroke-width: 2.5px; }
-.chart-line-symbol { -fx-background-color: -accent, white; }
-.chart-title { -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: -ink; }
-.axis-label, .axis { -fx-tick-label-fill: -ink-3; }
-
-/* ---------- chat ---------- */
+/* ---------- ask box and chat ---------- */
+.ask-box { -fx-background-radius: 14; -fx-border-radius: 14; }
+.ask-field { -fx-font-size: 15px; -fx-padding: 9 12 9 12; }
+.chat-welcome { -fx-spacing: 10; }
+.suggestion { -fx-background-radius: 999; -fx-border-radius: 999; -fx-padding: 6 14 6 14; -fx-cursor: hand; }
 .chat-user {
-    -fx-background-color: -accent;
-    -fx-background-radius: 14 14 4 14;
+    -fx-background-color: -color-accent-emphasis;
+    -fx-background-radius: 16 16 4 16;
     -fx-padding: 10 14 10 14;
 }
 .chat-user .label { -fx-text-fill: white; }
 .chat-ai {
-    -fx-background-color: white;
-    -fx-border-color: -line;
-    -fx-border-radius: 14 14 14 4;
-    -fx-background-radius: 14 14 14 4;
+    -fx-background-color: -color-bg-default;
+    -fx-border-color: -color-border-muted;
+    -fx-border-radius: 16 16 16 4;
+    -fx-background-radius: 16 16 16 4;
     -fx-padding: 10 14 10 14;
 }
-.suggestion { -fx-background-radius: 999; -fx-border-radius: 999; -fx-font-size: 12px; -fx-text-fill: -ink-2; }
-.chat-input { -fx-font-size: 14px; -fx-padding: 10 12 10 12; -fx-background-radius: 10; -fx-border-radius: 10; }
 
-/* ---------- dialogs ---------- */
-.dialog-pane { -fx-background-color: white; }
+/* ---------- charts ---------- */
+.chart-plot-background { -fx-background-color: transparent; }
+.chart-vertical-grid-lines { -fx-stroke: transparent; }
+.chart-series-line { -fx-stroke: -color-accent-emphasis; -fx-stroke-width: 2.5px; }
+.chart-line-symbol { -fx-background-color: -color-accent-emphasis, white; }
+
+/* icons inside buttons */
+.button .icon { -fx-background-color: -color-fg-default; }
+.button.accent .icon { -fx-background-color: white; }
+
+/* dialogs */
+.dialog-pane > .content { -fx-padding: 22 26 6 26; }
+.dialog-pane > .button-bar > .container { -fx-padding: 8 26 20 26; }

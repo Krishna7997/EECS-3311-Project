@@ -5,17 +5,21 @@ import javafx.scene.Node;
 /** One page of the main window. refresh() is called when the page is shown and when data changes. */
 interface View {
 
+    /** Stable id used for navigation (see {@link Nav}). */
+    String id();
+
     String title();
 
-    /** One line shown under the page title. */
+    /** One line under the page title saying what the page is for. */
     default String subtitle() {
         return "";
     }
 
+    /** Sidebar group, e.g. "Money" or "Plan". */
+    String section();
+
     /** SVG path for the sidebar icon (see {@link Icons}). */
-    default String icon() {
-        return Icons.LIST;
-    }
+    String icon();
 
     Node root();
 

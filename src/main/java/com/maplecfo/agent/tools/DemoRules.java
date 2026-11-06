@@ -22,6 +22,8 @@ public final class DemoRules {
         rules.add(new MockLlmClient.Rule(q -> q.contains("net worth") || q.contains("worth"), "net_worth", q -> MockLlmClient.args()));
         rules.add(new MockLlmClient.Rule(q -> q.contains("goal"), "goal_forecast", q -> MockLlmClient.args()));
         rules.add(new MockLlmClient.Rule(q -> q.matches(".*\\b(tfsa|rrsp|fhsa|room|contribut).*"), "contribution_room", DemoRules::roomArgs));
+        rules.add(new MockLlmClient.Rule(q -> q.contains("budget") && q.matches(".*\\b(set|change|make)\\b.*")
+                && categoryIn(q) != null && firstAmount(q).isPresent(), "propose_action", DemoRules::budgetProposalArgs));
         rules.add(new MockLlmClient.Rule(q -> q.contains("budget"), "budget_status", DemoRules::monthArgs));
         rules.add(new MockLlmClient.Rule(q -> q.contains("subscription") || q.contains("recurring"), "recurring_charges", q -> MockLlmClient.args()));
         rules.add(new MockLlmClient.Rule(q -> q.contains("debt") || q.contains("loan") || q.contains("pay off"), "debt_payoff", q -> MockLlmClient.args()));
@@ -57,6 +59,26 @@ public final class DemoRules {
         a.put("account", q.contains("rrsp") ? "RRSP" : q.contains("fhsa") ? "FHSA" : "TFSA");
         firstAmount(q).ifPresent(v -> a.put("amount", v));
         return a;
+    }
+
+    /** "set my dining budget to 200" -> {action: set_budget, category: DINING, amount: 200}. */
+    private static ObjectNode budgetProposalArgs(String q) {
+        ObjectNode a = MockLlmClient.args();
+        a.put("action", "set_budget");
+        a.put("category", categoryIn(q).name());
+        firstAmount(q).ifPresent(v -> a.put("amount", v));
+        return a;
+    }
+
+    private static com.maplecfo.domain.Category categoryIn(String q) {
+        for (com.maplecfo.domain.Category c : com.maplecfo.domain.Category.values()) {
+            String word = c.name().toLowerCase();
+            if (q.contains(word) || (word.endsWith("s") && q.contains(word.substring(0, word.length() - 1)))) {
+                return c;
+            }
+        }
+        if (q.contains("restaurant") || q.contains("eating out")) return com.maplecfo.domain.Category.DINING;
+        return null;
     }
 
     private static ObjectNode affordArgs(String q) {

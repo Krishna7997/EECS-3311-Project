@@ -1,155 +1,253 @@
 package com.maplecfo.ui.gui;
 
+import atlantafx.base.theme.Styles;
 import com.maplecfo.app.MapleCfoFacade;
+import com.maplecfo.domain.Account;
 import com.maplecfo.domain.Category;
 import com.maplecfo.domain.Transaction;
 import com.maplecfo.importer.ColumnMapping;
 import com.maplecfo.importer.ImportResult;
+import javafx.collections.FXCollections;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.stage.Window;
 
 import java.io.File;
 import java.time.YearMonth;
+import java.time.format.TextStyle;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-/** F01 import and F02 categorisation: import a bank CSV, browse a month, fix categories. */
+/** F01 import and F02 categories: import a bank CSV, browse by month, fix a category right in the table. */
 final class TransactionsView implements View {
 
-    private final MapleCfoFacade app;
-    private final VBox root;
-    private final TableView<Transaction> table = Ui.table("No transactions. Import a CSV export from your bank.");
-    private final TextField accountId = Ui.field("Account id, e.g. chequing", 160);
-    private final ComboBox<String> profile = new ComboBox<>();
-    private final Label monthLabel = Ui.heading("");
-    private final TextField search = Ui.field("Search description", 200);
-    private final CheckBox reviewOnly = new CheckBox("Only ones needing review");
-    private final ComboBox<Category> newCategory = new ComboBox<>();
-    private final Label status = Ui.muted("");
-    private YearMonth month;
     static final String AUTO = "Detect automatically";
+    private static final List<Category> CHOICES = List.of(Category.values()).stream()
+            .filter(c -> c != Category.UNCATEGORIZED).toList();
 
-    TransactionsView(MapleCfoFacade app) {
+    private final MapleCfoFacade app;
+    private final TableView<Transaction> table = Ui.table("No transactions in this month.");
+    private final Label monthLabel = new Label();
+    private final TextField search = Ui.field("Search, e.g. netflix");
+    private final ToggleButton allBtn = new ToggleButton("This month");
+    private final ToggleButton reviewBtn = new ToggleButton("Needs a category");
+    private final VBox resultBox = new VBox();
+    private final StackPane body = new StackPane();
+    private final VBox root;
+    private YearMonth month;
+
+    TransactionsView(MapleCfoFacade app, Nav nav) {
         this.app = app;
         this.month = YearMonth.from(app.today());
 
-        Button importBtn = Ui.primary("Import CSV…");
-        importBtn.setOnAction(e -> chooseAndImport(importBtn.getScene().getWindow()));
-        accountId.setText("chequing");
+        Button importBtn = Ui.primary("Import bank CSV", Icons.UPLOAD);
+        importBtn.setOnAction(e -> chooseAndImport());
 
-        Button prev = new Button("◀");
-        prev.setOnAction(e -> { month = month.minusMonths(1); refresh(); });
-        Button next = new Button("▶");
-        next.setOnAction(e -> { month = month.plusMonths(1); refresh(); });
-        search.setOnAction(e -> refresh());
-        reviewOnly.setOnAction(e -> refresh());
+        Button prev = Ui.secondary("‹");
+        prev.setOnAction(e -> { month = month.minusMonths(1); allBtn.setSelected(true); refresh(); });
+        Button next = Ui.secondary("›");
+        next.setOnAction(e -> { month = month.plusMonths(1); allBtn.setSelected(true); refresh(); });
+        monthLabel.getStyleClass().addAll(Styles.TITLE_4, "month-label");
+        monthLabel.setMinWidth(130);
+        monthLabel.setAlignment(Pos.CENTER);
 
-        table.getColumns().add(Ui.column("Date", Transaction::getDate, 100));
-        table.getColumns().add(Ui.column("Description", Transaction::getDescription, 320));
-        table.getColumns().add(Ui.column("Amount", Transaction::getAmount, 110));
-        table.getColumns().add(Ui.column("Category", t -> Ui.pretty(t.getCategory()), 130));
-        table.getColumns().add(Ui.column("Set by", t -> t.getCategorySource().name().toLowerCase(), 90));
-        table.getColumns().add(Ui.column("Account", Transaction::getAccountId, 100));
-        VBox.setVgrow(table, Priority.ALWAYS);
+        ToggleGroup filter = new ToggleGroup();
+        allBtn.setToggleGroup(filter);
+        reviewBtn.setToggleGroup(filter);
+        allBtn.getStyleClass().add(Styles.LEFT_PILL);
+        reviewBtn.getStyleClass().add(Styles.RIGHT_PILL);
+        allBtn.setSelected(true);
+        filter.selectedToggleProperty().addListener((o, a, b) -> {
+            if (b == null) a.setSelected(true);
+            refresh();
+        });
+        search.setPrefWidth(220);
+        search.textProperty().addListener((o, a, b) -> refresh());
 
-        newCategory.getItems().setAll(List.of(Category.values()).stream()
-                .filter(c -> c != Category.UNCATEGORIZED).toList());
-        newCategory.setPromptText("New category");
-        Button apply = new Button("Change category");
-        apply.setOnAction(e -> Ui.attempt(this::recategorize));
+        HBox toolbar = new HBox(10, prev, monthLabel, next, new HBox(0, allBtn, reviewBtn), Ui.spacer(), search, importBtn);
+        toolbar.setAlignment(Pos.CENTER_LEFT);
 
-        status.setWrapText(true);
-        javafx.scene.layout.Region grow = new javafx.scene.layout.Region();
-        javafx.scene.layout.HBox.setHgrow(grow, Priority.ALWAYS);
-        root = Ui.page(
-                Ui.card(Ui.heading("Import a bank CSV"),
-                        Ui.form(Ui.muted("Account"), accountId, Ui.muted("Bank format"), profile, importBtn), status),
-                Ui.row(prev, monthLabel, next, grow, search, reviewOnly),
-                table,
-                Ui.card(Ui.form(Ui.muted("Selected transaction"), newCategory, apply,
-                        Ui.muted("MapleCFO remembers the merchant next time. Undo reverts it."))));
+        table.getColumns().add(Ui.column("Date", Transaction::getDate, 110));
+        table.getColumns().add(Ui.column("Description", Transaction::getDescription, 330));
+        table.getColumns().add(Ui.moneyColumn("Amount", Transaction::getAmount, 120, true));
+        table.getColumns().add(categoryColumn());
+        table.getColumns().add(Ui.column("Account", Transaction::getAccountId, 110));
+        VBox.setVgrow(body, Priority.ALWAYS);
+
+        Label hint = Ui.small("Change a category with the drop-down in the table. MapleCFO remembers the merchant "
+                + "for next time, and Undo at the top reverts it.");
+        resultBox.managedProperty().bind(javafx.beans.binding.Bindings.isNotEmpty(resultBox.getChildren()));
+        root = Ui.page(toolbar, resultBox, body, hint);
     }
 
+    @Override public String id() { return Nav.TRANSACTIONS; }
     @Override public String title() { return "Transactions"; }
-
-    @Override public String subtitle() { return "Import bank CSVs and fix categories"; }
-
+    @Override public String subtitle() { return "Import CSV exports from your bank and check the categories"; }
+    @Override public String section() { return "Money"; }
     @Override public String icon() { return Icons.LIST; }
-
     @Override public Node root() { return root; }
 
     @Override
     public void refresh() {
-        String selected = profile.getValue();
-        List<String> formats = new java.util.ArrayList<>();
-        formats.add(AUTO);
-        app.getMappingProfiles().stream().map(ColumnMapping::profileName).forEach(formats::add);
-        profile.getItems().setAll(formats);
-        profile.setValue(selected != null && formats.contains(selected) ? selected : AUTO);
-
-        List<Transaction> rows;
+        monthLabel.setText(month.getMonth().getDisplayName(TextStyle.FULL, Locale.CANADA) + " " + month.getYear());
+        int review = app.getTransactionsNeedingReview().size();
+        reviewBtn.setText("Needs a category" + (review > 0 ? " (" + review + ")" : ""));
+        if (app.searchTransactions("").isEmpty()) {
+            Button imp = Ui.primary("Import bank CSV", Icons.UPLOAD);
+            imp.setOnAction(e -> chooseAndImport());
+            body.getChildren().setAll(Ui.emptyState(Icons.UPLOAD, "No transactions yet",
+                    "Log in to your bank's website, download your transactions as a CSV file, and import it here. "
+                            + "TD, RBC and simple Date/Description/Amount files are recognised automatically. "
+                            + "To try MapleCFO, use the files in the sample-data folder.", imp));
+            return;
+        }
         String q = search.getText() == null ? "" : search.getText().trim();
-        if (reviewOnly.isSelected()) {
+        List<Transaction> rows;
+        if (reviewBtn.isSelected()) {
             rows = app.getTransactionsNeedingReview();
-            monthLabel.setText("Needs review");
+            table.setPlaceholder(Ui.muted("Every transaction has a category."));
         } else if (!q.isEmpty()) {
             rows = app.searchTransactions(q);
-            monthLabel.setText("Search: " + q);
+            table.setPlaceholder(Ui.muted("Nothing matches \"" + q + "\"."));
         } else {
             rows = app.getTransactions(month);
-            monthLabel.setText(month.toString());
+            table.setPlaceholder(Ui.muted("No transactions in " + monthLabel.getText() + ". Use ‹ › to change month."));
         }
         table.getItems().setAll(rows);
+        body.getChildren().setAll(table);
     }
 
-    private void chooseAndImport(Window owner) {
+    private TableColumn<Transaction, Transaction> categoryColumn() {
+        TableColumn<Transaction, Transaction> c = new TableColumn<>("Category");
+        c.setCellValueFactory(cell -> new javafx.beans.property.ReadOnlyObjectWrapper<>(cell.getValue()));
+        c.setCellFactory(col -> new TableCell<>() {
+            private final ComboBox<Category> box = new ComboBox<>(FXCollections.observableArrayList(CHOICES));
+            private boolean updating;
+
+            {
+                box.setConverter(new javafx.util.StringConverter<>() {
+                    @Override public String toString(Category cat) { return cat == null ? "" : Ui.pretty(cat); }
+                    @Override public Category fromString(String s) { return null; }
+                });
+                box.setPromptText("Choose…");
+                box.getStyleClass().addAll(Styles.SMALL, "category-box");
+                box.setMaxWidth(Double.MAX_VALUE);
+                box.valueProperty().addListener((o, old, now) -> {
+                    Transaction t = getItem();
+                    if (updating || t == null || now == null || now == t.getCategory()) return;
+                    Ui.attempt(() -> app.recategorize(t.getId(), now));
+                    refresh();
+                });
+            }
+
+            @Override
+            protected void updateItem(Transaction t, boolean empty) {
+                super.updateItem(t, empty);
+                setText(null);
+                if (empty || t == null) {
+                    setGraphic(null);
+                    return;
+                }
+                updating = true;
+                box.setValue(t.getCategory() == Category.UNCATEGORIZED ? null : t.getCategory());
+                box.getStyleClass().remove("needs-review");
+                if (t.getCategory() == Category.UNCATEGORIZED) box.getStyleClass().add("needs-review");
+                updating = false;
+                setGraphic(box);
+            }
+        });
+        c.setPrefWidth(170);
+        c.setSortable(false);
+        return c;
+    }
+
+    private void chooseAndImport() {
         FileChooser fc = new FileChooser();
-        fc.setTitle("Choose a bank CSV export");
-        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV files", "*.csv"));
-        File f = fc.showOpenDialog(owner);
+        fc.setTitle("Choose the CSV file you downloaded from your bank");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV files", "*.csv", "*.CSV"));
+        File sample = new File("sample-data");
+        if (sample.isDirectory()) fc.setInitialDirectory(sample);
+        File f = fc.showOpenDialog(root.getScene().getWindow());
         if (f != null) {
-            Ui.attempt(() -> importFile(f));
+            importDialog(f);
         }
     }
 
-    /** Package-private so a smoke test can import without the file dialog. */
-    void importFile(File f) {
-        if (accountId.getText().isBlank()) throw new IllegalArgumentException("Enter the account id to import into");
+    /** Step 2 of importing: which account it belongs to (format is detected, can be changed). */
+    private void importDialog(File f) {
+        ComboBox<String> account = new ComboBox<>();
+        account.setEditable(true);
+        List<String> ids = new ArrayList<>(app.getAccounts().stream().map(Account::getId).toList());
+        if (!ids.contains("chequing")) ids.add(0, "chequing");
+        account.getItems().setAll(ids);
+        account.setValue(guessAccount(f.getName(), ids));
+
+        ComboBox<String> format = new ComboBox<>();
+        format.getItems().add(AUTO);
+        app.getMappingProfiles().stream().map(ColumnMapping::profileName).forEach(format.getItems()::add);
+        String detected;
         try {
-            String format = profile.getValue();
-            String how = "";
-            if (format == null || AUTO.equals(format)) {
-                format = app.detectImportFormat(f.toPath()).orElseThrow(() -> new IllegalArgumentException(
-                        "MapleCFO could not recognise the columns in " + f.getName()
-                                + ". Choose the bank format from the list and try again."));
-                how = " (detected automatically)";
-            }
-            ImportResult r = app.importTransactions(f.toPath(), accountId.getText().trim(), format);
-            status.setText(f.getName() + " — format: " + format + how + ". " + r);
-            if (!r.rejectedRows().isEmpty()) {
-                Ui.info("Imported " + r.imported() + " rows. " + r.rejectedRows().size()
-                        + " rows could not be read:\n" + String.join("\n", r.rejectedRows()));
-            }
+            detected = app.detectImportFormat(f.toPath()).orElse(null);
         } catch (java.io.IOException e) {
-            throw new IllegalArgumentException("Could not read the file: " + e.getMessage());
+            detected = null;
         }
+        format.setValue(AUTO);
+        String help = detected != null ? "Detected: " + detected + ". Change it only if the result looks wrong."
+                : "MapleCFO could not recognise these columns. Choose your bank's format.";
+
+        Ui.Form form = new Ui.Form()
+                .add("Account", account, "Which account is this file from? Type a short name like chequing or visa.")
+                .add("Bank format", format, help);
+        String detectedFinal = detected;
+        Ui.dialog("Import " + f.getName(), null, form, "Import", () -> {
+            String acc = account.getEditor().getText() == null ? "" : account.getEditor().getText().trim();
+            if (acc.isEmpty()) throw new IllegalArgumentException("Enter the account this file belongs to.");
+            String fmt = AUTO.equals(format.getValue()) ? detectedFinal : format.getValue();
+            if (fmt == null) throw new IllegalArgumentException("Choose the bank format for this file.");
+            ImportResult r = app.importTransactions(f.toPath(), acc, fmt);
+            showResult(f.getName(), fmt, r);
+        });
         refresh();
     }
 
-    private void recategorize() {
-        Transaction t = table.getSelectionModel().getSelectedItem();
-        if (t == null) throw new IllegalArgumentException("Select a transaction first");
-        if (newCategory.getValue() == null) throw new IllegalArgumentException("Choose the new category");
-        app.recategorize(t.getId(), newCategory.getValue());
-        status.setText("Changed " + t.getDescription() + " to " + newCategory.getValue() + ".");
+    private static String guessAccount(String fileName, List<String> ids) {
+        String n = fileName.toLowerCase();
+        return ids.stream().filter(id -> n.contains(id.toLowerCase())).findFirst().orElse(ids.get(0));
+    }
+
+    private void showResult(String file, String format, ImportResult r) {
+        String text = "Imported " + r.imported() + " transactions from " + file + " (" + format + ")."
+                + (r.duplicatesSkipped() > 0 ? " Skipped " + r.duplicatesSkipped() + " already imported." : "")
+                + (r.uncategorized() > 0 ? " " + r.uncategorized() + " need a category." : "")
+                + (r.rejectedRows().isEmpty() ? "" : " " + r.rejectedRows().size() + " rows could not be read.");
+        Button close = Ui.flat("×");
+        close.setOnAction(e -> resultBox.getChildren().clear());
+        resultBox.getChildren().setAll(Ui.banner(text, r.rejectedRows().isEmpty() ? "ok" : "warn", close));
+        if (r.imported() > 0) {
+            Transaction latest = app.searchTransactions("").stream()
+                    .max(java.util.Comparator.comparing(Transaction::getDate)).orElse(null);
+            if (latest != null) month = YearMonth.from(latest.getDate());
+        }
+    }
+
+    /** For the smoke test: import without the file dialogs. */
+    void importForTest(File f, String account) throws Exception {
+        String fmt = app.detectImportFormat(f.toPath()).orElseThrow();
+        showResult(f.getName(), fmt, app.importTransactions(f.toPath(), account, fmt));
         refresh();
     }
 }

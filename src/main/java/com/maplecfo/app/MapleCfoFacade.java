@@ -170,6 +170,10 @@ public class MapleCfoFacade {
         return history.redo();
     }
 
+    public boolean canRedo() {
+        return history.canRedo();
+    }
+
     public String describeUndo() {
         return history.nextUndoDescription().orElse("nothing to undo");
     }
