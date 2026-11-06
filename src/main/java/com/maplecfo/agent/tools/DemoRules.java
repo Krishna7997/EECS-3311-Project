@@ -62,11 +62,35 @@ public final class DemoRules {
     private static ObjectNode affordArgs(String q) {
         ObjectNode a = MockLlmClient.args();
         firstAmount(q).ifPresent(v -> a.put("amount", v));
+        affordDate(q, java.time.LocalDate.now()).ifPresent(d -> a.put("date", d.toString()));
         return a;
     }
 
+    /** Understands "2027-06-30", "in 4 months" and "by june" (the next June, last day of the month). */
+    public static java.util.Optional<java.time.LocalDate> affordDate(String q, java.time.LocalDate today) {
+        Matcher iso = Pattern.compile("(\\d{4}-\\d{2}-\\d{2})").matcher(q);
+        if (iso.find()) {
+            return java.util.Optional.of(java.time.LocalDate.parse(iso.group(1)));
+        }
+        Matcher in = Pattern.compile("in (\\d+) months?").matcher(q);
+        if (in.find()) {
+            return java.util.Optional.of(today.plusMonths(Integer.parseInt(in.group(1))));
+        }
+        for (int i = 0; i < MONTHS.length; i++) {
+            if (Pattern.compile("\\b" + MONTHS[i] + "\\b").matcher(q).find()) {
+                int year = i + 1 >= today.getMonthValue() ? today.getYear() : today.getYear() + 1;
+                Matcher y = Pattern.compile("\\b" + MONTHS[i] + "\\s+(20\\d{2})\\b").matcher(q);
+                if (y.find()) year = Integer.parseInt(y.group(1));
+                return java.util.Optional.of(java.time.YearMonth.of(year, i + 1).atEndOfMonth());
+            }
+        }
+        return java.util.Optional.empty();
+    }
+
     private static java.util.Optional<Double> firstAmount(String q) {
-        Matcher m = AMOUNT.matcher(q);
+        // ignore dates and "in N months" so they are not read as the amount
+        Matcher m = AMOUNT.matcher(q.replaceAll("\\d{4}-\\d{2}-\\d{2}", " ").replaceAll("in \\d+ months?", " ")
+                .replaceAll("\\b(" + String.join("|", MONTHS) + ")\\s+20\\d{2}\\b", "$1"));
         while (m.find()) {
             String digits = m.group(1).replace(",", "");
             double v = Double.parseDouble(digits);

@@ -152,4 +152,22 @@ final class AccountCommands {
             return 0;
         }
     }
+
+    @Command(name = "afford", description = "Can I afford it? e.g. afford 1500 --by 2027-03-31 (F11).")
+    static class AffordCmd implements Callable<Integer> {
+        @CommandLine.ParentCommand MapleCfoCli root;
+        @CommandLine.Spec CommandLine.Model.CommandSpec spec;
+        @Parameters(description = "Purchase amount") Money amount;
+        @Option(names = "--by", description = "Date, YYYY-MM-DD (default: 3 months from today)") LocalDate by;
+
+        @Override
+        public Integer call() {
+            LocalDate date = by != null ? by : root.facade().today().plusMonths(3);
+            com.maplecfo.planning.AffordabilityResult r = root.facade().checkAffordability(amount, date);
+            PrintWriter out = spec.commandLine().getOut();
+            out.println("Verdict: " + r.verdict());
+            out.println(r.summary());
+            return 0;
+        }
+    }
 }

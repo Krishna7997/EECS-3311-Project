@@ -74,6 +74,7 @@ public class MapleCfoFacade {
     private com.maplecfo.planning.AccountService accounts;
     private com.maplecfo.planning.NetWorthService netWorth;
     private com.maplecfo.planning.GoalService goals;
+    private com.maplecfo.planning.AffordabilityAnalyzer affordability;
 
     public MapleCfoFacade(TransactionService txService, BudgetService budgets, RegisteredAccountService registered,
                           FireCalculator fire, DebtPayoffPlanner debtPlanner, DebtRepository debtRepo,
@@ -226,10 +227,12 @@ public class MapleCfoFacade {
     // ---------------------------------------------------------- F03 accounts and net worth
 
     void attachPlanning(com.maplecfo.planning.AccountService accounts, com.maplecfo.planning.NetWorthService netWorth,
-                        com.maplecfo.planning.GoalService goals) {
+                        com.maplecfo.planning.GoalService goals,
+                        com.maplecfo.planning.AffordabilityAnalyzer affordability) {
         this.accounts = accounts;
         this.netWorth = netWorth;
         this.goals = goals;
+        this.affordability = affordability;
     }
 
     /** Adds an account and stores a net worth snapshot. Returns warnings such as a duplicate name. */
@@ -290,6 +293,13 @@ public class MapleCfoFacade {
 
     public void deleteGoal(String id) {
         goals.deleteGoal(id);
+    }
+
+    // ---------------------------------------------------------- F11 affordability
+
+    /** "Can I afford this amount by this date?" */
+    public com.maplecfo.planning.AffordabilityResult checkAffordability(Money amount, LocalDate date) {
+        return affordability.analyze(amount, date);
     }
 
     // ---------------------------------------------------------- F12 monthly summary

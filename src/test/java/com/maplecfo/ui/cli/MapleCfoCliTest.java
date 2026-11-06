@@ -117,4 +117,13 @@ class MapleCfoCliTest {
         assertTrue(dep.contains("Goal reached: Emergency fund"), dep);
         assertTrue(run("goal", "forecast", "Emergency fund").contains("is complete"));
     }
+
+    @Test
+    void affordCommand() {
+        run("import", "sample-data/td_chequing_sample.csv", "-a", "chequing", "-p", "TD bank account");
+        run("account", "add", "TD Chequing", "CHEQUING", "2500");
+        String r = run("afford", "300", "--by", "2027-01-31");
+        assertTrue(r.contains("Verdict: YES"), r);
+        assertTrue(run("afford", "900000").contains("Verdict: NO"));
+    }
 }

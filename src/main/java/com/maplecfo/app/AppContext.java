@@ -39,7 +39,9 @@ import com.maplecfo.persistence.sqlite.SqliteMappingProfileRepository;
 import com.maplecfo.persistence.sqlite.SqliteProfileRepository;
 import com.maplecfo.persistence.sqlite.SqliteTransactionRepository;
 import com.maplecfo.persistence.TransactionRepository;
+import com.maplecfo.agent.tools.AffordabilityTool;
 import com.maplecfo.agent.tools.GoalForecastTool;
+import com.maplecfo.planning.AffordabilityAnalyzer;
 import com.maplecfo.agent.tools.NetWorthTool;
 import com.maplecfo.persistence.sqlite.SqliteAccountRepository;
 import com.maplecfo.persistence.sqlite.SqliteGoalRepository;
@@ -132,7 +134,8 @@ public final class AppContext {
         NetWorthService netWorth = new NetWorthService(accountService, new SqliteNetWorthHistoryRepository(db), clock);
         CashFlowForecaster cashFlow = new CashFlowForecaster(txService, recurring, clock);
         GoalService goals = new GoalService(new SqliteGoalRepository(db), cashFlow, bus, clock);
-        facade.attachPlanning(accountService, netWorth, goals);
+        AffordabilityAnalyzer affordability = new AffordabilityAnalyzer(accountService, cashFlow, goals, clock);
+        facade.attachPlanning(accountService, netWorth, goals, affordability);
 
         PendingActionStore pending = new PendingActionStore();
         ToolRegistry tools = new ToolRegistry();
@@ -144,6 +147,7 @@ public final class AppContext {
         tools.register(new DebtPayoffTool(planner));
         tools.register(new NetWorthTool(netWorth, accountService));
         tools.register(new GoalForecastTool(goals));
+        tools.register(new AffordabilityTool(affordability, clock));
         tools.register(new ProposeActionTool(pending, budgets, clock));
         facade.attachAgent(new CfoAgent(llm, tools, new ConversationMemory(10), prompts,
                 validator, pending, profileRepo::load, clock));
