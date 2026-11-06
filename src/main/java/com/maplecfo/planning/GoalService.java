@@ -99,7 +99,7 @@ public class GoalService {
                 othersNeed = othersNeed.plus(requiredMonthly(other));
             }
         }
-        Money available = cf.averageSurplus().minus(othersNeed).max(Money.zero());
+        Money available = cf.cashSurplus().minus(othersNeed).max(Money.zero());
         LocalDate today = LocalDate.now(clock);
         LocalDate completion = null;
         if (available.isPositive()) {

@@ -30,7 +30,7 @@ final class AutomationCommands {
         @Override
         public Integer call() throws Exception {
             PrintWriter out = spec.commandLine().getOut();
-            Path f = folder != null ? folder : AppContext.defaultImportFolder();
+            Path f = folder != null ? folder : root.facade().getImportFolder();
             ImportFolderWatcher w = root.facade().newImportWatcher(f, account);
             if (once) {
                 List<ImportFolderWatcher.Outcome> done = w.scanOnce();
@@ -49,6 +49,54 @@ final class AutomationCommands {
             root.printNewAlerts(out);
             out.flush();
             Thread.currentThread().join(); // until Ctrl+C
+            return 0;
+        }
+    }
+
+    @Command(name = "inbox", description = "Show or change the folder watched for bank CSVs (F13).")
+    static class InboxCmd implements Callable<Integer> {
+        @CommandLine.ParentCommand MapleCfoCli root;
+        @CommandLine.Spec CommandLine.Model.CommandSpec spec;
+        @CommandLine.Parameters(arity = "0..1", description = "New folder (leave out to show the current one)") Path folder;
+
+        @Override
+        public Integer call() {
+            PrintWriter out = spec.commandLine().getOut();
+            if (folder != null) {
+                if (root.facade().isImportFolderFromEnvironment()) {
+                    out.println("Note: MAPLECFO_INBOX is set, so it is used instead of the saved folder.");
+                }
+                out.println("Import folder saved: " + root.facade().setImportFolder(folder));
+            } else {
+                out.println("Import folder: " + root.facade().getImportFolder()
+                        + (root.facade().isImportFolderFromEnvironment() ? "  (from MAPLECFO_INBOX)" : ""));
+                out.println("Change it with: inbox <folder>");
+            }
+            return 0;
+        }
+    }
+
+    @Command(name = "checkin", description = "Your monthly check-in list (F13). Use --done when finished.")
+    static class CheckinCmd implements Callable<Integer> {
+        @CommandLine.ParentCommand MapleCfoCli root;
+        @CommandLine.Spec CommandLine.Model.CommandSpec spec;
+        @Option(names = "--done", description = "Mark this month's check-in as done") boolean done;
+
+        @Override
+        public Integer call() {
+            PrintWriter out = spec.commandLine().getOut();
+            if (done) {
+                root.facade().completeMonthlyCheckin();
+                out.println("Check-in done for this month. See you next month!");
+                return 0;
+            }
+            out.println(root.facade().isMonthlyCheckinDue() ? "Your monthly check-in is due:" : "This month's check-in is done. The list, for reference:");
+            out.println("  1. Import last month's CSV from each bank:   import <file> -a <account>   (or save it in: "
+                    + root.facade().getImportFolder() + ")");
+            out.println("  2. Update balances that are not imported:     account update <account> <balance>");
+            out.println("  3. Look over your budgets:                    budget status");
+            out.println("  4. Confirm detected contributions, check room: ai   then   room");
+            out.println("Then run: checkin --done");
             return 0;
         }
     }

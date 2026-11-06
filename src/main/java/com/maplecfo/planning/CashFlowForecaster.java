@@ -37,17 +37,21 @@ public class CashFlowForecaster {
 
         Money income = Money.zero();
         Money spending = Money.zero();
+        Money registered = Money.zero();
         int months = 0;
         for (int i = 1; i <= MONTHS_TO_AVERAGE; i++) {
             YearMonth m = thisMonth.minusMonths(i);
-            List<Transaction> inMonth = all.stream()
-                    .filter(t -> YearMonth.from(t.getDate()).equals(m))
-                    .filter(t -> t.getCategory() != Category.TRANSFER)
-                    .toList();
-            if (inMonth.isEmpty()) {
+            List<Transaction> monthAll = all.stream().filter(t -> YearMonth.from(t.getDate()).equals(m)).toList();
+            List<Transaction> inMonth = monthAll.stream().filter(t -> t.getCategory() != Category.TRANSFER).toList();
+            if (monthAll.isEmpty()) {
                 continue;
             }
             months++;
+            for (Transaction t : monthAll) {
+                if (t.getCategory() == Category.TRANSFER && t.isExpense() && isRegistered(t.getDescription())) {
+                    registered = registered.plus(t.getAmount().abs());
+                }
+            }
             for (Transaction t : inMonth) {
                 if (t.isExpense()) {
                     spending = spending.plus(t.getAmount().abs());
@@ -66,10 +70,17 @@ public class CashFlowForecaster {
         }
 
         if (months == 0) {
-            return new CashFlowForecast(0, Money.zero(), Money.zero(), Money.zero(), fixed, true);
+            return new CashFlowForecast(0, Money.zero(), Money.zero(), Money.zero(), fixed, true, Money.zero());
         }
         Money avgIncome = income.dividedBy(months);
         Money avgSpending = spending.dividedBy(months);
-        return new CashFlowForecast(months, avgIncome, avgSpending, avgIncome.minus(avgSpending), fixed, months < 2);
+        return new CashFlowForecast(months, avgIncome, avgSpending, avgIncome.minus(avgSpending), fixed, months < 2,
+                registered.dividedBy(months));
+    }
+
+    /** True when a description mentions a TFSA, RRSP or FHSA as a whole word. */
+    public static boolean isRegistered(String description) {
+        String d = " " + Transaction.normalise(description) + " ";
+        return d.contains(" tfsa ") || d.contains(" rrsp ") || d.contains(" fhsa ");
     }
 }

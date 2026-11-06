@@ -56,7 +56,9 @@ The window has a sidebar with one page per feature:
 
 New items are added with a button that opens a short form (for example **Add account**, **New goal**, **Set a budget**).
 Undo/Redo are at the top right (Cmd/Ctrl+Z, Cmd/Ctrl+Shift+Z). While the window is open, CSV files saved into
-`~/.maplecfo/inbox` are imported automatically. The look uses the open-source AtlantaFX theme.
+the import folder (default `~/.maplecfo/inbox`, change it in **Settings**) are imported automatically.
+At the start of every month, Home shows a short **monthly check-in** (import last month's CSVs, update balances,
+review budgets and TFSA/RRSP/FHSA room) until you mark it done. The look uses the open-source AtlantaFX theme.
 
 ### Command-line interface
 ```
@@ -96,8 +98,10 @@ java -jar target/maplecfo.jar ask "How much did I spend on dining last month?"
 java -jar target/maplecfo.jar ask "Can I afford a 1500 dollar trip by March?"
 java -jar target/maplecfo.jar report -m 2026-09
 # F13 auto-import and reminders, F15 limits
-java -jar target/maplecfo.jar watch --once --folder ~/.maplecfo/inbox
+java -jar target/maplecfo.jar inbox ~/Downloads/bank          # choose the folder MapleCFO watches for CSVs
+java -jar target/maplecfo.jar watch --once
 java -jar target/maplecfo.jar reminders
+java -jar target/maplecfo.jar checkin                          # the monthly check-in list (checkin --done when finished)
 java -jar target/maplecfo.jar limits refresh --force
 ```
 Changes the AI (or the contribution detector) proposes are only applied after `confirm <id>`; use interactive mode or the GUI for that, because proposals live only while the app is open.
@@ -109,7 +113,7 @@ cp .env.example .env
 Then put your own key in `.env`. The `.env` file is git-ignored, so the key is never committed.
 Without a key, MapleCFO runs in **demo mode**: an offline mock model answers from the same tools, so every feature can still be tried.
 
-Optional settings (in `.env` or as environment variables): `LLM_MODEL` (default `claude-haiku-5-5`), `LLM_WORKSPACE_ID`, `MAPLECFO_DB`, `MAPLECFO_INBOX` (auto-import folder), `MAPLECFO_LIMITS_URL`.
+Optional settings (in `.env` or as environment variables): `LLM_MODEL` (default `claude-haiku-5-5`), `LLM_WORKSPACE_ID`, `MAPLECFO_DB`, `MAPLECFO_INBOX` (auto-import folder; overrides the one chosen in Settings), `MAPLECFO_LIMITS_URL`.
 
 ### Weekly limits bot (F15)
 `.github/workflows/limits-update.yml` runs every Monday. It reads the CRA limits page, validates any new TFSA/RRSP numbers and opens a pull request for review. The app downloads `contribution_limits.json` from this repository at most once a week, validates it again and keeps a local cache.

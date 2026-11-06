@@ -51,6 +51,7 @@ final class HomeView implements View {
     public void refresh() {
         content.getChildren().clear();
         content.getChildren().add(askBox());
+        if (app.isMonthlyCheckinDue()) content.getChildren().add(monthlyCheckin());
         Node steps = gettingStarted();
         if (steps != null) content.getChildren().add(steps);
         content.getChildren().add(tiles());
@@ -78,6 +79,43 @@ final class HomeView implements View {
         box.getStyleClass().addAll("card", "ask-box");
         box.setPadding(new javafx.geometry.Insets(12));
         return box;
+    }
+
+    /** Once a month: the few things that keep MapleCFO's numbers right. */
+    private Node monthlyCheckin() {
+        YearMonth now = YearMonth.from(app.today());
+        String month = now.getMonth().getDisplayName(TextStyle.FULL, Locale.CANADA);
+        String last = now.minusMonths(1).getMonth().getDisplayName(TextStyle.FULL, Locale.CANADA);
+        VBox list = new VBox(0,
+                checkRow("1", "Import " + last + "'s bank CSVs", "One file per bank account and card. Or save them in "
+                        + "your import folder: " + app.getImportFolder().getFileName() + ".", "Import", Nav.TRANSACTIONS),
+                checkRow("2", "Update balances that aren't imported", "Investments, TFSA, RRSP, FHSA and loans.",
+                        "Accounts", Nav.ACCOUNTS),
+                checkRow("3", "Look over your budgets", "See what went over last month and adjust.", "Budgets",
+                        Nav.BUDGETS),
+                checkRow("4", "Check your TFSA, RRSP and FHSA room", "Confirm any contributions MapleCFO found.",
+                        "Room", Nav.REGISTERED));
+        Button done = Ui.primary("Mark as done", Icons.CHECK);
+        done.setOnAction(e -> { app.completeMonthlyCheckin(); refresh(); });
+        VBox card = Ui.card(month + " check-in", "A 5-minute routine at the start of each month keeps your numbers "
+                + "right.", done, list);
+        card.getStyleClass().add("checkin-card");
+        return card;
+    }
+
+    private Node checkRow(String n, String title, String text, String button, String page) {
+        Label badge = new Label(n);
+        badge.getStyleClass().addAll("step-badge", "step-todo");
+        Label t = new Label(title);
+        t.getStyleClass().add("step-title");
+        VBox words = new VBox(2, t, Ui.small(text));
+        HBox.setHgrow(words, Priority.ALWAYS);
+        Button b = Ui.secondary(button);
+        b.setOnAction(e -> nav.go(page));
+        HBox line = new HBox(14, badge, words, b);
+        line.setAlignment(Pos.CENTER_LEFT);
+        line.getStyleClass().add("step-row");
+        return line;
     }
 
     /** A checklist for new users; hidden once every step is done. */

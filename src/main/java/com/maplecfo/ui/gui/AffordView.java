@@ -80,7 +80,10 @@ final class AffordView implements View {
             g.setVgap(8);
             int row = 0;
             row = line(g, row, "Cash in chequing and savings today", r.currentCash().toString());
-            row = line(g, row, "Usually left over each month", r.forecast().averageSurplus().toString());
+            if (r.forecast().registeredSavingsPerMonth().isPositive()) {
+                row = line(g, row, "Moved to TFSA / RRSP / FHSA each month", r.forecast().registeredSavingsPerMonth().toString());
+            }
+            row = line(g, row, "Usually left over in chequing each month", r.forecast().cashSurplus().toString());
             row = line(g, row, "Expected cash by " + r.date() + " (after goal savings)", r.projectedCash().toString());
             row = line(g, row, "Safety buffer (one month of bills)", r.safetyBuffer().toString());
             row = line(g, row, "Price", r.amount().toString());

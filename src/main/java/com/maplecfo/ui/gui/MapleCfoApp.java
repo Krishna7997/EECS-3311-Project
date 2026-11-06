@@ -78,18 +78,28 @@ public class MapleCfoApp extends Application implements Nav {
 
     /** F13: watch the inbox folder for bank CSVs; raise reminders; F15: check limits in the background. */
     private void startAutomation() {
-        try {
-            Path inbox = AppContext.defaultImportFolder();
-            watcher = app.newImportWatcher(inbox, "chequing");
-            watcher.start();
-            autoImport.setText("Auto-import is on");
-        } catch (Exception e) {
-            autoImport.setText("Auto-import is off");
-        }
+        startWatcher();
         app.checkReminders();
         Thread limits = new Thread(() -> app.refreshLimits(false), "maplecfo-limits");
         limits.setDaemon(true);
         limits.start();
+    }
+
+    private void startWatcher() {
+        try {
+            if (watcher != null) watcher.close();
+            Path inbox = app.getImportFolder();
+            watcher = app.newImportWatcher(inbox, "chequing");
+            watcher.start();
+            autoImport.setText("Auto-import: " + inbox.getFileName());
+        } catch (Exception e) {
+            autoImport.setText("Auto-import is off");
+        }
+    }
+
+    @Override
+    public void importFolderChanged() {
+        startWatcher();
     }
 
     @Override

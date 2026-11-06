@@ -146,3 +146,6 @@
 /* dialogs */
 .dialog-pane > .content { -fx-padding: 22 26 6 26; }
 .dialog-pane > .button-bar > .container { -fx-padding: 8 26 20 26; }
+
+/* monthly check-in */
+.checkin-card { -fx-border-color: -color-accent-muted; -fx-border-width: 1.5; }

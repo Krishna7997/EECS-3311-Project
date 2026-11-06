@@ -52,7 +52,7 @@ public record AffordabilityResult(Money amount, LocalDate date, Verdict verdict,
                     .append(" (including a ").append(safetyBuffer).append(" safety buffer).");
         }
         sb.append(" Projection: ").append(currentCash).append(" cash today, about ")
-                .append(forecast.averageSurplus()).append(" average monthly surplus, ")
+                .append(forecast.cashSurplus()).append(" left over in an average month, ")
                 .append(projectedCash).append(" expected by ").append(date).append('.');
         if (!affectedGoals.isEmpty()) {
             sb.append(" It would fit with the full buffer if you paused these goals: ").append(String.join(", ", affectedGoals)).append('.');

@@ -105,8 +105,9 @@ class AutomationTest {
         assertTrue(app.checkReminders().isEmpty(), "nothing imported yet: nothing to remind");
         app.importTransactions(TD, "chequing", "TD bank account");
         List<String> due = app.checkReminders();
-        assertEquals(1, due.size(), due.toString());
+        assertEquals(2, due.size(), due.toString());
         assertTrue(due.get(0).contains("September summary is ready"), due.get(0));
+        assertTrue(due.get(1).startsWith("Time for your October check-in"), due.get(1));
         assertTrue(app.checkReminders().isEmpty(), "not repeated");
 
         MapleCfoFacade later = app("2026-12-15T15:00:00Z"); // same database, two months later
@@ -175,5 +176,90 @@ class AutomationTest {
         assertEquals(5, e.monthsOfIncome());
         assertEquals(Money.of(45360), e.incomeUsed(), "10 x $1,890 over 5 months, scaled to 12");
         assertEquals(Money.of("8164.80"), e.estimate(), "18% of $45,360 is under the yearly maximum");
+    }
+
+    // ------------------------------------------------------------------ registered transfers follow the money
+
+    @Test
+    void registeredDepositsAreTransfersNotSpending() throws Exception {
+        MapleCfoFacade app = oct21();
+        app.importTransactions(TD, "chequing", "TD bank account");
+        app.importTransactions(Path.of("sample-data/td_chequing_nov2026_sample.csv"), "chequing", "TD bank account");
+        for (Transaction t : app.searchTransactions("fhsa deposit")) {
+            assertEquals(Category.TRANSFER, t.getCategory(), "FHSA deposits are your own money moving");
+        }
+        assertEquals(Category.TRANSFER, app.searchTransactions("tfsa to rrsp").get(0).getCategory());
+    }
+
+    @Test
+    void confirmingAContributionMovesTheMoneyIntoTheAccount() throws Exception {
+        MapleCfoFacade app = oct21();
+        app.saveProfile(new UserProfile(2003, "ON", 2003, null, null, null));
+        app.addAccount(new Account("chequing", "TD Chequing", AccountType.CHEQUING, "TD", Money.of(100)));
+        app.addAccount(new Account("tfsa", "Wealthsimple TFSA", AccountType.TFSA, "WS", Money.of(6000)));
+        app.importTransactions(TD, "chequing", "TD bank account");
+        Money before = app.getNetWorth().total();
+
+        String id = app.getPendingActions().keySet().iterator().next();
+        assertTrue(app.getPendingActions().get(id).endsWith("and add it to Wealthsimple TFSA"),
+                app.getPendingActions().get(id));
+        app.confirmProposedAction(id);
+        assertEquals(Money.of(6500), app.getAccounts().stream().filter(a -> a.getId().equals("tfsa")).findFirst()
+                .orElseThrow().getBalance());
+        assertEquals(before.plus(Money.of(500)), app.getNetWorth().total(),
+                "chequing already dropped (from the CSV balance); now the TFSA side is added");
+
+        assertTrue(app.undoLastEdit());
+        assertEquals(Money.of(6000), app.getAccounts().stream().filter(a -> a.getId().equals("tfsa")).findFirst()
+                .orElseThrow().getBalance());
+    }
+
+    @Test
+    void withoutAnAccountOnlyTheRoomIsRecorded() throws Exception {
+        MapleCfoFacade app = oct21();
+        app.importTransactions(TD, "chequing", "TD bank account");
+        String text = app.getPendingActions().values().iterator().next();
+        assertFalse(text.contains("add it to"), text);
+        assertTrue(app.getAlerts().stream().anyMatch(a -> a.message().contains("add your TFSA account")));
+    }
+
+    // ------------------------------------------------------------------ settings: import folder, monthly check-in
+
+    @Test
+    void importFolderCanBeChangedAndIsRemembered() throws Exception {
+        MapleCfoFacade app = oct21();
+        assertEquals(com.maplecfo.app.AppContext.defaultImportFolder(), app.getImportFolder());
+        Path mine = dir.resolve("My Bank Downloads");
+        assertEquals(mine.toAbsolutePath().normalize(), app.setImportFolder(mine));
+        assertTrue(Files.isDirectory(mine), "created if missing");
+        assertEquals(mine.toAbsolutePath().normalize(), oct21().getImportFolder(), "remembered after a restart");
+
+        Path file = Files.writeString(dir.resolve("note.txt"), "x");
+        assertThrows(IllegalArgumentException.class, () -> app.setImportFolder(file));
+    }
+
+    @Test
+    void monthlyCheckinOncePerMonth() throws Exception {
+        MapleCfoFacade app = oct21();
+        assertFalse(app.isMonthlyCheckinDue(), "nothing to check before the first import");
+        app.importTransactions(TD, "chequing", "TD bank account");
+        assertTrue(app.isMonthlyCheckinDue());
+        app.completeMonthlyCheckin();
+        assertFalse(app.isMonthlyCheckinDue());
+        assertTrue(app.checkReminders().stream().noneMatch(s -> s.contains("check-in")));
+
+        MapleCfoFacade november = app("2026-11-03T15:00:00Z");
+        assertTrue(november.isMonthlyCheckinDue(), "due again in a new month");
+        assertTrue(november.checkReminders().stream().anyMatch(s -> s.startsWith("Time for your November check-in")));
+    }
+
+    @Test
+    void inboxFromEnvironmentOrDotEnvWinsButOnlyWhenSet() {
+        Clock c = Clock.fixed(Instant.parse("2026-10-21T15:00:00Z"), ZoneId.of("America/Toronto"));
+        MapleCfoFacade withEnv = AppContext.create(DatabaseManager.forFile(dir.resolve("e.db")), c,
+                com.maplecfo.app.AppConfig.of(Map.of("MAPLECFO_INBOX", "/data/bank-csv")));
+        assertTrue(withEnv.isImportFolderFromEnvironment());
+        assertEquals(Path.of("/data/bank-csv"), withEnv.getImportFolder());
+        assertFalse(oct21().isImportFolderFromEnvironment(), "tests never pick up the computer's settings");
     }
 }

@@ -51,6 +51,7 @@ import com.maplecfo.automation.ReminderService;
 import com.maplecfo.planning.RrspRoomEstimator;
 import com.maplecfo.agent.tools.NetWorthTool;
 import com.maplecfo.persistence.sqlite.SqliteAccountRepository;
+import com.maplecfo.persistence.sqlite.SqliteSettingsRepository;
 import com.maplecfo.persistence.sqlite.SqliteGoalRepository;
 import com.maplecfo.persistence.sqlite.SqliteNetWorthHistoryRepository;
 import com.maplecfo.planning.AccountService;
@@ -85,12 +86,8 @@ public final class AppContext {
         return Path.of(System.getProperty("user.home"), ".maplecfo", "maplecfo.db");
     }
 
-    /** Folder watched for new bank CSVs (F13): ~/.maplecfo/inbox (override with MAPLECFO_INBOX). */
+    /** Default folder watched for new bank CSVs (F13): ~/.maplecfo/inbox. It can be changed in Settings. */
     public static Path defaultImportFolder() {
-        String env = System.getenv("MAPLECFO_INBOX");
-        if (env != null && !env.isBlank()) {
-            return Path.of(env);
-        }
         return Path.of(System.getProperty("user.home"), ".maplecfo", "inbox");
     }
 
@@ -115,10 +112,15 @@ public final class AppContext {
     }
 
     public static MapleCfoFacade create(DatabaseManager db, Clock clock, AppConfig config) {
-        return create(db, clock, LlmClientFactory.create(config, DemoRules.forMapleCfo()));
+        return create(db, clock, LlmClientFactory.create(config, DemoRules.forMapleCfo()), config);
     }
 
+    /** Tests: a given model and no settings from the environment, so results never depend on the computer. */
     public static MapleCfoFacade create(DatabaseManager db, Clock clock, LlmClient llm) {
+        return create(db, clock, llm, AppConfig.of(java.util.Map.of()));
+    }
+
+    static MapleCfoFacade create(DatabaseManager db, Clock clock, LlmClient llm, AppConfig config) {
         EventBus bus = new EventBus();
         AlertService alerts = new AlertService();
         alerts.register(bus);
@@ -177,9 +179,11 @@ public final class AppContext {
         tools.register(new GoalForecastTool(goals));
         tools.register(new AffordabilityTool(affordability, clock));
         tools.register(new ProposeActionTool(pending, budgets, clock));
-        new ContributionDetector(txService, registered, pending, bus).register();
+        new ContributionDetector(txService, registered, pending, bus).withAccounts(accountService, netWorth).register();
         new BalanceSyncService(accountService, debtRepo, netWorth).register(bus);
-        facade.attachAutomation(new ReminderService(txService, bus, clock), new RrspRoomEstimator(txService, limits),
+        SqliteSettingsRepository settings = new SqliteSettingsRepository(db);
+        facade.attachSettings(settings, AppContext::defaultImportFolder, config.get("MAPLECFO_INBOX").orElse(null));
+        facade.attachAutomation(new ReminderService(txService, bus, clock, settings), new RrspRoomEstimator(txService, limits),
                 limits);
 
         facade.attachAgent(new CfoAgent(llm, tools, new ConversationMemory(10), prompts,

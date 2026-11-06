@@ -50,6 +50,12 @@ public final class AppConfig {
         return new AppConfig(v);
     }
 
+    /** Any MAPLECFO_* or LLM_* value, from the environment or .env; empty when not set. */
+    public java.util.Optional<String> get(String key) {
+        String v = values.get(key);
+        return v == null || v.isBlank() ? java.util.Optional.empty() : java.util.Optional.of(v);
+    }
+
     /** Values for tests or tools that set the configuration directly. */
     public static AppConfig of(Map<String, String> values) {
         return new AppConfig(new HashMap<>(values));

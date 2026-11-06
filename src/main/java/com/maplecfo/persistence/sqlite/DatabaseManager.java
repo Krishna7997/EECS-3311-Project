@@ -98,7 +98,10 @@ public class DatabaseManager {
               deadline TEXT, linked_account_id TEXT)""",
             """
             CREATE TABLE IF NOT EXISTS net_worth_history (
-              date TEXT PRIMARY KEY, total TEXT NOT NULL)"""
+              date TEXT PRIMARY KEY, total TEXT NOT NULL)""",
+            """
+            CREATE TABLE IF NOT EXISTS settings (
+              key TEXT PRIMARY KEY, value TEXT)"""
         };
         try (Connection c = getConnection(); Statement s = c.createStatement()) {
             for (String sql : ddl) {

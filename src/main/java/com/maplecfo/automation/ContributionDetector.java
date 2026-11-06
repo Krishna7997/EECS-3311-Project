@@ -35,6 +35,8 @@ public class ContributionDetector implements FinanceEventListener {
     private final PendingActionStore pending;
     private final EventBus eventBus;
     private final Set<String> alreadyProposed = new HashSet<>();
+    private com.maplecfo.planning.AccountService accounts;
+    private com.maplecfo.planning.NetWorthService netWorth;
 
     public ContributionDetector(TransactionService txService, RegisteredAccountService registered,
                                 PendingActionStore pending, EventBus eventBus) {
@@ -42,6 +44,14 @@ public class ContributionDetector implements FinanceEventListener {
         this.registered = registered;
         this.pending = pending;
         this.eventBus = eventBus;
+    }
+
+    /** With accounts, a confirmed contribution also moves the money into the TFSA/RRSP/FHSA account balance. */
+    public ContributionDetector withAccounts(com.maplecfo.planning.AccountService accounts,
+                                             com.maplecfo.planning.NetWorthService netWorth) {
+        this.accounts = accounts;
+        this.netWorth = netWorth;
+        return this;
     }
 
     public void register() {
@@ -63,11 +73,14 @@ public class ContributionDetector implements FinanceEventListener {
             if (t.isEmpty() || !alreadyProposed.add(txId)) continue;
             Optional<ContributionRecord> rec = detect(t.get());
             if (rec.isEmpty() || alreadyLogged(rec.get())) continue;
-            String actionId = pending.add(new RecordContributionCommand(registered, rec.get()));
+            RecordContributionCommand cmd = new RecordContributionCommand(registered, rec.get(), accounts, netWorth);
+            String actionId = pending.add(cmd);
             ids.add(actionId);
             eventBus.publish(FinanceEvent.of(EventType.CONTRIBUTION_DETECTED, "Detected a " + rec.get().amount() + " "
                     + rec.get().accountType() + " " + rec.get().kind().name().toLowerCase() + " on "
-                    + rec.get().date() + " (" + t.get().getDescription() + "). Confirm with: confirm " + actionId));
+                    + rec.get().date() + " (" + t.get().getDescription() + "). Confirm with: confirm " + actionId
+                    + (cmd.targetAccountName().isEmpty() && accounts != null
+                    ? ". Tip: add your " + rec.get().accountType() + " account so its balance is updated too." : "")));
         }
         return ids;
     }

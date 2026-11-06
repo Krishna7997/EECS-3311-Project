@@ -61,7 +61,7 @@ public class AffordabilityAnalyzer {
                 activeGoals.add(g.getName());
             }
         }
-        Money projectedNoGoals = cash.plus(cf.averageSurplus().times(months));
+        Money projectedNoGoals = cash.plus(cf.cashSurplus().times(months));
         Money projected = projectedNoGoals.minus(goalNeedsMonthly.times(months));
         Money headroom = projected.minus(amount).minus(buffer);
 

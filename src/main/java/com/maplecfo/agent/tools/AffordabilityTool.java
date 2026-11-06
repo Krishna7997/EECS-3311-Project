@@ -50,6 +50,8 @@ public class AffordabilityTool extends AbstractFinanceTool {
         out.put("verdict", r.verdict().name());
         out.put("current_cash", r.currentCash().toString());
         out.put("average_monthly_surplus", r.forecast().averageSurplus().toString());
+        out.put("registered_savings_per_month", r.forecast().registeredSavingsPerMonth().toString());
+        out.put("left_over_per_month_after_tfsa_rrsp_fhsa", r.forecast().cashSurplus().toString());
         out.put("projected_cash", r.projectedCash().toString());
         out.put("safety_buffer", r.safetyBuffer().toString());
         out.put("headroom", r.headroom().toString());

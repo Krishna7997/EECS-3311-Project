@@ -28,10 +28,35 @@ public class ReminderService {
     private String lastImportReminder;
     private YearMonth lastSummaryReminder;
 
+    static final String CHECKIN_KEY = "checkin.lastDone";
+
+    private final com.maplecfo.persistence.SettingsRepository settings;
+    private YearMonth lastCheckinReminder;
+
     public ReminderService(TransactionService txService, EventBus eventBus, Clock clock) {
+        this(txService, eventBus, clock, new com.maplecfo.persistence.memory.InMemorySettingsRepository());
+    }
+
+    public ReminderService(TransactionService txService, EventBus eventBus, Clock clock,
+                           com.maplecfo.persistence.SettingsRepository settings) {
         this.txService = txService;
         this.eventBus = eventBus;
         this.clock = clock;
+        this.settings = settings;
+    }
+
+    /**
+     * The monthly check-in is due once per calendar month, for users who already have data:
+     * import last month's CSVs, update balances, review budgets and registered-account room.
+     */
+    public boolean isMonthlyCheckinDue() {
+        YearMonth now = YearMonth.from(LocalDate.now(clock));
+        boolean done = settings.get(CHECKIN_KEY).map(v -> v.equals(now.toString())).orElse(false);
+        return !done && !txService.findAll().isEmpty();
+    }
+
+    public void completeMonthlyCheckin() {
+        settings.put(CHECKIN_KEY, YearMonth.from(LocalDate.now(clock)).toString());
     }
 
     /** Publishes any reminders that are due and returns their text. */
@@ -58,6 +83,13 @@ public class ReminderService {
             lastSummaryReminder = lastMonth;
             due.add("Your " + lastMonth.getMonth().getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.CANADA)
                     + " summary is ready: open Monthly Report or run `report`.");
+        }
+        YearMonth now = YearMonth.from(today);
+        if (isMonthlyCheckinDue() && !now.equals(lastCheckinReminder)) {
+            lastCheckinReminder = now;
+            due.add("Time for your " + now.getMonth().getDisplayName(java.time.format.TextStyle.FULL,
+                    java.util.Locale.CANADA) + " check-in: import last month's bank CSVs, update your account "
+                    + "balances, and look over your budgets and TFSA/RRSP/FHSA room.");
         }
         due.forEach(msg -> eventBus.publish(FinanceEvent.of(EventType.REMINDER_DUE, msg)));
         return due;

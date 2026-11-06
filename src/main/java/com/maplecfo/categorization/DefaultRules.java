@@ -34,7 +34,7 @@ final class DefaultRules {
             Map.entry(Category.INCOME, List.of("payroll", "salary", "direct deposit", "pay deposit", "cra deposit",
                     "gst credit", "osap")),
             Map.entry(Category.TRANSFER, List.of("e transfer", "etransfer", "interac", "transfer to", "transfer from",
-                    "tfsa contribution", "rrsp contribution", "credit card payment", "payment thank you")));
+                    "tfsa contribution", "rrsp contribution", "tfsa", "rrsp", "fhsa", "credit card payment", "payment thank you")));
 
     static List<CategoryRule> canadian() {
         List<CategoryRule> rules = new ArrayList<>();

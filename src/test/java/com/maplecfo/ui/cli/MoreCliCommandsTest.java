@@ -135,4 +135,14 @@ class MoreCliCommandsTest {
         java.nio.file.Files.writeString(odd, "foo;bar\n1;2\n");
         assertTrue(fail("import", odd.toString(), "-a", "chequing").contains("Could not recognise"));
     }
+
+    @Test
+    void inboxAndCheckin() {
+        Path folder = dir.resolve("downloads");
+        assertTrue(run("inbox", folder.toString()).contains("Import folder saved: " + folder));
+        assertTrue(run("inbox").contains("Import folder: " + folder));
+        assertTrue(run("checkin").contains("Your monthly check-in is due"));
+        run("checkin", "--done");
+        assertTrue(run("checkin").contains("This month's check-in is done"));
+    }
 }

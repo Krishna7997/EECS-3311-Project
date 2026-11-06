@@ -68,7 +68,10 @@ class AffordabilityTest {
         assertTrue(cf.fixedCostsPerMonth().isLessThan(Money.of(1700)),
                 "the monthly $500 TFSA transfer is savings, not a bill: " + cf.fixedCostsPerMonth());
         assertEquals(Money.of(2500), r.currentCash(), "only chequing and savings count as cash");
-        assertEquals(Money.of(2500).plus(cf.averageSurplus().times(3)), r.projectedCash());
+        assertEquals(Money.of(500), cf.registeredSavingsPerMonth(), "the sample moves $500 to a TFSA every month");
+        assertEquals(cf.averageSurplus().minus(Money.of(500)), cf.cashSurplus());
+        assertEquals(Money.of(2500).plus(cf.cashSurplus().times(3)), r.projectedCash(),
+                "money sent to the TFSA is not available to spend");
         assertEquals(r.projectedCash().minus(Money.of(100)).minus(cf.fixedCostsPerMonth()), r.headroom());
     }
 

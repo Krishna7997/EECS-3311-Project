@@ -362,7 +362,63 @@ public class MapleCfoFacade {
                 o -> eventBus.publish(com.maplecfo.events.FinanceEvent.of(EventType.AUTO_IMPORTED, o.message())));
     }
 
-    /** Raises any reminders that are due ("no import in 30 days", "summary ready"). */
+    // ---------------------------------------------------------- settings: import folder and monthly check-in
+
+    static final String IMPORT_FOLDER_KEY = "import.folder";
+    private com.maplecfo.persistence.SettingsRepository settings;
+    private java.util.function.Supplier<Path> defaultImportFolder;
+
+    private String inboxOverride;
+
+    void attachSettings(com.maplecfo.persistence.SettingsRepository settings, java.util.function.Supplier<Path> defaultFolder,
+                        String inboxOverride) {
+        this.settings = settings;
+        this.defaultImportFolder = defaultFolder;
+        this.inboxOverride = inboxOverride;
+    }
+
+    /** The folder watched for bank CSVs (F13): MAPLECFO_INBOX if set, else the saved choice, else ~/.maplecfo/inbox. */
+    public Path getImportFolder() {
+        if (isImportFolderFromEnvironment()) {
+            return Path.of(inboxOverride);
+        }
+        return settings.get(IMPORT_FOLDER_KEY).map(Path::of).orElseGet(defaultImportFolder);
+    }
+
+    public boolean isImportFolderFromEnvironment() {
+        return inboxOverride != null && !inboxOverride.isBlank();
+    }
+
+    /** Saves a new import folder, creating it if needed. */
+    public Path setImportFolder(Path folder) {
+        if (folder == null || folder.toString().isBlank()) {
+            throw new IllegalArgumentException("Choose a folder.");
+        }
+        Path p = folder.toAbsolutePath().normalize();
+        if (java.nio.file.Files.exists(p) && !java.nio.file.Files.isDirectory(p)) {
+            throw new IllegalArgumentException(p + " is a file, not a folder.");
+        }
+        try {
+            java.nio.file.Files.createDirectories(p);
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Cannot use " + p + ": " + e.getMessage());
+        }
+        if (!java.nio.file.Files.isReadable(p)) {
+            throw new IllegalArgumentException("MapleCFO cannot read " + p + ".");
+        }
+        settings.put(IMPORT_FOLDER_KEY, p.toString());
+        return p;
+    }
+
+    public boolean isMonthlyCheckinDue() {
+        return reminders.isMonthlyCheckinDue();
+    }
+
+    public void completeMonthlyCheckin() {
+        reminders.completeMonthlyCheckin();
+    }
+
+    /** Raises any reminders that are due ("no import in 30 days", "summary ready", monthly check-in). */
     public List<String> checkReminders() {
         return reminders.checkDue();
     }

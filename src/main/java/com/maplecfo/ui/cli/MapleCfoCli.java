@@ -49,6 +49,8 @@ import java.util.concurrent.Callable;
                 AgentCommands.AiStatusCmd.class,
                 AutomationCommands.WatchCmd.class,
                 AutomationCommands.RemindersCmd.class,
+                AutomationCommands.InboxCmd.class,
+                AutomationCommands.CheckinCmd.class,
                 AutomationCommands.RrspEstimateCmd.class,
                 AutomationCommands.LimitsCmd.class,
                 MapleCfoCli.GuiCmd.class,

@@ -19,6 +19,9 @@ interface Nav {
 
     void go(String pageId);
 
+    /** Restarts the automatic import after the folder was changed in Settings. */
+    void importFolderChanged();
+
     /** Opens the AI chat and asks this question. */
     void ask(String question);
 }
