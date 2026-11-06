@@ -8,8 +8,8 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -17,6 +17,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -37,7 +39,6 @@ public class MapleCfoApp extends Application {
 
     private MapleCfoFacade app;
     private final List<View> views = new ArrayList<>();
-    private TabPane tabs;
     private final Label undoLabel = new Label();
     private Button undo;
     private Button redo;
@@ -47,8 +48,10 @@ public class MapleCfoApp extends Application {
         app = preset != null ? preset : AppContext.create(AppContext.defaultDatabasePath());
         stage.setScene(buildScene());
         stage.setTitle("MapleCFO — your AI personal CFO");
-        stage.setWidth(1150);
-        stage.setHeight(780);
+        stage.setWidth(1280);
+        stage.setHeight(820);
+        stage.setMinWidth(1000);
+        stage.setMinHeight(640);
         stage.show();
         startAutomation();
         refreshCurrent();
@@ -63,9 +66,9 @@ public class MapleCfoApp extends Application {
             java.nio.file.Path inbox = AppContext.defaultImportFolder();
             watcher = app.newImportWatcher(inbox, "chequing");
             watcher.start();
-            autoImport.setText("Auto-import folder: " + inbox);
+            autoImport.setText("Auto-import on\n" + inbox.getFileName() + " folder");
         } catch (Exception e) {
-            autoImport.setText("Auto-import is off: " + e.getMessage());
+            autoImport.setText("Auto-import is off");
         }
         app.checkReminders();
         // F15: check for newer contribution limits in the background (at most once a week)
@@ -87,14 +90,68 @@ public class MapleCfoApp extends Application {
             app = preset != null ? preset : AppContext.create(AppContext.defaultDatabasePath());
         }
         views.addAll(createViews(app));
-        tabs = new TabPane();
-        tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        for (View v : views) {
-            Tab t = new Tab(v.title(), v.root());
-            t.setUserData(v);
-            tabs.getTabs().add(t);
+
+        // ---- sidebar navigation
+        Label leaf = new Label();
+        leaf.setGraphic(Icons.of(Icons.LEAF, 22));
+        leaf.getStyleClass().add("brand-icon");
+        Label brand = new Label("MapleCFO");
+        brand.getStyleClass().add("brand");
+        HBox brandRow = new HBox(8, leaf, brand);
+        brandRow.getStyleClass().add("brand-row");
+        VBox nav = new VBox(4, brandRow);
+        nav.getStyleClass().add("sidebar");
+        for (int i = 0; i < views.size(); i++) {
+            View v = views.get(i);
+            ToggleButton b = new ToggleButton(v.title(), Icons.of(v.icon(), 18));
+            b.setToggleGroup(navGroup);
+            b.getStyleClass().add("nav-item");
+            b.setMaxWidth(Double.MAX_VALUE);
+            b.setUserData(i);
+            b.setOnAction(e -> {
+                if (!b.isSelected()) b.setSelected(true); // keep one page selected
+                show((int) b.getUserData());
+            });
+            navButtons.add(b);
+            nav.getChildren().add(b);
         }
-        tabs.getSelectionModel().selectedItemProperty().addListener((o, a, b) -> refreshCurrent());
+        Region push = new Region();
+        VBox.setVgrow(push, Priority.ALWAYS);
+        Label mode = new Label(app.getLlm().isMock() ? "AI demo mode" : "AI: " + app.getLlm().modelName());
+        mode.getStyleClass().addAll("chip", app.getLlm().isMock() ? "chip-warn" : "chip-ok");
+        autoImport.getStyleClass().add("sidebar-note");
+        autoImport.setWrapText(true);
+        nav.getChildren().addAll(push, mode, autoImport);
+
+        // ---- page header with undo / redo
+        pageTitle.getStyleClass().add("page-title");
+        pageSubtitle.getStyleClass().add("page-subtitle");
+        VBox titles = new VBox(2, pageTitle, pageSubtitle);
+        undo = new Button("Undo");
+        undo.getStyleClass().add("ghost");
+        undo.setOnAction(e -> Ui.attempt(() -> { app.undoLastEdit(); refreshCurrent(); }));
+        redo = new Button("Redo");
+        redo.getStyleClass().add("ghost");
+        redo.setOnAction(e -> Ui.attempt(() -> { app.redoLastEdit(); refreshCurrent(); }));
+        undoLabel.getStyleClass().add("undo-hint");
+        undoLabel.setMaxWidth(300);
+        undoLabel.setMinWidth(0);
+        undo.setMinWidth(Region.USE_PREF_SIZE);
+        redo.setMinWidth(Region.USE_PREF_SIZE);
+        titles.setMinWidth(0);
+        pageSubtitle.setMinWidth(0);
+        Region grow = new Region();
+        HBox.setHgrow(grow, Priority.ALWAYS);
+        HBox header = new HBox(10, titles, grow, undoLabel, undo, redo);
+        header.getStyleClass().add("page-header");
+
+        BorderPane content = new BorderPane(pageHost);
+        content.setTop(header);
+        content.getStyleClass().add("content");
+
+        BorderPane root = new BorderPane(content);
+        root.setLeft(nav);
+        root.getStyleClass().add("app-root");
 
         // Observer: any change in the model refreshes the visible screen.
         for (EventType type : EventType.values()) {
@@ -104,29 +161,30 @@ public class MapleCfoApp extends Application {
             });
         }
 
-        undo = new Button("Undo");
-        undo.setOnAction(e -> Ui.attempt(() -> { app.undoLastEdit(); refreshCurrent(); }));
-        redo = new Button("Redo");
-        redo.setOnAction(e -> Ui.attempt(() -> { app.redoLastEdit(); refreshCurrent(); }));
-        Region grow = new Region();
-        HBox.setHgrow(grow, Priority.ALWAYS);
-        Label mode = new Label(app.getLlm().isMock()
-                ? "AI: demo mode (no API key)" : "AI: " + app.getLlm().modelName());
-        mode.getStyleClass().add("muted");
-        Label brand = new Label("MapleCFO");
-        brand.getStyleClass().add("brand");
-        autoImport.getStyleClass().add("muted");
-        HBox top = new HBox(8, brand, autoImport, grow, undoLabel, undo, redo, mode);
-        top.getStyleClass().add("toolbar");
-
-        BorderPane root = new BorderPane(tabs);
-        root.setTop(top);
         Scene scene = new Scene(root);
         scene.getStylesheets().add(MapleCfoApp.class.getResource("/gui/maplecfo.css").toExternalForm());
         scene.getAccelerators().put(new KeyCodeCombination(KeyCode.Z, KeyCombination.SHORTCUT_DOWN), undo::fire);
         scene.getAccelerators().put(new KeyCodeCombination(KeyCode.Z, KeyCombination.SHORTCUT_DOWN,
                 KeyCombination.SHIFT_DOWN), redo::fire);
+        show(0);
         return scene;
+    }
+
+    private final ToggleGroup navGroup = new ToggleGroup();
+    private final List<ToggleButton> navButtons = new ArrayList<>();
+    private final StackPane pageHost = new StackPane();
+    private final Label pageTitle = new Label();
+    private final Label pageSubtitle = new Label();
+    private int current = -1;
+
+    private void show(int index) {
+        current = index;
+        View v = views.get(index);
+        navButtons.get(index).setSelected(true);
+        pageTitle.setText(v.title());
+        pageSubtitle.setText(v.subtitle());
+        pageHost.getChildren().setAll(v.root());
+        refreshCurrent();
     }
 
     /** The tabs, in order. */
@@ -136,12 +194,11 @@ public class MapleCfoApp extends Application {
     }
 
     void selectTab(int index) {
-        tabs.getSelectionModel().select(index);
-        refreshCurrent();
+        show(index);
     }
 
     int tabCount() {
-        return tabs.getTabs().size();
+        return views.size();
     }
 
     View view(int index) {
@@ -149,14 +206,11 @@ public class MapleCfoApp extends Application {
     }
 
     private void refreshCurrent() {
-        if (tabs == null) return;
-        Tab t = tabs.getSelectionModel().getSelectedItem();
-        if (t != null) {
-            try {
-                ((View) t.getUserData()).refresh();
-            } catch (RuntimeException e) {
-                Ui.error(e);
-            }
+        if (current < 0 || undo == null) return;
+        try {
+            views.get(current).refresh();
+        } catch (RuntimeException e) {
+            Ui.error(e);
         }
         String next = app.describeUndo();
         undoLabel.setText(next.equals("nothing to undo") ? "" : "Undo: " + next);

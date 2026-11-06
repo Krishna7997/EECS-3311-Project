@@ -55,7 +55,7 @@ final class PlanningView implements View {
     private final TextField save = Ui.field("Saved per year", 120);
     private final TextField spend = Ui.field("Spending per year", 130);
     private final TextField age = Ui.field("Age", 60);
-    private final Label fireResult = Ui.big("");
+    private final Label fireResult = Ui.heading("Enter your numbers and press Project.");
     private final TableView<FireProjection.Scenario> scenarios = Ui.table("Enter your numbers and press Project.");
     private final LineChart<Number, Number> fireChart = new LineChart<>(new NumberAxis(), new NumberAxis());
 
@@ -76,6 +76,10 @@ final class PlanningView implements View {
     }
 
     @Override public String title() { return "Planning"; }
+
+    @Override public String subtitle() { return "Subscriptions, TFSA / RRSP / FHSA room, debt payoff and FIRE"; }
+
+    @Override public String icon() { return Icons.PLAN; }
 
     @Override public Node root() { return root; }
 
@@ -120,11 +124,11 @@ final class PlanningView implements View {
         recurring.getColumns().add(Ui.column("Per year", RecurringCharge::yearlyCost, 110));
         recurring.getColumns().add(Ui.column("Note", c -> c.priceIncreased() ? "price went up"
                 : c.variableAmount() ? "amount varies" : "", 120));
-        return Ui.page(Ui.heading("Subscriptions and bills found in your transactions"), recurring, recurringTotal);
+        return Ui.page(recurring, recurringTotal);
     }
 
     private Node roomPage() {
-        Button saveProfile = new Button("Save profile");
+        Button saveProfile = Ui.primary("Save profile");
         saveProfile.setOnAction(e -> Ui.attempt(() -> {
             UserProfile p = app.getProfile();
             p.setBirthYear(intOrNull(birthYear));
@@ -167,10 +171,10 @@ final class PlanningView implements View {
         ScrollPane sp = new ScrollPane(Ui.page(
                 Ui.card(Ui.heading("Contribution room this year"), roomBox),
                 Ui.card(Ui.heading("Your profile (used to calculate room)"),
-                        Ui.row(birthYear, residentSince, rrspLimit, fhsaOpened, saveProfile),
+                        Ui.form(birthYear, residentSince, rrspLimit, fhsaOpened, saveProfile),
                         Ui.muted("The RRSP deduction limit is on your latest CRA Notice of Assessment."),
                         Ui.row(estimate), estimateText),
-                Ui.card(Ui.heading("Check or record a contribution"), Ui.row(roomType, roomAmount, check, log), roomResult)));
+                Ui.card(Ui.heading("Check or record a contribution"), Ui.form(roomType, roomAmount, check, log), roomResult)));
         sp.setFitToWidth(true);
         return sp;
     }
@@ -181,7 +185,7 @@ final class PlanningView implements View {
         debts.getColumns().add(Ui.column("APR", d -> d.getApr() + "%", 80));
         debts.getColumns().add(Ui.column("Min / month", Debt::getMinPayment, 110));
         debts.setPrefHeight(180);
-        Button add = new Button("Add debt");
+        Button add = Ui.primary("Add debt");
         add.setOnAction(e -> Ui.attempt(() -> {
             double apr;
             try {
@@ -208,7 +212,7 @@ final class PlanningView implements View {
                 p.payoffs().stream().map(PayoffPlan.DebtPayoff::debtName).toList()), 220));
         plans.setPrefHeight(110);
         extra.setText("0");
-        Button compare = new Button("Compare avalanche and snowball");
+        Button compare = Ui.primary("Compare avalanche and snowball");
         Label warn = Ui.muted("");
         compare.setOnAction(e -> Ui.attempt(() -> {
             Money x = Ui.money(extra, "the extra payment");
@@ -217,10 +221,14 @@ final class PlanningView implements View {
             plans.getItems().setAll(a, s);
             warn.setText(String.join(" ", a.warnings()));
         }));
-        return Ui.page(debts, Ui.row(debtName, debtBalance, debtApr, debtMin, add, remove),
-                Ui.row(new Label("Extra per month:"), extra, compare), plans, warn,
-                Ui.muted("Avalanche pays the highest interest rate first (least interest). "
-                        + "Snowball pays the smallest balance first (quick wins)."));
+        ScrollPane sp = new ScrollPane(Ui.page(debts,
+                Ui.card(Ui.heading("Add a debt"), Ui.form(debtName, debtBalance, debtApr, debtMin, add, remove)),
+                Ui.card(Ui.heading("Compare payoff plans"), Ui.form(Ui.muted("Extra per month"), extra, compare),
+                        plans, warn,
+                        Ui.muted("Avalanche pays the highest interest rate first (least interest). "
+                                + "Snowball pays the smallest balance first (quick wins)."))));
+        sp.setFitToWidth(true);
+        return sp;
     }
 
     private Node firePage() {
@@ -228,7 +236,7 @@ final class PlanningView implements View {
         save.setText("15000");
         spend.setText("40000");
         age.setText("22");
-        Button project = new Button("Project");
+        Button project = Ui.primary("Project");
         project.setOnAction(e -> Ui.attempt(this::projectFire));
         scenarios.getColumns().add(Ui.column("Scenario", FireProjection.Scenario::label, 160));
         scenarios.getColumns().add(Ui.column("Save / yr", FireProjection.Scenario::yearlySaving, 110));
@@ -243,9 +251,10 @@ final class PlanningView implements View {
         fireChart.getXAxis().setLabel("Years from now");
         fireChart.getYAxis().setLabel("Invested ($)");
         ScrollPane sp = new ScrollPane(Ui.page(
-                Ui.row(invested, save, spend, new Label("Age"), age, project,
-                        Ui.muted("5% real return, 4% withdrawal rate")),
-                fireResult, scenarios, fireChart));
+                Ui.card(Ui.heading("Your numbers"), Ui.form(invested, save, spend, Ui.muted("Age"), age, project),
+                        Ui.muted("Uses a 5% real return and a 4% withdrawal rate.")),
+                Ui.card(fireResult, scenarios), Ui.card(Ui.heading("Invested over time"), fireChart)));
+        
         sp.setFitToWidth(true);
         return sp;
     }

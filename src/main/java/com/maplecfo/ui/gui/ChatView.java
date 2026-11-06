@@ -32,7 +32,7 @@ final class ChatView implements View {
     private final VBox messages = new VBox(8);
     private final ScrollPane scroll = new ScrollPane(messages);
     private final TextField input = new TextField();
-    private final Button send = new Button("Ask");
+    private final Button send = Ui.primary("Ask");
     private final Label usage = Ui.muted("");
     private final VBox root;
 
@@ -43,6 +43,7 @@ final class ChatView implements View {
         VBox.setVgrow(scroll, Priority.ALWAYS);
         input.setPromptText("Ask about your money, e.g. \"Can I afford a $1,200 laptop by December?\"");
         HBox.setHgrow(input, Priority.ALWAYS);
+        input.getStyleClass().add("chat-input");
         input.setOnAction(e -> ask(input.getText()));
         send.setOnAction(e -> ask(input.getText()));
         Button clear = new Button("New conversation");
@@ -52,23 +53,27 @@ final class ChatView implements View {
             greet();
         });
 
-        HBox chips = new HBox(6);
+        javafx.scene.layout.FlowPane chips = new javafx.scene.layout.FlowPane(6, 6);
         for (String s : SUGGESTIONS) {
             Button b = new Button(s);
+            b.getStyleClass().add("suggestion");
             b.setOnAction(e -> ask(s));
             chips.getChildren().add(b);
         }
-        ScrollPane chipScroll = new ScrollPane(chips);
-        chipScroll.setFitToHeight(true);
-        chipScroll.setPrefHeight(44);
-        chipScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
+
+        clear.getStyleClass().add("ghost");
         HBox bar = new HBox(8, input, send, clear);
-        root = Ui.page(scroll, chipScroll, bar, usage);
+        bar.setAlignment(Pos.CENTER);
+        root = Ui.page(scroll, chips, bar, usage);
         greet();
     }
 
     @Override public String title() { return "Ask MapleCFO"; }
+
+    @Override public String subtitle() { return "Your AI CFO answers from your own data and never changes anything without asking"; }
+
+    @Override public String icon() { return Icons.CHAT; }
 
     @Override public Node root() { return root; }
 

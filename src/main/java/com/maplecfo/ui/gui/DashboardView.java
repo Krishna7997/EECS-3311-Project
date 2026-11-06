@@ -39,6 +39,11 @@ final class DashboardView implements View {
     private final VBox pendingCard;
     private final LineChart<String, Number> history = new LineChart<>(new CategoryAxis(), new NumberAxis());
     private final ScrollPane root;
+    private final Label monthIncome = Ui.big("-");
+    private final Label monthSaved = Ui.big("-");
+    private final Label incomeDetail = new Label();
+    private final Label savedDetail = new Label();
+    private VBox historyCard;
 
     DashboardView(MapleCfoFacade app) {
         this.app = app;
@@ -47,26 +52,44 @@ final class DashboardView implements View {
         history.setLegendVisible(false);
         history.setPrefHeight(220);
         history.setAnimated(false);
-        history.setTitle("Net worth history");
+        history.setCreateSymbols(true);
 
+        netWorthDetail.getStyleClass().add("muted");
+        monthDetail.getStyleClass().add("muted");
+        incomeDetail.getStyleClass().add("muted");
+        savedDetail.getStyleClass().add("muted");
+        GridPane tiles = new GridPane();
+        tiles.setHgap(16);
+        tiles.add(Ui.stat("Net worth", netWorth, netWorthDetail), 0, 0);
+        tiles.add(Ui.stat("Spent this month", monthSpent, monthDetail), 1, 0);
+        tiles.add(Ui.stat("Income this month", monthIncome, incomeDetail), 2, 0);
+        tiles.add(Ui.stat("Saved this month", monthSaved, savedDetail), 3, 0);
+        for (int i = 0; i < 4; i++) {
+            javafx.scene.layout.ColumnConstraints q = new javafx.scene.layout.ColumnConstraints();
+            q.setPercentWidth(25);
+            tiles.getColumnConstraints().add(q);
+        }
         GridPane grid = new GridPane();
-        grid.setHgap(12);
-        grid.setVgap(12);
-        grid.add(Ui.card(Ui.heading("Net worth"), netWorth, netWorthDetail), 0, 0);
-        grid.add(Ui.card(Ui.heading("Spent this month"), monthSpent, monthDetail), 1, 0);
-        grid.add(Ui.card(Ui.heading("Budgets"), budgetBox), 0, 1);
-        grid.add(Ui.card(Ui.heading("Savings goals"), goalBox), 1, 1);
+        grid.setHgap(16);
+        grid.setVgap(16);
+        grid.add(Ui.card(Ui.heading("Budgets this month"), budgetBox), 0, 0);
+        grid.add(Ui.card(Ui.heading("Savings goals"), goalBox), 1, 0);
         javafx.scene.layout.ColumnConstraints half = new javafx.scene.layout.ColumnConstraints();
         half.setPercentWidth(50);
         grid.getColumnConstraints().addAll(half, half);
 
         pendingCard = Ui.card(Ui.heading("Waiting for your OK"), pendingBox,
                 Ui.muted("Found automatically (for example a TFSA transfer in your latest import). Nothing is saved until you confirm."));
-        root = new ScrollPane(Ui.page(grid, pendingCard, Ui.card(Ui.heading("Alerts"), alerts), history));
+        historyCard = Ui.card(Ui.heading("Net worth history"), history);
+        root = new ScrollPane(Ui.page(tiles, pendingCard, grid, Ui.card(Ui.heading("Alerts"), alerts), historyCard));
         root.setFitToWidth(true);
     }
 
     @Override public String title() { return "Dashboard"; }
+
+    @Override public String subtitle() { return "Your money at a glance"; }
+
+    @Override public String icon() { return Icons.HOME; }
 
     @Override public Node root() { return root; }
 
@@ -74,11 +97,11 @@ final class DashboardView implements View {
     public void refresh() {
         if (app.getAccounts().isEmpty()) {
             netWorth.setText("-");
-            netWorthDetail.setText("Add your first account in the Accounts & Goals tab.");
+            netWorthDetail.setText("Add accounts in Accounts & Goals");
         } else {
             NetWorthSnapshot s = app.getNetWorth();
             netWorth.setText(s.total().toString());
-            netWorthDetail.setText("Assets " + s.assets() + "  ·  Debts " + s.liabilities());
+            netWorthDetail.setText("Assets " + s.assets() + " · Debts " + s.liabilities());
         }
 
         YearMonth m = YearMonth.from(app.today());
@@ -90,7 +113,17 @@ final class DashboardView implements View {
             else income = income.plus(t.getAmount());
         }
         monthSpent.setText(spent.toString());
-        monthDetail.setText("Income " + income + " in " + m + ". Import a CSV in the Transactions tab to update.");
+        monthDetail.setText(m.getMonth().getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.CANADA)
+                + " " + m.getYear());
+        monthIncome.setText(income.toString());
+        incomeDetail.setText("Transfers not counted");
+        Money saved = income.minus(spent);
+        monthSaved.setText(saved.toString());
+        monthSaved.getStyleClass().removeAll("positive", "negative");
+        monthSaved.getStyleClass().add(saved.isNegative() ? "negative" : "positive");
+        savedDetail.setText(income.isPositive()
+                ? Math.round(saved.getAmount().doubleValue() / income.getAmount().doubleValue() * 100) + "% of income"
+                : "No income yet this month");
 
         budgetBox.getChildren().clear();
         List<BudgetStatus> budgets = app.getBudgetStatus(m);
@@ -100,7 +133,7 @@ final class DashboardView implements View {
             bar.setPrefWidth(160);
             if (b.isExceeded()) bar.getStyleClass().add("over");
             else if (b.isNearLimit()) bar.getStyleClass().add("near");
-            budgetBox.getChildren().add(Ui.row(fixed(b.budget().category().name()), bar,
+            budgetBox.getChildren().add(Ui.row(fixed(Ui.pretty(b.budget().category())), bar,
                     Ui.muted(b.spent() + " of " + b.budget().limit())));
         }
 
@@ -112,12 +145,13 @@ final class DashboardView implements View {
             bar.setPrefWidth(160);
             if (!f.onTrack()) bar.getStyleClass().add("near");
             goalBox.getChildren().add(Ui.row(fixed(f.goal().getName()), bar,
-                    Ui.muted(f.isComplete() ? "done" : f.onTrack() ? "on track" : "behind")));
+                    f.isComplete() ? Ui.chip("Done", "info") : f.onTrack() ? Ui.chip("On track", "ok")
+                            : Ui.chip("Behind", "warn")));
         }
 
         pendingBox.getChildren().clear();
         app.getPendingActions().forEach((id, text) -> {
-            javafx.scene.control.Button ok = new javafx.scene.control.Button("Confirm");
+            javafx.scene.control.Button ok = Ui.primary("Confirm");
             ok.setOnAction(e -> Ui.attempt(() -> { app.confirmProposedAction(id); refresh(); }));
             javafx.scene.control.Button no = new javafx.scene.control.Button("Dismiss");
             no.setOnAction(e -> Ui.attempt(() -> { app.dismissProposedAction(id); refresh(); }));
@@ -134,8 +168,8 @@ final class DashboardView implements View {
             series.getData().add(new XYChart.Data<>(e.getKey().toString(), e.getValue().getAmount()));
         }
         history.getData().setAll(List.of(series));
-        history.setVisible(series.getData().size() > 1);
-        history.setManaged(series.getData().size() > 1);
+        historyCard.setVisible(series.getData().size() > 1);
+        historyCard.setManaged(series.getData().size() > 1);
     }
 
     private static Label fixed(String text) {

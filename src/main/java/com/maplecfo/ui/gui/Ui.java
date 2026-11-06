@@ -40,8 +40,9 @@ final class Ui {
     }
 
     static VBox page(javafx.scene.Node... children) {
-        VBox box = new VBox(12, children);
-        box.setPadding(new Insets(16));
+        VBox box = new VBox(16, children);
+        box.setPadding(new Insets(4, 24, 24, 24));
+        box.getStyleClass().add("page");
         return box;
     }
 
@@ -52,10 +53,69 @@ final class Ui {
     }
 
     static VBox card(javafx.scene.Node... children) {
-        VBox box = new VBox(6, children);
+        VBox box = new VBox(10, children);
         box.getStyleClass().add("card");
-        box.setPadding(new Insets(12));
+        box.setPadding(new Insets(18));
         return box;
+    }
+
+    /** "CREDIT_CARD" -> "Credit card": enum names in a friendlier form for the screen. */
+    static String pretty(Object value) {
+        String s = String.valueOf(value).replace('_', ' ').toLowerCase();
+        if (s.equals("tfsa") || s.equals("rrsp") || s.equals("fhsa")) return s.toUpperCase();
+        return s.isEmpty() ? s : Character.toUpperCase(s.charAt(0)) + s.substring(1);
+    }
+
+    /** A table column that shows a coloured chip, e.g. a goal's status. */
+    static <T> javafx.scene.control.TableColumn<T, T> chipColumn(String title,
+                                                              java.util.function.Function<T, Label> chip, double width) {
+        javafx.scene.control.TableColumn<T, T> c = new javafx.scene.control.TableColumn<>(title);
+        c.setCellValueFactory(cell -> new javafx.beans.property.ReadOnlyObjectWrapper<>(cell.getValue()));
+        c.setCellFactory(col -> new javafx.scene.control.TableCell<>() {
+            @Override
+            protected void updateItem(T item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty || item == null ? null : chip.apply(item));
+                setText(null);
+            }
+        });
+        c.setPrefWidth(width);
+        return c;
+    }
+
+    /** A filled, accent-coloured button for the main action on a card. */
+    static javafx.scene.control.Button primary(String text) {
+        javafx.scene.control.Button b = new javafx.scene.control.Button(text);
+        b.getStyleClass().add("primary");
+        b.setDefaultButton(false);
+        return b;
+    }
+
+    /** A small rounded status label: kind is ok, warn, bad or info. */
+    static Label chip(String text, String kind) {
+        Label l = new Label(text);
+        l.getStyleClass().addAll("chip", "chip-" + kind);
+        return l;
+    }
+
+    /** A KPI tile: small caption, big value, optional note underneath. */
+    static VBox stat(String caption, Label value, Label note) {
+        Label c = new Label(caption.toUpperCase());
+        c.getStyleClass().add("stat-caption");
+        value.getStyleClass().setAll("label", "stat-value");
+        VBox box = note == null ? new VBox(4, c, value) : new VBox(4, c, value, note);
+        box.getStyleClass().addAll("card", "stat");
+        box.setPadding(new Insets(16));
+        box.setMaxWidth(Double.MAX_VALUE);
+        return box;
+    }
+
+    /** A labelled group of form controls laid out in a wrapping row. */
+    static javafx.scene.layout.FlowPane form(javafx.scene.Node... children) {
+        javafx.scene.layout.FlowPane f = new javafx.scene.layout.FlowPane(8, 8, children);
+        f.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        f.getStyleClass().add("form");
+        return f;
     }
 
     static TextField field(String prompt, double width) {

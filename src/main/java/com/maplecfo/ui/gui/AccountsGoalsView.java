@@ -41,19 +41,24 @@ final class AccountsGoalsView implements View {
     private final TextField affordAmount = Ui.field("Amount, e.g. 1500", 140);
     private final DatePicker affordDate = new DatePicker();
     private final Label affordResult = Ui.muted("");
+    private final Label affordVerdict = new Label();
 
     AccountsGoalsView(MapleCfoFacade app) {
         this.app = app;
 
         // ---- accounts (F03)
         accType.getItems().setAll(AccountType.values());
+        accType.setConverter(new javafx.util.StringConverter<>() {
+            @Override public String toString(AccountType t) { return t == null ? "" : Ui.pretty(t); }
+            @Override public AccountType fromString(String s) { return null; }
+        });
         accType.setPromptText("Type");
         accounts.getColumns().add(Ui.column("Name", Account::getName, 180));
-        accounts.getColumns().add(Ui.column("Type", Account::getType, 120));
+        accounts.getColumns().add(Ui.column("Type", a -> Ui.pretty(a.getType()), 120));
         accounts.getColumns().add(Ui.column("Bank", Account::getInstitution, 100));
         accounts.getColumns().add(Ui.column("Balance", a -> (a.isLiability() ? "-" : "") + a.getBalance(), 120));
         accounts.setPrefHeight(200);
-        Button add = new Button("Add account");
+        Button add = Ui.primary("Add account");
         add.setOnAction(e -> Ui.attempt(this::addAccount));
         Button update = new Button("Update balance");
         update.setOnAction(e -> Ui.attempt(() -> {
@@ -72,11 +77,12 @@ final class AccountsGoalsView implements View {
         goals.getColumns().add(Ui.column("Progress", f -> Math.round(f.goal().progress() * 100) + "%", 80));
         goals.getColumns().add(Ui.column("Deadline", f -> f.goal().getDeadline() == null ? "-" : f.goal().getDeadline(), 100));
         goals.getColumns().add(Ui.column("Needs / month", GoalForecast::requiredMonthly, 110));
-        goals.getColumns().add(Ui.column("Status", f -> f.isComplete() ? "done" : f.onTrack() ? "on track" : "behind", 90));
+        goals.getColumns().add(Ui.chipColumn("Status", f -> f.isComplete() ? Ui.chip("Done", "info")
+                : f.onTrack() ? Ui.chip("On track", "ok") : Ui.chip("Behind", "warn"), 110));
         goals.setPrefHeight(170);
         goals.getSelectionModel().selectedItemProperty().addListener((o, a, f) ->
                 goalForecast.setText(f == null ? "Select a goal to see its forecast." : f.summary()));
-        Button addGoal = new Button("Add goal");
+        Button addGoal = Ui.primary("Add goal");
         addGoal.setOnAction(e -> Ui.attempt(() -> {
             String name = goalName.getText().trim();
             String id = Ui.uniqueId(name, app.getGoals().stream().map(SavingsGoal::getId).toList());
@@ -98,27 +104,42 @@ final class AccountsGoalsView implements View {
 
         // ---- affordability (F11)
         affordDate.setValue(app.today().plusMonths(3));
-        Button check = new Button("Can I afford it?");
+        affordVerdict.setVisible(false);
+        affordResult.setWrapText(true);
+        goalForecast.setWrapText(true);
+        Button check = Ui.primary("Can I afford it?");
         check.setOnAction(e -> Ui.attempt(() -> {
             AffordabilityResult r = app.checkAffordability(Ui.money(affordAmount, "an amount"), affordDate.getValue());
-            affordResult.setText(r.verdict() + " — " + r.summary());
+            affordVerdict.getStyleClass().setAll("label", "chip", "chip-" + switch (r.verdict()) {
+                case YES -> "ok";
+                case TIGHT -> "warn";
+                case NO -> "bad";
+                case INSUFFICIENT_DATA -> "info";
+            });
+            affordVerdict.setText(r.verdict().name().replace('_', ' '));
+            affordVerdict.setVisible(true);
+            affordResult.setText(r.summary());
         }));
 
         root = new ScrollPane(Ui.page(
                 Ui.card(Ui.heading("Net worth"), netWorth, accounts,
-                        Ui.row(accName, accType, accBalance, accBank, add),
-                        Ui.row(new Label("Selected account:"), newBalance, update, remove)),
+                        Ui.form(accName, accType, accBalance, accBank, add),
+                        Ui.form(Ui.muted("Selected account"), newBalance, update, remove)),
                 Ui.card(Ui.heading("Savings goals"), goals,
-                        Ui.row(goalName, goalTarget, goalDeadline, addGoal),
-                        Ui.row(new Label("Selected goal:"), deposit, dep, delGoal), goalForecast),
-                Ui.card(Ui.heading("Can I afford it?"), Ui.row(affordAmount, new Label("by"), affordDate, check),
-                        affordResult,
+                        Ui.form(goalName, goalTarget, goalDeadline, addGoal),
+                        Ui.form(Ui.muted("Selected goal"), deposit, dep, delGoal), goalForecast),
+                Ui.card(Ui.heading("Can I afford it?"), Ui.form(affordAmount, Ui.muted("by"), affordDate, check),
+                        affordVerdict, affordResult,
                         Ui.muted("Uses your chequing and savings balances, your average monthly surplus, "
                                 + "goal contributions and a one-month safety buffer."))));
         root.setFitToWidth(true);
     }
 
     @Override public String title() { return "Accounts & Goals"; }
+
+    @Override public String subtitle() { return "Net worth, savings goals and \"Can I afford it?\""; }
+
+    @Override public String icon() { return Icons.WALLET; }
 
     @Override public Node root() { return root; }
 
@@ -127,6 +148,7 @@ final class AccountsGoalsView implements View {
         List<Account> list = app.getAccounts();
         accounts.getItems().setAll(list);
         netWorth.setText(list.isEmpty() ? "-" : app.getNetWorth().total().toString());
+        netWorth.getStyleClass().setAll("label", "big-number");
         goals.getItems().setAll(app.forecastGoals());
     }
 

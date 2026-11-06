@@ -36,7 +36,7 @@ final class BudgetsView implements View {
         category.getItems().setAll(List.of(Category.values()).stream()
                 .filter(c -> c != Category.INCOME && c != Category.TRANSFER && c != Category.UNCATEGORIZED).toList());
         category.setPromptText("Category");
-        Button set = new Button("Set budget");
+        Button set = Ui.primary("Set budget");
         set.setOnAction(e -> Ui.attempt(() -> {
             if (category.getValue() == null) throw new IllegalArgumentException("Choose a category");
             app.setBudget(category.getValue(), Ui.money(limit, "a limit"), month);
@@ -48,7 +48,7 @@ final class BudgetsView implements View {
         Button next = new Button("▶");
         next.setOnAction(e -> { month = month.plusMonths(1); refresh(); });
 
-        table.getColumns().add(Ui.column("Category", s -> s.budget().category(), 140));
+        table.getColumns().add(Ui.column("Category", s -> Ui.pretty(s.budget().category()), 140));
         table.getColumns().add(Ui.column("Spent", BudgetStatus::spent, 110));
         table.getColumns().add(Ui.column("Limit", s -> s.budget().limit(), 110));
         table.getColumns().add(Ui.column("Left", BudgetStatus::remaining, 110));
@@ -74,10 +74,15 @@ final class BudgetsView implements View {
         VBox.setVgrow(table, Priority.ALWAYS);
 
         root = Ui.page(Ui.row(prev, monthLabel, next), table,
-                Ui.row(category, limit, set, Ui.muted("You get a warning at 80% and when you go over.")));
+                Ui.card(Ui.heading("Set a monthly limit"), Ui.form(category, limit, set),
+                        Ui.muted("You get a warning at 80% and an alert when you go over.")));
     }
 
     @Override public String title() { return "Budgets"; }
+
+    @Override public String subtitle() { return "Monthly limits with warnings at 80% and when you go over"; }
+
+    @Override public String icon() { return Icons.BUDGET; }
 
     @Override public Node root() { return root; }
 

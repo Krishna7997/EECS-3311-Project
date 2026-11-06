@@ -31,14 +31,13 @@ final class ReportView implements View {
     private final Label narrativeSource = Ui.muted("");
     private final VBox details = new VBox(4);
     private final PieChart pie = new PieChart();
-    private final Button generate = new Button("Generate summary");
+    private final Button generate = Ui.primary("Generate summary");
     private YearMonth month;
 
     ReportView(MapleCfoFacade app) {
         this.app = app;
         this.month = YearMonth.from(app.today()).minusMonths(1);
         narrative.setWrapText(true);
-        pie.setLegendVisible(true);
         pie.setPrefHeight(320);
         pie.setAnimated(false);
         Button prev = new Button("◀");
@@ -48,17 +47,29 @@ final class ReportView implements View {
         generate.setOnAction(e -> generateAsync());
 
         GridPane figures = new GridPane();
-        figures.setHgap(12);
-        figures.add(Ui.card(Ui.heading("Income"), income), 0, 0);
-        figures.add(Ui.card(Ui.heading("Spending"), spending), 1, 0);
-        figures.add(Ui.card(Ui.heading("Saved"), saved, rate), 2, 0);
+        figures.setHgap(16);
+        figures.add(Ui.stat("Income", income, null), 0, 0);
+        figures.add(Ui.stat("Spending", spending, null), 1, 0);
+        figures.add(Ui.stat("Saved", saved, rate), 2, 0);
+        for (int i = 0; i < 3; i++) {
+            javafx.scene.layout.ColumnConstraints c = new javafx.scene.layout.ColumnConstraints();
+            c.setPercentWidth(100.0 / 3);
+            figures.getColumnConstraints().add(c);
+        }
+        pie.setLegendVisible(false);
+        narrative.setStyle("-fx-font-size: 14.5px; -fx-line-spacing: 3px;");
 
         root = new ScrollPane(Ui.page(Ui.row(prev, monthLabel, next, generate), figures,
-                Ui.card(Ui.heading("Summary"), narrative, narrativeSource), pie, Ui.card(Ui.heading("Details"), details)));
+                Ui.card(Ui.heading("Summary"), narrative, narrativeSource),
+                Ui.card(Ui.heading("Where the money went"), pie), Ui.card(Ui.heading("Details"), details)));
         root.setFitToWidth(true);
     }
 
     @Override public String title() { return "Monthly Report"; }
+
+    @Override public String subtitle() { return "A summary of any month, written by the AI when available"; }
+
+    @Override public String icon() { return Icons.REPORT; }
 
     @Override public Node root() { return root; }
 
@@ -96,7 +107,7 @@ final class ReportView implements View {
                 : "Written from a template (no AI available or the AI text could not be verified).");
         pie.getData().clear();
         for (Map.Entry<Category, Money> e : r.spendingByCategory().entrySet()) {
-            pie.getData().add(new PieChart.Data(e.getKey().name() + " " + e.getValue(), e.getValue().getAmount().doubleValue()));
+            pie.getData().add(new PieChart.Data(Ui.pretty(e.getKey()) + " " + e.getValue(), e.getValue().getAmount().doubleValue()));
         }
         details.getChildren().setAll(
                 new Label(r.transactionCount() + " transactions. Spending changed by " + r.spendingChange()

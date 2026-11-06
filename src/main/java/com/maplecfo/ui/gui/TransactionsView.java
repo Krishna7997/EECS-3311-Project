@@ -40,7 +40,7 @@ final class TransactionsView implements View {
         this.app = app;
         this.month = YearMonth.from(app.today());
 
-        Button importBtn = new Button("Import CSV…");
+        Button importBtn = Ui.primary("Import CSV…");
         importBtn.setOnAction(e -> chooseAndImport(importBtn.getScene().getWindow()));
         accountId.setText("chequing");
 
@@ -54,7 +54,7 @@ final class TransactionsView implements View {
         table.getColumns().add(Ui.column("Date", Transaction::getDate, 100));
         table.getColumns().add(Ui.column("Description", Transaction::getDescription, 320));
         table.getColumns().add(Ui.column("Amount", Transaction::getAmount, 110));
-        table.getColumns().add(Ui.column("Category", Transaction::getCategory, 130));
+        table.getColumns().add(Ui.column("Category", t -> Ui.pretty(t.getCategory()), 130));
         table.getColumns().add(Ui.column("Set by", t -> t.getCategorySource().name().toLowerCase(), 90));
         table.getColumns().add(Ui.column("Account", Transaction::getAccountId, 100));
         VBox.setVgrow(table, Priority.ALWAYS);
@@ -65,16 +65,23 @@ final class TransactionsView implements View {
         Button apply = new Button("Change category");
         apply.setOnAction(e -> Ui.attempt(this::recategorize));
 
+        status.setWrapText(true);
+        javafx.scene.layout.Region grow = new javafx.scene.layout.Region();
+        javafx.scene.layout.HBox.setHgrow(grow, Priority.ALWAYS);
         root = Ui.page(
-                Ui.row(new Label("Import into"), accountId, new Label("Bank format"), profile, importBtn),
-                status,
-                Ui.row(prev, monthLabel, next, search, reviewOnly),
+                Ui.card(Ui.heading("Import a bank CSV"),
+                        Ui.form(Ui.muted("Account"), accountId, Ui.muted("Bank format"), profile, importBtn), status),
+                Ui.row(prev, monthLabel, next, grow, search, reviewOnly),
                 table,
-                Ui.row(new Label("Selected transaction:"), newCategory, apply,
-                        Ui.muted("MapleCFO remembers the merchant for next time. Use Undo to revert.")));
+                Ui.card(Ui.form(Ui.muted("Selected transaction"), newCategory, apply,
+                        Ui.muted("MapleCFO remembers the merchant next time. Undo reverts it."))));
     }
 
     @Override public String title() { return "Transactions"; }
+
+    @Override public String subtitle() { return "Import bank CSVs and fix categories"; }
+
+    @Override public String icon() { return Icons.LIST; }
 
     @Override public Node root() { return root; }
 
