@@ -120,13 +120,78 @@ public class RegisteredAccountService {
         return contributionRepo.findByType(type);
     }
 
+    /** Most a person can take out under the Home Buyers' Plan (withdrawals after April 16, 2024). */
+    public static final Money HBP_LIMIT = Money.of(60000);
+    /** Lifelong Learning Plan: at most $10,000 a year and $20,000 in total. */
+    public static final Money LLP_YEAR_LIMIT = Money.of(10000);
+    public static final Money LLP_TOTAL_LIMIT = Money.of(20000);
+
+    /** HBP and LLP balances still to be paid back into the RRSP, with what is due this year. */
+    public List<RepaymentPlan> repaymentPlans(int year) {
+        List<ContributionRecord> rrsp = contributionRepo.findByType(AccountType.RRSP);
+        List<RepaymentPlan> plans = new java.util.ArrayList<>();
+        plan(rrsp, ContributionKind.HBP_WITHDRAWAL, ContributionKind.HBP_REPAYMENT, "Home Buyers' Plan", 15, year)
+                .ifPresent(plans::add);
+        plan(rrsp, ContributionKind.LLP_WITHDRAWAL, ContributionKind.LLP_REPAYMENT, "Lifelong Learning Plan", 10, year)
+                .ifPresent(plans::add);
+        return plans;
+    }
+
+    private static java.util.Optional<RepaymentPlan> plan(List<ContributionRecord> records, ContributionKind out,
+                                                          ContributionKind back, String program, int years, int year) {
+        Money withdrawn = Money.zero();
+        Money repaid = Money.zero();
+        int firstWithdrawal = Integer.MAX_VALUE;
+        java.util.Map<Integer, Money> perYear = new java.util.TreeMap<>();
+        for (ContributionRecord r : records) {
+            if (r.date().getYear() > year) continue;
+            if (r.kind() == out) {
+                withdrawn = withdrawn.plus(r.amount());
+                firstWithdrawal = Math.min(firstWithdrawal, r.date().getYear());
+                perYear.merge(r.date().getYear(), r.amount(), Money::plus);
+            } else if (r.kind() == back) {
+                repaid = repaid.plus(r.amount());
+            }
+        }
+        if (!withdrawn.isPositive()) return java.util.Optional.empty();
+        int start;
+        if (out == ContributionKind.HBP_WITHDRAWAL) {
+            // normally the second year after the withdrawal; deferred by 3 years for 2022-2025 withdrawals
+            start = firstWithdrawal + ((firstWithdrawal >= 2022 && firstWithdrawal <= 2025) ? 5 : 2);
+        } else {
+            start = firstWithdrawal + 5; // simplified: LLP repayments start no later than the 5th year after
+        }
+        Money yearly = withdrawn.dividedBy(years);
+        Money due = Money.zero();
+        if (year >= start) {
+            Money required = yearly.times(Math.min(years, year - start + 1)).min(withdrawn);
+            due = required.minus(repaid).max(Money.zero());
+        }
+        List<String> warnings = new java.util.ArrayList<>();
+        if (out == ContributionKind.HBP_WITHDRAWAL && withdrawn.isGreaterThan(HBP_LIMIT)) {
+            warnings.add("More than the " + HBP_LIMIT + " Home Buyers' Plan limit was taken out; the extra is taxed as income.");
+        }
+        if (out == ContributionKind.LLP_WITHDRAWAL) {
+            perYear.forEach((y, m) -> {
+                if (m.isGreaterThan(LLP_YEAR_LIMIT)) {
+                    warnings.add("More than " + LLP_YEAR_LIMIT + " was taken out under the LLP in " + y + ".");
+                }
+            });
+            if (withdrawn.isGreaterThan(LLP_TOTAL_LIMIT)) {
+                warnings.add("More than the " + LLP_TOTAL_LIMIT + " Lifelong Learning Plan total was taken out.");
+            }
+        }
+        return java.util.Optional.of(new RepaymentPlan(program, withdrawn, repaid,
+                withdrawn.minus(repaid).max(Money.zero()), start, years, yearly, due, warnings));
+    }
+
     /** Contributions and withdrawals logged this calendar year: [contributed, withdrawn]. */
     public Money[] yearTotals(AccountType type, int year) {
         Money in = Money.zero();
         Money out = Money.zero();
         for (ContributionRecord r : contributionRepo.findByType(type)) {
             if (r.date().getYear() != year) continue;
-            if (r.kind() == com.maplecfo.domain.ContributionKind.WITHDRAWAL) out = out.plus(r.amount());
+            if (r.kind().isWithdrawal()) out = out.plus(r.amount());
             else in = in.plus(r.amount());
         }
         return new Money[] {in, out};
@@ -205,7 +270,7 @@ public class RegisteredAccountService {
     private static Money withdrawalsIn(List<ContributionRecord> records, int year) {
         Money w = Money.zero();
         for (ContributionRecord r : records) {
-            if (r.kind() == ContributionKind.WITHDRAWAL && r.date().getYear() == year) w = w.plus(r.amount());
+            if (r.kind().isWithdrawal() && r.date().getYear() == year) w = w.plus(r.amount());
         }
         return w;
     }

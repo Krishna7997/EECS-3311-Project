@@ -34,6 +34,15 @@ public class RrspRoomEstimator {
     }
 
     public Estimate estimate(int year) {
+        return estimate(year, Money.zero());
+    }
+
+    /**
+     * @param pensionAdjustment last year's pension adjustment (T4 box 52), subtracted from the room;
+     *                          zero for people without a workplace pension plan
+     */
+    public Estimate estimate(int year, Money pensionAdjustment) {
+        Money pa = pensionAdjustment == null ? Money.zero() : pensionAdjustment;
         ContributionLimits l = limits.currentLimits();
         TreeMap<Integer, Money> dollar = new TreeMap<>(l.rrspDollarLimits());
         Map.Entry<Integer, Money> max = dollar.floorEntry(year) != null ? dollar.floorEntry(year) : dollar.firstEntry();
@@ -55,10 +64,11 @@ public class RrspRoomEstimator {
         }
         Money annual = months.size() >= 12 ? income : income.dividedBy(months.size()).times(12);
         Money eighteen = annual.times(l.rrspEarnedIncomeRate());
-        Money est = eighteen.min(yearlyMax);
+        Money est = eighteen.min(yearlyMax).minus(pa).max(Money.zero());
         String how = "18% of " + annual + (months.size() < 12 ? " (" + months.size() + " months of " + incomeYear
                 + " pay scaled to a year)" : " (" + incomeYear + " pay)") + " = " + eighteen + ", capped at "
-                + yearlyMax + ". Pay deposits are after tax, so your real room is likely higher; confirm with "
+                + yearlyMax + (pa.isPositive() ? ", minus your " + pa + " pension adjustment" : "")
+                + ". Pay deposits are after tax, so your real room is likely higher; confirm with "
                 + "your CRA Notice of Assessment.";
         return new Estimate(Status.ESTIMATED, year, annual, months.size(), yearlyMax, est, how);
     }

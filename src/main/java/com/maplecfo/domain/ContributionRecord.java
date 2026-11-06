@@ -17,5 +17,8 @@ public record ContributionRecord(AccountType accountType, LocalDate date, Money 
         if (!amount.isPositive()) {
             throw new IllegalArgumentException("Amount must be greater than zero");
         }
+        if (!kind.allowedFor(accountType)) {
+            throw new IllegalArgumentException(kind.label() + " is not possible for a " + accountType);
+        }
     }
 }

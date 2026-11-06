@@ -100,12 +100,35 @@ final class TransactionCommands {
             @Option(names = {"-m", "--month"}, description = "Month, e.g. 2026-10") YearMonth month;
             @Option(names = "--review", description = "Only transactions that need a category") boolean review;
             @Option(names = "--limit", defaultValue = "25") int limit;
+            @Option(names = "--from", description = "From date, e.g. 2026-09-01 (instead of a month)") java.time.LocalDate from;
+            @Option(names = "--to", description = "To date") java.time.LocalDate to;
+            @Option(names = {"-a", "--account"}, description = "Only this account") String account;
+            @Option(names = {"-c", "--category"}, description = "Only this category: ${COMPLETION-CANDIDATES}") com.maplecfo.domain.Category category;
+            @Option(names = "--in", description = "Only money in") boolean in;
+            @Option(names = "--out", description = "Only money out") boolean out;
+            @Option(names = "--min", description = "Smallest amount") com.maplecfo.domain.Money min;
+            @Option(names = "--max", description = "Largest amount") com.maplecfo.domain.Money max;
 
             @Override
             public Integer call() {
-                List<Transaction> txs = review ? parent.root.facade().getTransactionsNeedingReview()
-                        : parent.root.facade().getTransactions(month);
-                print(parent.root, spec.commandLine().getOut(), txs, limit);
+                com.maplecfo.services.TransactionFilter f = com.maplecfo.services.TransactionFilter.all()
+                        .account(account).category(category).amounts(min, max)
+                        .direction(in ? com.maplecfo.services.TransactionFilter.Direction.IN
+                                : out ? com.maplecfo.services.TransactionFilter.Direction.OUT : null);
+                List<Transaction> txs;
+                if (review) {
+                    txs = f.apply(parent.root.facade().getTransactionsNeedingReview());
+                } else if (from != null || to != null) {
+                    txs = parent.root.facade().findTransactions(f.between(from, to));
+                } else if (month != null) {
+                    txs = parent.root.facade().findTransactions(f.between(month.atDay(1), month.atEndOfMonth()));
+                } else {
+                    txs = parent.root.facade().findTransactions(f);
+                }
+                java.io.PrintWriter pw = spec.commandLine().getOut();
+                print(parent.root, pw, txs, limit);
+                com.maplecfo.domain.Money[] t = com.maplecfo.services.TransactionFilter.totals(txs);
+                pw.println(txs.size() + " transactions  ·  money in " + t[0] + "  ·  money out " + t[1]);
                 return 0;
             }
         }

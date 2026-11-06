@@ -154,4 +154,68 @@ class SavingsAndRoomTest {
                 ContributionKind.WITHDRAWAL));
         assertEquals(Money.zero(), app.getContributionRoom(AccountType.RRSP, 2026).available());
     }
+
+    // ------------------------------------------------------------------ HBP / LLP / FHSA transfer / pension adjustment
+
+    @Test
+    void homeBuyersPlanIsRepaidOverFifteenYearsWithoutUsingRoom() {
+        app.saveProfile(new UserProfile(2003, "ON", 2003, null, Money.of(5000), null));
+        app.recordContribution(new ContributionRecord(AccountType.RRSP, LocalDate.of(2020, 6, 1), Money.of(15000),
+                ContributionKind.HBP_WITHDRAWAL));
+        app.recordContribution(new ContributionRecord(AccountType.RRSP, LocalDate.of(2026, 2, 1), Money.of(1000),
+                ContributionKind.HBP_REPAYMENT));
+        assertEquals(Money.of(5000), app.getContributionRoom(AccountType.RRSP, 2026).available(),
+                "neither the HBP withdrawal nor the repayment uses room");
+
+        RepaymentPlan p = app.getRepaymentPlans().get(0);
+        assertEquals("Home Buyers' Plan", p.program());
+        assertEquals(2022, p.firstRepaymentYear(), "second year after a 2020 withdrawal");
+        assertEquals(Money.of(1000), p.yearlyPayment());
+        assertEquals(Money.of(14000), p.balance());
+        assertEquals(Money.of(4000), p.dueThisYear(), "2022-2026 = 5 payments of $1,000, $1,000 paid");
+        assertTrue(p.summary(2026).contains("Repay $4,000.00 for 2026"));
+    }
+
+    @Test
+    void hbpWithdrawalsIn2022To2025StartLaterAndTheLimitIsChecked() {
+        app.saveProfile(new UserProfile(2003, "ON", 2003, null, Money.of(5000), null));
+        app.recordContribution(new ContributionRecord(AccountType.RRSP, LocalDate.of(2024, 6, 1), Money.of(65000),
+                ContributionKind.HBP_WITHDRAWAL));
+        RepaymentPlan p = app.getRepaymentPlans().get(0);
+        assertEquals(2029, p.firstRepaymentYear(), "temporary 3-year deferral");
+        assertEquals(Money.zero(), p.dueThisYear());
+        assertFalse(p.warnings().isEmpty(), "over the $60,000 limit");
+    }
+
+    @Test
+    void kindsOnlyWhereTheyApply() {
+        assertThrows(IllegalArgumentException.class, () -> new ContributionRecord(AccountType.TFSA, LocalDate.now(),
+                Money.of(100), ContributionKind.HBP_WITHDRAWAL));
+        assertThrows(IllegalArgumentException.class, () -> new ContributionRecord(AccountType.RRSP, LocalDate.now(),
+                Money.of(100), ContributionKind.TRANSFER_TO_RRSP));
+    }
+
+    @Test
+    void fhsaToRrspTransferLeavesTheFhsaWithoutRestoringRoom() {
+        app.saveProfile(new UserProfile(2003, "ON", 2003, null, Money.of(5000), 2026));
+        app.recordContribution(new ContributionRecord(AccountType.FHSA, LocalDate.of(2026, 1, 10), Money.of(8000),
+                ContributionKind.CONTRIBUTION));
+        app.recordContribution(new ContributionRecord(AccountType.FHSA, LocalDate.of(2026, 6, 1), Money.of(3000),
+                ContributionKind.TRANSFER_TO_RRSP));
+        assertEquals(Money.zero(), app.getContributionRoom(AccountType.FHSA, 2026).available());
+        assertEquals(Money.of(5000), app.getContributionRoom(AccountType.RRSP, 2026).available(),
+                "the transfer does not use RRSP room");
+        assertEquals(Money.of(3000), app.getContributionTotals(AccountType.FHSA, 2026)[1]);
+    }
+
+    @Test
+    void pensionAdjustmentLowersTheRrspEstimateAndIsSaved() {
+        UserProfile p = new UserProfile(2003, "ON", 2003, null, null, null);
+        p.setPensionAdjustment(Money.of(3000));
+        app.saveProfile(p);
+        assertEquals(Money.of(3000), app.getProfile().getPensionAdjustment(), "stored in the database");
+        var est = app.estimateRrspRoom(2027);
+        assertEquals(Money.of("5164.80"), est.estimate(), "18% of $45,360 = $8,164.80, minus $3,000");
+        assertTrue(est.explanation().contains("pension adjustment"));
+    }
 }

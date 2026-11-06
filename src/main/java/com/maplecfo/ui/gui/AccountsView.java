@@ -111,9 +111,8 @@ final class AccountsView implements View {
                     Ui.stat("Taken out this year", Ui.big(totals[1].toString()), null)));
             TableView<com.maplecfo.domain.ContributionRecord> rec = Ui.table("No contributions recorded yet.");
             rec.getColumns().add(Ui.column("Date", com.maplecfo.domain.ContributionRecord::date, 120));
-            rec.getColumns().add(Ui.column("What", r -> r.kind() == com.maplecfo.domain.ContributionKind.WITHDRAWAL
-                    ? "Withdrawal" : "Contribution", 140));
-            rec.getColumns().add(Ui.moneyColumn("Amount", r -> r.kind() == com.maplecfo.domain.ContributionKind.WITHDRAWAL
+            rec.getColumns().add(Ui.column("What", r -> r.kind().label(), 220));
+            rec.getColumns().add(Ui.moneyColumn("Amount", r -> r.kind().isWithdrawal()
                     ? r.amount().negate() : r.amount(), 140, false));
             rec.getItems().setAll(app.getContributions(a.getType()));
             Ui.fitRows(rec, 8);

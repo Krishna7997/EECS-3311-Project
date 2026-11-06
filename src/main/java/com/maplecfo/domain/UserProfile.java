@@ -16,6 +16,7 @@ public class UserProfile {
     private Money annualIncome;
     private Money rrspDeductionLimit;
     private Integer fhsaOpenedYear;
+    private Money pensionAdjustment;
 
     public UserProfile() {
     }
@@ -59,5 +60,8 @@ public class UserProfile {
     public Money getRrspDeductionLimit() { return rrspDeductionLimit; }
     public void setRrspDeductionLimit(Money rrspDeductionLimit) { this.rrspDeductionLimit = rrspDeductionLimit; }
     public Integer getFhsaOpenedYear() { return fhsaOpenedYear; }
+    /** Pension adjustment from last year's T4 (box 52); lowers RRSP room for people with a workplace pension. */
+    public Money getPensionAdjustment() { return pensionAdjustment; }
+    public void setPensionAdjustment(Money pensionAdjustment) { this.pensionAdjustment = pensionAdjustment; }
     public void setFhsaOpenedYear(Integer fhsaOpenedYear) { this.fhsaOpenedYear = fhsaOpenedYear; }
 }

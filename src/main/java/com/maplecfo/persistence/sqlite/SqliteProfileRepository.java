@@ -14,19 +14,23 @@ public class SqliteProfileRepository implements ProfileRepository {
 
     @Override
     public UserProfile load() {
-        return jdbc.query("SELECT * FROM profile WHERE id = 1", rs -> new UserProfile(
-                Jdbc.intOrNull(rs, "birth_year"), rs.getString("province"), Jdbc.intOrNull(rs, "resident_since_year"),
-                money(rs.getString("annual_income")), money(rs.getString("rrsp_deduction_limit")),
-                Jdbc.intOrNull(rs, "fhsa_opened_year"))).stream().findFirst().orElseGet(UserProfile::new);
+        return jdbc.query("SELECT * FROM profile WHERE id = 1", rs -> {
+            UserProfile p = new UserProfile(
+                    Jdbc.intOrNull(rs, "birth_year"), rs.getString("province"), Jdbc.intOrNull(rs, "resident_since_year"),
+                    money(rs.getString("annual_income")), money(rs.getString("rrsp_deduction_limit")),
+                    Jdbc.intOrNull(rs, "fhsa_opened_year"));
+            p.setPensionAdjustment(money(rs.getString("pension_adjustment")));
+            return p;
+        }).stream().findFirst().orElseGet(UserProfile::new);
     }
 
     @Override
     public void save(UserProfile p) {
         jdbc.update("""
                 INSERT OR REPLACE INTO profile (id, birth_year, province, resident_since_year, annual_income,
-                rrsp_deduction_limit, fhsa_opened_year) VALUES (1,?,?,?,?,?,?)""",
+                rrsp_deduction_limit, fhsa_opened_year, pension_adjustment) VALUES (1,?,?,?,?,?,?,?)""",
                 p.getBirthYear(), p.getProvince(), p.getResidentSinceYear(), text(p.getAnnualIncome()),
-                text(p.getRrspDeductionLimit()), p.getFhsaOpenedYear());
+                text(p.getRrspDeductionLimit()), p.getFhsaOpenedYear(), text(p.getPensionAdjustment()));
     }
 
     private static Money money(String s) {

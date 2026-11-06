@@ -73,6 +73,7 @@ Example session with the fake sample data:
 java -jar target/maplecfo.jar import sample-data/td_chequing_sample.csv -a chequing      # bank format detected automatically
 java -jar target/maplecfo.jar import sample-data/rbc_visa_sample.csv -a visa -p RBC         # or choose it with -p
 java -jar target/maplecfo.jar tx list --review
+java -jar target/maplecfo.jar tx list --from 2026-09-01 --to 2026-10-31 --category DINING --out   # filters combine
 # F03 net worth, F09 goals, F11 affordability
 java -jar target/maplecfo.jar account add "TD Chequing" CHEQUING 2500 --bank TD
 java -jar target/maplecfo.jar account add "RBC Visa" CREDIT_CARD 800 --bank RBC
@@ -89,6 +90,8 @@ java -jar target/maplecfo.jar profile set --birth-year 2003 --resident-since 201
 java -jar target/maplecfo.jar room
 java -jar target/maplecfo.jar room check TFSA 3000
 java -jar target/maplecfo.jar rrsp-estimate -y 2027
+java -jar target/maplecfo.jar room log RRSP 15000 --kind HBP_WITHDRAWAL --date 2026-05-01   # Home Buyers' Plan
+java -jar target/maplecfo.jar room                                                     # shows what to repay
 # F07 FIRE, F08 debt payoff
 java -jar target/maplecfo.jar fire --invested 10000 --save 15000 --spend 40000 --age 23
 java -jar target/maplecfo.jar debt add "RBC Visa" --balance 2400 --apr 20.99 --min 60

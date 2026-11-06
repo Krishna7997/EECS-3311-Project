@@ -41,7 +41,11 @@ final class RoomCommands implements Callable<Integer> {
             }
             ContributionRoom r = root.facade().getContributionRoom(t, y);
             out.println(t + " " + y + ": room " + r.limit() + ", used " + r.used() + ", available " + r.available()
-                    + (r.isOverContributed() ? "   OVER-CONTRIBUTED" : ""));
+                    + (r.isOverContributed() ? "   OVER-CONTRIBUTED" : r.isOverLimit() ? "   (within the $2,000 RRSP allowance)" : ""));
+        }
+        for (com.maplecfo.planning.RepaymentPlan p : root.facade().getRepaymentPlans()) {
+            out.println(p.summary(y));
+            p.warnings().forEach(w -> out.println("  Warning: " + w));
         }
         return 0;
     }
@@ -77,14 +81,15 @@ final class RoomCommands implements Callable<Integer> {
         @Parameters(index = "0") AccountType type;
         @Parameters(index = "1") Money amount;
         @Option(names = "--withdrawal", description = "This was a withdrawal") boolean withdrawal;
+        @Option(names = "--kind", description = "Instead of --withdrawal: ${COMPLETION-CANDIDATES}") ContributionKind kind;
         @Option(names = "--date", description = "Date (default: today), e.g. 2026-01-15") LocalDate date;
 
         @Override
         public Integer call() {
             LocalDate d = date != null ? date : parent.root.facade().today();
-            ContributionKind kind = withdrawal ? ContributionKind.WITHDRAWAL : ContributionKind.CONTRIBUTION;
-            parent.root.facade().recordContribution(new ContributionRecord(type, d, amount, kind));
-            spec.commandLine().getOut().println("Recorded " + kind.name().toLowerCase() + " of " + amount + " to " + type + " on " + d + ".");
+            ContributionKind k = kind != null ? kind : withdrawal ? ContributionKind.WITHDRAWAL : ContributionKind.CONTRIBUTION;
+            parent.root.facade().recordContribution(new ContributionRecord(type, d, amount, k));
+            spec.commandLine().getOut().println("Recorded " + k.label().toLowerCase() + " of " + amount + " to " + type + " on " + d + ".");
             return 0;
         }
     }
@@ -125,6 +130,7 @@ final class RoomCommands implements Callable<Integer> {
             @Option(names = "--resident-since", description = "Year you became a resident of Canada") Integer residentSince;
             @Option(names = "--rrsp-limit", description = "RRSP deduction limit from your CRA Notice of Assessment") Money rrspLimit;
             @Option(names = "--fhsa-opened", description = "Year you opened your FHSA") Integer fhsaOpened;
+            @Option(names = "--pension-adjustment", description = "Last year's pension adjustment (T4 box 52)") Money pensionAdjustment;
 
             @Override
             public Integer call() {
@@ -134,6 +140,7 @@ final class RoomCommands implements Callable<Integer> {
                 if (residentSince != null) p.setResidentSinceYear(residentSince);
                 if (rrspLimit != null) p.setRrspDeductionLimit(rrspLimit);
                 if (fhsaOpened != null) p.setFhsaOpenedYear(fhsaOpened);
+                if (pensionAdjustment != null) p.setPensionAdjustment(pensionAdjustment);
                 parent.root.facade().saveProfile(p);
                 spec.commandLine().getOut().println("Profile saved.");
                 return 0;

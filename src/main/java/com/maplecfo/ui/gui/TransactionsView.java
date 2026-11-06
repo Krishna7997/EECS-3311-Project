@@ -4,6 +4,7 @@ import atlantafx.base.theme.Styles;
 import com.maplecfo.app.MapleCfoFacade;
 import com.maplecfo.domain.Account;
 import com.maplecfo.domain.Category;
+import com.maplecfo.domain.Money;
 import com.maplecfo.domain.Transaction;
 import com.maplecfo.importer.ColumnMapping;
 import com.maplecfo.importer.ImportResult;
@@ -48,6 +49,15 @@ final class TransactionsView implements View {
     private final VBox resultBox = new VBox();
     static final String ALL_ACCOUNTS = "All accounts";
     private final ComboBox<String> accountFilter = new ComboBox<>();
+    static final String ALL_CATEGORIES = "All categories";
+    private final ComboBox<String> categoryFilter = new ComboBox<>();
+    private final ComboBox<String> directionFilter = new ComboBox<>();
+    private final javafx.scene.control.DatePicker fromDate = new javafx.scene.control.DatePicker();
+    private final javafx.scene.control.DatePicker toDate = new javafx.scene.control.DatePicker();
+    private final TextField minAmount = Ui.field("Min $");
+    private final TextField maxAmount = Ui.field("Max $");
+    private final Label totalsLabel = Ui.small("");
+    private boolean updatingFilters;
     private final StackPane body = new StackPane();
     private final VBox root;
     private YearMonth month;
@@ -79,10 +89,47 @@ final class TransactionsView implements View {
         });
         search.setPrefWidth(200);
         accountFilter.setValue(ALL_ACCOUNTS);
-        accountFilter.setOnAction(e -> refresh());
         search.textProperty().addListener((o, a, b) -> refresh());
 
-        HBox toolbar = new HBox(10, prev, monthLabel, next, new HBox(0, allBtn, reviewBtn), Ui.spacer(), accountFilter, search, importBtn);
+        HBox toolbar = new HBox(10, prev, monthLabel, next, new HBox(0, allBtn, reviewBtn), Ui.spacer(), search, importBtn);
+
+        // second row: filters (any combination); dates override the month
+        categoryFilter.getItems().add(ALL_CATEGORIES);
+        for (Category c : Category.values()) categoryFilter.getItems().add(Ui.pretty(c));
+        categoryFilter.setValue(ALL_CATEGORIES);
+        directionFilter.getItems().setAll("Money in and out", "Money in", "Money out");
+        directionFilter.setValue("Money in and out");
+        fromDate.setPromptText("From");
+        toDate.setPromptText("To");
+        fromDate.setPrefWidth(140);
+        toDate.setPrefWidth(140);
+        minAmount.setPrefWidth(90);
+        maxAmount.setPrefWidth(90);
+        Runnable changed = () -> { if (!updatingFilters) refresh(); };
+        accountFilter.valueProperty().addListener((o, x, y) -> changed.run());
+        categoryFilter.valueProperty().addListener((o, x, y) -> changed.run());
+        directionFilter.valueProperty().addListener((o, x, y) -> changed.run());
+        fromDate.valueProperty().addListener((o, x, y) -> changed.run());
+        toDate.valueProperty().addListener((o, x, y) -> changed.run());
+        minAmount.textProperty().addListener((o, x, y) -> changed.run());
+        maxAmount.textProperty().addListener((o, x, y) -> changed.run());
+        Button clear = Ui.flat("Clear filters");
+        clear.setOnAction(e -> {
+            updatingFilters = true;
+            accountFilter.setValue(ALL_ACCOUNTS);
+            categoryFilter.setValue(ALL_CATEGORIES);
+            directionFilter.setValue("Money in and out");
+            fromDate.setValue(null);
+            toDate.setValue(null);
+            minAmount.clear();
+            maxAmount.clear();
+            search.clear();
+            updatingFilters = false;
+            refresh();
+        });
+        javafx.scene.layout.FlowPane filters = new javafx.scene.layout.FlowPane(8, 8, Ui.small("Filter:"),
+                accountFilter, categoryFilter, directionFilter, fromDate, toDate, minAmount, maxAmount, clear);
+        filters.setAlignment(Pos.CENTER_LEFT);
         toolbar.setAlignment(Pos.CENTER_LEFT);
 
         table.getColumns().add(Ui.column("Date", Transaction::getDate, 110));
@@ -95,7 +142,7 @@ final class TransactionsView implements View {
         Label hint = Ui.small("Change a category with the drop-down in the table. MapleCFO remembers the merchant "
                 + "for next time, and Undo at the top reverts it.");
         resultBox.managedProperty().bind(javafx.beans.binding.Bindings.isNotEmpty(resultBox.getChildren()));
-        root = Ui.page(toolbar, resultBox, body, hint);
+        root = Ui.page(toolbar, filters, resultBox, body, Ui.row(totalsLabel, Ui.spacer()), hint);
     }
 
     @Override public String id() { return Nav.TRANSACTIONS; }
@@ -120,29 +167,59 @@ final class TransactionsView implements View {
             return;
         }
         String q = search.getText() == null ? "" : search.getText().trim();
-        List<Transaction> rows;
-        if (reviewBtn.isSelected()) {
-            rows = app.getTransactionsNeedingReview();
-            table.setPlaceholder(Ui.muted("Every transaction has a category."));
-        } else if (!q.isEmpty()) {
-            rows = app.searchTransactions(q);
-            table.setPlaceholder(Ui.muted("Nothing matches \"" + q + "\"."));
-        } else {
-            rows = app.getTransactions(month);
-            table.setPlaceholder(Ui.muted("No transactions in " + monthLabel.getText() + ". Use ‹ › to change month."));
-        }
+        boolean dates = fromDate.getValue() != null || toDate.getValue() != null;
+
+        // keep the account list up to date without triggering another refresh
+        updatingFilters = true;
         List<String> ids = new ArrayList<>();
         ids.add(ALL_ACCOUNTS);
         app.searchTransactions("").stream().map(Transaction::getAccountId).distinct().sorted().forEach(ids::add);
         String chosen = accountFilter.getValue();
         if (!accountFilter.getItems().equals(ids)) accountFilter.getItems().setAll(ids);
         accountFilter.setValue(ids.contains(chosen) ? chosen : ALL_ACCOUNTS);
-        if (!ALL_ACCOUNTS.equals(accountFilter.getValue())) {
-            String acc = accountFilter.getValue();
-            rows = rows.stream().filter(t -> t.getAccountId().equals(acc)).toList();
+        updatingFilters = false;
+
+        com.maplecfo.services.TransactionFilter f = com.maplecfo.services.TransactionFilter.all().text(q);
+        if (!ALL_ACCOUNTS.equals(accountFilter.getValue())) f = f.account(accountFilter.getValue());
+        if (!ALL_CATEGORIES.equals(categoryFilter.getValue())) {
+            String wanted = categoryFilter.getValue();
+            f = f.category(java.util.Arrays.stream(Category.values()).filter(c -> Ui.pretty(c).equals(wanted))
+                    .findFirst().orElse(null));
         }
+        if ("Money in".equals(directionFilter.getValue())) f = f.direction(com.maplecfo.services.TransactionFilter.Direction.IN);
+        if ("Money out".equals(directionFilter.getValue())) f = f.direction(com.maplecfo.services.TransactionFilter.Direction.OUT);
+        f = f.amounts(amountOrNull(minAmount), amountOrNull(maxAmount));
+
+        List<Transaction> rows;
+        String where;
+        if (reviewBtn.isSelected()) {
+            rows = f.apply(app.getTransactionsNeedingReview());
+            where = "needing a category";
+        } else if (dates) {
+            rows = app.findTransactions(f.between(fromDate.getValue(), toDate.getValue()));
+            where = (fromDate.getValue() != null ? "from " + fromDate.getValue() : "") + " "
+                    + (toDate.getValue() != null ? "to " + toDate.getValue() : "");
+        } else if (!q.isEmpty()) {
+            rows = app.findTransactions(f);
+            where = "matching \"" + q + "\" (all dates)";
+        } else {
+            rows = app.findTransactions(f.between(month.atDay(1), month.atEndOfMonth()));
+            where = "in " + monthLabel.getText();
+        }
+        table.setPlaceholder(Ui.muted("No transactions " + where.trim() + " match these filters."));
         table.getItems().setAll(rows);
         body.getChildren().setAll(table);
+        Money[] tot = com.maplecfo.services.TransactionFilter.totals(rows);
+        totalsLabel.setText(rows.size() + (rows.size() == 1 ? " transaction " : " transactions ") + where.trim()
+                + "  ·  money in " + tot[0] + "  ·  money out " + tot[1]);
+    }
+
+    private static Money amountOrNull(TextField f) {
+        try {
+            return f.getText() == null || f.getText().isBlank() ? null : Ui.money(f, "an amount");
+        } catch (IllegalArgumentException e) {
+            return null; // ignore while the user is still typing
+        }
     }
 
     private TableColumn<Transaction, Transaction> categoryColumn() {

@@ -86,7 +86,7 @@ final class RegisteredView implements View {
         Label available = Ui.big(r.available().toString());
         Label chip = r.isOverContributed() ? Ui.chip("Over the limit", "bad")
                 : r.isOverLimit() ? Ui.chip("In $2,000 allowance", "warn") : Ui.chip("Room left", "ok");
-        Button record = Ui.primary("Add a contribution", Icons.PLUS);
+        Button record = Ui.primary("Contribution / withdrawal", Icons.PLUS);
         record.setOnAction(e -> recordDialog(t));
         Button history = Ui.flat("History");
         history.setOnAction(e -> historyPopup(t));
@@ -95,6 +95,12 @@ final class RegisteredView implements View {
                 new VBox(0, available, Ui.muted("available in " + year)),
                 Ui.small("Limit " + r.limit() + " · used " + r.used()),
                 Ui.small("This year: put in " + totals[0] + " · taken out " + totals[1]), Ui.row(record, history));
+        if (t == AccountType.RRSP) {
+            for (com.maplecfo.planning.RepaymentPlan p : app.getRepaymentPlans()) {
+                card.getChildren().add(Ui.banner(p.summary(year), p.dueThisYear().isPositive() ? "warn" : "info"));
+                p.warnings().forEach(w -> card.getChildren().add(Ui.banner(w, "bad")));
+            }
+        }
         if (t == AccountType.TFSA && totals[1].isPositive() && !r.isOverLimit()) {
             card.getChildren().add(Ui.small("The " + totals[1] + " you took out comes back as room on January 1, "
                     + (year + 1) + "."));
@@ -112,9 +118,8 @@ final class RegisteredView implements View {
     private void historyPopup(AccountType t) {
         javafx.scene.control.TableView<ContributionRecord> table = Ui.table("Nothing recorded yet.");
         table.getColumns().add(Ui.column("Date", ContributionRecord::date, 120));
-        table.getColumns().add(Ui.column("What", r -> r.kind() == ContributionKind.WITHDRAWAL ? "Withdrawal"
-                : "Contribution", 140));
-        table.getColumns().add(Ui.moneyColumn("Amount", r -> r.kind() == ContributionKind.WITHDRAWAL
+        table.getColumns().add(Ui.column("What", r -> r.kind().label(), 220));
+        table.getColumns().add(Ui.moneyColumn("Amount", r -> r.kind().isWithdrawal()
                 ? r.amount().negate() : r.amount(), 140, false));
         table.getItems().setAll(app.getContributions(t));
         Ui.fitRows(table, 10);
@@ -128,6 +133,8 @@ final class RegisteredView implements View {
         TextField resident = Ui.field("e.g. 2010");
         TextField rrsp = Ui.field("e.g. 5,400");
         TextField fhsa = Ui.field("Leave empty if you don't have one");
+        TextField pension = Ui.field("Leave empty if you have no workplace pension");
+        if (p.getPensionAdjustment() != null) pension.setText(p.getPensionAdjustment().getAmount().toPlainString());
         if (p.getBirthYear() != null) birth.setText(p.getBirthYear().toString());
         if (p.getResidentSinceYear() != null) resident.setText(p.getResidentSinceYear().toString());
         if (p.getRrspDeductionLimit() != null) rrsp.setText(p.getRrspDeductionLimit().getAmount().toPlainString());
@@ -148,7 +155,9 @@ final class RegisteredView implements View {
                 .add("Birth year", birth, null)
                 .add("Year you became a resident of Canada", resident, "If you were born here, use your birth year.")
                 .add("RRSP deduction limit ($)", rrspBox, "Shown on your latest CRA Notice of Assessment.")
-                .add("Year you opened your FHSA", fhsa, null);
+                .add("Year you opened your FHSA", fhsa, null)
+                .add("Pension adjustment ($)", pension, "Box 52 of last year's T4, only if you have a workplace "
+                        + "pension. Used when estimating RRSP room.");
         Button save = Ui.primary("Save details");
         Label saved = Ui.small("");
         save.setOnAction(e -> Ui.attempt(() -> {
@@ -157,6 +166,7 @@ final class RegisteredView implements View {
             u.setResidentSinceYear(Ui.year(resident, "the year you became a resident"));
             u.setRrspDeductionLimit(rrsp.getText().isBlank() ? null : Ui.money(rrsp, "the RRSP deduction limit"));
             u.setFhsaOpenedYear(Ui.year(fhsa, "the FHSA year"));
+            u.setPensionAdjustment(pension.getText().isBlank() ? null : Ui.money(pension, "the pension adjustment"));
             app.saveProfile(u);
             refresh();
         }));
@@ -170,7 +180,13 @@ final class RegisteredView implements View {
     void recordDialog(AccountType t) {
         TextField amount = Ui.field("e.g. 500");
         DatePicker date = new DatePicker(app.today());
-        CheckBox withdrawal = new CheckBox("This was a withdrawal");
+        javafx.scene.control.ComboBox<ContributionKind> kind = new javafx.scene.control.ComboBox<>();
+        for (ContributionKind k : ContributionKind.values()) if (k.allowedFor(t)) kind.getItems().add(k);
+        kind.setValue(ContributionKind.CONTRIBUTION);
+        kind.setConverter(new javafx.util.StringConverter<>() {
+            @Override public String toString(ContributionKind k) { return k == null ? "" : k.label(); }
+            @Override public ContributionKind fromString(String s) { return null; }
+        });
         // the room check happens while typing, so there is no separate "check" step
         javafx.scene.control.Label preview = new javafx.scene.control.Label();
         javafx.beans.property.SimpleStringProperty okText = new javafx.beans.property.SimpleStringProperty("Save");
@@ -188,9 +204,8 @@ final class RegisteredView implements View {
             }
             try {
                 Money m = Ui.money(amount, "an amount");
-                if (withdrawal.isSelected()) {
-                    preview.setText(t == AccountType.TFSA ? "Taking out " + m + " gives you that room back next year."
-                            : "Withdrawals don't give " + t + " room back.");
+                if (kind.getValue() != ContributionKind.CONTRIBUTION) {
+                    preview.setText(explainKind(t, kind.getValue(), m));
                     preview.getStyleClass().add("room-info");
                 } else {
                     ContributionCheck c = app.previewContribution(t, m);
@@ -225,17 +240,39 @@ final class RegisteredView implements View {
             }
         };
         amount.textProperty().addListener((o, a, b) -> update.run());
-        withdrawal.selectedProperty().addListener((o, a, b) -> update.run());
+        kind.valueProperty().addListener((o, a, b) -> update.run());
         Ui.Form form = new Ui.Form()
+                .add("What happened?", kind, null)
                 .add("Amount ($)", amount, null)
                 .note(preview)
-                .add("Date", date, null)
-                .note(withdrawal);
-        Ui.dialog("Add a " + t + " contribution", "MapleCFO checks your room as you type.", form, okText, () -> {
+                .add("Date", date, null);
+        Ui.dialog("Add to your " + t + " history", "MapleCFO checks your room as you type.", form, okText, () -> {
             Money m = Ui.money(amount, "an amount");
             if (date.getValue() == null) throw new IllegalArgumentException("Choose the date.");
             app.recordContribution(new ContributionRecord(t, date.getValue(), m,
-                    withdrawal.isSelected() ? ContributionKind.WITHDRAWAL : ContributionKind.CONTRIBUTION));
+                    kind.getValue()));
         }, this::refresh);
+    }
+
+    /** What a withdrawal, repayment or transfer means, shown while the user types the amount. */
+    private String explainKind(AccountType t, ContributionKind k, Money m) {
+        int year = app.today().getYear();
+        return switch (k) {
+            case WITHDRAWAL -> switch (t) {
+                case TFSA -> "Tax-free. Taking out " + m + " gives you that room back on January 1, " + (year + 1) + ".";
+                case RRSP -> m + " is added to your income and taxed; the bank holds back some tax. RRSP room "
+                        + "does not come back.";
+                default -> "Taxed as income unless it is a qualifying withdrawal for your first home. FHSA room "
+                        + "does not come back.";
+            };
+            case HBP_WITHDRAWAL -> "Tax-free if it is for your first home (up to $60,000). You repay it into your "
+                    + "RRSP over 15 years; repayments don't use room.";
+            case LLP_WITHDRAWAL -> "Tax-free for full-time school (up to $10,000 a year, $20,000 total). You repay it "
+                    + "over 10 years.";
+            case HBP_REPAYMENT, LLP_REPAYMENT -> "A repayment doesn't use RRSP room. Remember to designate it as a "
+                    + "repayment on your tax return.";
+            case TRANSFER_TO_RRSP -> "Tax-free move to your RRSP that doesn't use RRSP room. FHSA room does not come back.";
+            case CONTRIBUTION -> "";
+        };
     }
 }

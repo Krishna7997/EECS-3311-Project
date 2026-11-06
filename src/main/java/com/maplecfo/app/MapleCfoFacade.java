@@ -219,9 +219,19 @@ public class MapleCfoFacade {
                 .sorted(java.util.Comparator.comparing(ContributionRecord::date).reversed()).toList();
     }
 
+    /** RRSP Home Buyers' Plan / Lifelong Learning Plan money still to be paid back. */
+    public List<com.maplecfo.planning.RepaymentPlan> getRepaymentPlans() {
+        return registered.repaymentPlans(today().getYear());
+    }
+
     /** This year's [contributed, withdrawn] for one registered account type. */
     public Money[] getContributionTotals(AccountType t, int year) {
         return registered.yearTotals(t, year);
+    }
+
+    /** Transactions matching a filter (date range, account, category, in/out, amount, text), newest first. */
+    public List<Transaction> findTransactions(com.maplecfo.services.TransactionFilter filter) {
+        return filter.apply(txService.findAll());
     }
 
     /** All imported transactions of one account, newest first. */
@@ -451,7 +461,7 @@ public class MapleCfoFacade {
     }
 
     public com.maplecfo.planning.RrspRoomEstimator.Estimate estimateRrspRoom(int year) {
-        return rrspEstimator.estimate(year);
+        return rrspEstimator.estimate(year, getProfile().getPensionAdjustment());
     }
 
     // ---------------------------------------------------------- F12 monthly summary

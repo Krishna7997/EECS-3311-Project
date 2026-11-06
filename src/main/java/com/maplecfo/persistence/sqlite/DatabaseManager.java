@@ -107,6 +107,7 @@ public class DatabaseManager {
             for (String sql : ddl) {
                 s.execute(sql);
             }
+            addColumnIfMissing(s, "profile", "pension_adjustment", "TEXT");
         } catch (SQLException e) {
             throw new PersistenceException("Could not create the database tables", e);
         }
@@ -114,5 +115,15 @@ public class DatabaseManager {
 
     public String getUrl() {
         return url;
+    }
+
+    /** Adds a column to a table made by an older version of MapleCFO (keeps the user's data). */
+    private static void addColumnIfMissing(Statement s, String table, String column, String type) throws SQLException {
+        try (var rs = s.executeQuery("PRAGMA table_info(" + table + ")")) {
+            while (rs.next()) {
+                if (rs.getString("name").equalsIgnoreCase(column)) return;
+            }
+        }
+        s.execute("ALTER TABLE " + table + " ADD COLUMN " + column + " " + type);
     }
 }
