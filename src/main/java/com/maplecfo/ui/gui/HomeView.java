@@ -173,15 +173,11 @@ final class HomeView implements View {
     }
 
     private Node tiles() {
-        YearMonth m = YearMonth.from(app.today());
-        Money spent = Money.zero();
-        Money income = Money.zero();
-        for (Transaction t : app.getTransactions(m)) {
-            if (t.getCategory() == Category.TRANSFER) continue;
-            if (t.isExpense()) spent = spent.plus(t.getAmount().abs());
-            else income = income.plus(t.getAmount());
-        }
+        java.time.LocalDate today = app.today();
+        YearMonth m = YearMonth.from(today);
         String monthName = m.getMonth().getDisplayName(TextStyle.FULL, Locale.CANADA);
+        com.maplecfo.reports.PeriodSummary month = app.summarize(m.atDay(1), today);
+        com.maplecfo.reports.PeriodSummary year = app.summarize(today.withDayOfYear(1), today);
         Label nw;
         Label nwNote;
         if (app.getAccounts().isEmpty()) {
@@ -192,17 +188,22 @@ final class HomeView implements View {
             nw = Ui.big(s.total().toString());
             nwNote = Ui.small("Assets " + s.assets() + " · Debts " + s.liabilities());
         }
-        Money saved = income.minus(spent);
-        Label savedLabel = Ui.big(saved.toString());
-        savedLabel.getStyleClass().add(saved.isNegative() ? "negative" : "positive");
-        String rate = income.isPositive()
-                ? Math.round(saved.getAmount().doubleValue() / income.getAmount().doubleValue() * 100) + "% of income"
-                : "No income yet in " + monthName;
         return new ResponsiveGrid(220, 16,
                 Ui.stat("Net worth", nw, nwNote),
-                Ui.stat("Spent in " + monthName, Ui.big(spent.toString()), Ui.small("Transfers are not counted")),
-                Ui.stat("Income in " + monthName, Ui.big(income.toString()), Ui.small("Pay and other money in")),
-                Ui.stat("Saved in " + monthName, savedLabel, Ui.small(rate)));
+                Ui.stat("Spent in " + monthName, Ui.big(month.spending().toString()),
+                        Ui.small("Income " + month.income() + " · transfers not counted")),
+                savedTile("Saved in " + monthName, month, "No income yet in " + monthName),
+                savedTile("Saved in " + today.getYear(), year, "No income recorded this year"));
+    }
+
+    /** Income minus spending, coloured, with the savings rate and what went to registered accounts. */
+    private static Node savedTile(String caption, com.maplecfo.reports.PeriodSummary p, String noIncome) {
+        Label value = Ui.big(p.saved().toString());
+        value.getStyleClass().add(p.saved().isNegative() ? "negative" : "positive");
+        String note = p.income().isPositive() ? p.savingsRatePercent() + "% of income" : noIncome;
+        if (p.toRegistered().isPositive()) note += " · " + p.toRegistered() + " to TFSA/RRSP/FHSA";
+        if (p.fromRegistered().isPositive()) note += " · " + p.fromRegistered() + " taken out";
+        return Ui.stat(caption, value, Ui.small(note));
     }
 
     /** Things the user should act on: AI or detector proposals, transactions to sort, budgets over the limit. */

@@ -159,3 +159,4 @@
 .room-ok { -fx-background-color: -color-success-subtle; -fx-text-fill: -color-success-fg; -fx-padding: 8 10 8 10; -fx-background-radius: 8; }
 .room-over { -fx-background-color: -color-danger-subtle; -fx-text-fill: -color-danger-fg; -fx-padding: 8 10 8 10; -fx-background-radius: 8; }
 .room-info { -fx-background-color: #eef4ff; -fx-text-fill: #1f3d7a; -fx-padding: 8 10 8 10; -fx-background-radius: 8; }
+.room-warn { -fx-background-color: -color-warning-subtle; -fx-text-fill: -color-warning-fg; -fx-padding: 8 10 8 10; -fx-background-radius: 8; }

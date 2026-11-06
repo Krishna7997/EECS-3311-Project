@@ -275,23 +275,35 @@ final class Ui {
      * {@code onDone} runs after a successful OK.
      */
     static void dialog(String title, String intro, Form form, String okText, Action action, Runnable onDone) {
+        dialog(title, intro, form, new javafx.beans.property.SimpleStringProperty(okText), action, onDone);
+    }
+
+    /** Same, with an OK label that can change while the user types (e.g. "Save anyway"). */
+    static void dialog(String title, String intro, Form form, javafx.beans.value.ObservableValue<String> okText,
+                       Action action, Runnable onDone) {
         popup(title, intro, form.grid, okText, popupError -> {
             action.run();
             return null;
-        }, onDone, false);
+        }, onDone, false, true);
+    }
+
+    /** A read-only pop-up (lists, history) with a single Close button. */
+    static void view(String title, String intro, Node body) {
+        popup(title, intro, body, new javafx.beans.property.SimpleStringProperty("Close"), e -> null, null, false, false);
     }
 
     /** A pop-up that shows its answer inside itself and stays open, e.g. "Check an amount". */
     static void check(String title, String intro, Form form, String okText, Check check) {
-        popup(title, intro, form.grid, okText, popupError -> check.run(), null, true);
+        popup(title, intro, form.grid, new javafx.beans.property.SimpleStringProperty(okText), popupError -> check.run(),
+                null, true, true);
     }
 
     private interface PopupAction {
         String run(Label error) throws Exception;
     }
 
-    private static void popup(String title, String intro, Node body, String okText, PopupAction action,
-                              Runnable onDone, boolean stayOpen) {
+    private static void popup(String title, String intro, Node body, javafx.beans.value.ObservableValue<String> okText,
+                              PopupAction action, Runnable onDone, boolean stayOpen, boolean showCancel) {
         Label heading = new Label(title);
         heading.getStyleClass().add(Styles.TITLE_3);
         heading.setWrapText(true);
@@ -309,9 +321,10 @@ final class Ui {
         answer.setVisible(false);
 
         Button cancel = secondary(stayOpen ? "Close" : "Cancel");
-        Button ok = primary(okText);
+        Button ok = primary("");
+        ok.textProperty().bind(okText);
         ok.setDefaultButton(true);
-        HBox buttons = new HBox(10, spacer(), cancel, ok);
+        HBox buttons = showCancel ? new HBox(10, spacer(), cancel, ok) : new HBox(10, spacer(), ok);
         buttons.setAlignment(Pos.CENTER_RIGHT);
 
         VBox card = new VBox(14, heading);
@@ -319,8 +332,9 @@ final class Ui {
         card.getChildren().addAll(body, error, answer, buttons);
         card.getStyleClass().addAll("card", "popup");
         card.setPadding(new Insets(24, 26, 20, 26));
-        card.setMaxWidth(480);
-        card.setPrefWidth(480);
+        double w = body instanceof TableView<?> || body.lookup(".table-view") != null ? 760 : 480;
+        card.setMaxWidth(w);
+        card.setPrefWidth(w);
         card.setMaxHeight(Region.USE_PREF_SIZE);
 
         Runnable close = () -> {
@@ -368,19 +382,22 @@ final class Ui {
 
     /** A short message in a pop-up with one OK button. */
     static void info(String msg) {
-        popup("MapleCFO", null, muted(msg), "OK", e -> null, null, false);
+        popup("MapleCFO", null, muted(msg), new javafx.beans.property.SimpleStringProperty("OK"), e -> null, null,
+                false, false);
     }
 
     static void error(Throwable e) {
         Label l = new Label(message(e));
         l.setWrapText(true);
         l.getStyleClass().add("form-error");
-        popup("Something needs your attention", null, l, "OK", x -> null, null, false);
+        popup("Something needs your attention", null, l, new javafx.beans.property.SimpleStringProperty("OK"),
+                x -> null, null, false, false);
     }
 
     /** Asks before doing something that cannot be undone; runs onYes only if the user agrees. */
     static void confirm(String msg, String okText, Runnable onYes) {
-        popup("Are you sure?", null, muted(msg), okText, e -> null, onYes, false);
+        popup("Are you sure?", null, muted(msg), new javafx.beans.property.SimpleStringProperty(okText), e -> null,
+                onYes, false, true);
     }
 
     /** Runs an action and shows any error in a pop-up instead of crashing. */

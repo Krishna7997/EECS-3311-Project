@@ -84,6 +84,8 @@ final class AccountsView implements View {
     }
 
     private Node actions(Account a) {
+        Button activity = Ui.flat("Activity");
+        activity.setOnAction(e -> activityPopup(a));
         Button update = Ui.flat("Update balance");
         update.setOnAction(e -> updateDialog(a));
         Button remove = Ui.flat("Remove");
@@ -94,7 +96,53 @@ final class AccountsView implements View {
                 refresh();
             });
         });
-        return new HBox(4, update, remove);
+        return new HBox(4, activity, update, remove);
+    }
+
+    /** Money in and out of one account: its imported transactions, and for a TFSA/RRSP/FHSA its contributions. */
+    private void activityPopup(Account a) {
+        int year = app.today().getYear();
+        VBox body = new VBox(12);
+        List<com.maplecfo.domain.Transaction> txs = app.getAccountActivity(a.getId());
+        if (a.getType().isRegistered()) {
+            Money[] totals = app.getContributionTotals(a.getType(), year);
+            body.getChildren().add(Ui.row(
+                    Ui.stat("Put in this year", Ui.big(totals[0].toString()), null),
+                    Ui.stat("Taken out this year", Ui.big(totals[1].toString()), null)));
+            TableView<com.maplecfo.domain.ContributionRecord> rec = Ui.table("No contributions recorded yet.");
+            rec.getColumns().add(Ui.column("Date", com.maplecfo.domain.ContributionRecord::date, 120));
+            rec.getColumns().add(Ui.column("What", r -> r.kind() == com.maplecfo.domain.ContributionKind.WITHDRAWAL
+                    ? "Withdrawal" : "Contribution", 140));
+            rec.getColumns().add(Ui.moneyColumn("Amount", r -> r.kind() == com.maplecfo.domain.ContributionKind.WITHDRAWAL
+                    ? r.amount().negate() : r.amount(), 140, false));
+            rec.getItems().setAll(app.getContributions(a.getType()));
+            Ui.fitRows(rec, 8);
+            body.getChildren().add(rec);
+        }
+        if (!txs.isEmpty() || !a.getType().isRegistered()) {
+            Money in = Money.zero();
+            Money out = Money.zero();
+            for (var t : txs) {
+                if (t.getDate().getYear() != year) continue;
+                if (t.isExpense()) out = out.plus(t.getAmount().abs());
+                else in = in.plus(t.getAmount());
+            }
+            if (!a.getType().isRegistered()) {
+                body.getChildren().add(Ui.row(Ui.stat("Money in this year", Ui.big(in.toString()), null),
+                        Ui.stat("Money out this year", Ui.big(out.toString()), null)));
+            }
+            TableView<com.maplecfo.domain.Transaction> t = Ui.table("No transactions imported for this account yet. "
+                    + "Import a CSV and choose \"" + a.getId() + "\" as the account.");
+            t.getColumns().add(Ui.column("Date", com.maplecfo.domain.Transaction::getDate, 110));
+            t.getColumns().add(Ui.column("Description", com.maplecfo.domain.Transaction::getDescription, 300));
+            t.getColumns().add(Ui.column("Category", x -> Ui.pretty(x.getCategory()), 120));
+            t.getColumns().add(Ui.moneyColumn("Amount", com.maplecfo.domain.Transaction::getAmount, 120, true));
+            t.getItems().setAll(txs);
+            Ui.fitRows(t, 10);
+            body.getChildren().add(t);
+        }
+        Ui.view(a.getName(), Ui.pretty(a.getType()) + " · balance "
+                + (a.isLiability() ? a.getBalance().negate() : a.getBalance()), body);
     }
 
     private void addDialog() {

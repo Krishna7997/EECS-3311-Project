@@ -51,7 +51,11 @@ public class ContributionRoomTool extends AbstractFinanceTool {
             }
             out.put("available_room", c.room().available().toString());
             out.put("amount", c.amount().toString());
-            if (c.status() == ContributionCheck.Status.OVER) {
+            if (c.status() == ContributionCheck.Status.ALLOWANCE) {
+                out.put("excess", c.excess().toString());
+                out.put("summary", "A " + c.amount() + " RRSP contribution would be " + c.excess() + " over the "
+                        + "deduction limit, which is within the $2,000 CRA allows without tax (the extra is not deductible).");
+            } else if (c.status() == ContributionCheck.Status.OVER) {
                 out.put("excess", c.excess().toString());
                 out.put("summary", "A " + c.amount() + " " + type + " contribution would be " + c.excess()
                         + " over your room of " + c.room().available() + ". CRA charges 1% per month on the excess.");

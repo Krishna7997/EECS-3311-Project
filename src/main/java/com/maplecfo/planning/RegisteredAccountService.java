@@ -69,6 +69,15 @@ public class RegisteredAccountService {
     }
 
     public ContributionCheck checkContribution(AccountType type, Money amount, LocalDate date) {
+        return evaluate(type, amount, date, true);
+    }
+
+    /** Same check without raising an alert, for a live preview while the user is typing. */
+    public ContributionCheck previewContribution(AccountType type, Money amount, LocalDate date) {
+        return evaluate(type, amount, date, false);
+    }
+
+    private ContributionCheck evaluate(AccountType type, Money amount, LocalDate date, boolean alert) {
         requireRegistered(type);
         Objects.requireNonNull(amount, "amount");
         Objects.requireNonNull(date, "date");
@@ -85,9 +94,13 @@ public class RegisteredAccountService {
         ContributionRoom room = computeRoom(type, date.getYear());
         if (amount.isGreaterThan(room.available())) {
             Money excess = amount.minus(room.available().max(Money.zero()));
+            Money totalOver = amount.minus(room.available());
+            if (type == AccountType.RRSP && !totalOver.isGreaterThan(ContributionRoom.RRSP_ALLOWANCE)) {
+                return new ContributionCheck(ContributionCheck.Status.ALLOWANCE, type, amount, room, excess, List.of());
+            }
             ContributionCheck over = new ContributionCheck(ContributionCheck.Status.OVER, type, amount, room,
                     excess, List.of());
-            eventBus.publish(FinanceEvent.of(EventType.CONTRIBUTION_WARNING, over));
+            if (alert) eventBus.publish(FinanceEvent.of(EventType.CONTRIBUTION_WARNING, over));
             return over;
         }
         return new ContributionCheck(ContributionCheck.Status.OK, type, amount, room, Money.zero(), List.of());
@@ -105,6 +118,18 @@ public class RegisteredAccountService {
 
     public List<ContributionRecord> getContributions(AccountType type) {
         return contributionRepo.findByType(type);
+    }
+
+    /** Contributions and withdrawals logged this calendar year: [contributed, withdrawn]. */
+    public Money[] yearTotals(AccountType type, int year) {
+        Money in = Money.zero();
+        Money out = Money.zero();
+        for (ContributionRecord r : contributionRepo.findByType(type)) {
+            if (r.date().getYear() != year) continue;
+            if (r.kind() == com.maplecfo.domain.ContributionKind.WITHDRAWAL) out = out.plus(r.amount());
+            else in = in.plus(r.amount());
+        }
+        return new Money[] {in, out};
     }
 
     /** Removes a logged record (used to undo a confirmed contribution). */

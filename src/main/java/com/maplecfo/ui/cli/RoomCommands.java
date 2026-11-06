@@ -59,6 +59,8 @@ final class RoomCommands implements Callable<Integer> {
             ContributionCheck c = parent.root.facade().checkContribution(type, amount);
             switch (c.status()) {
                 case OK -> out.println("OK: " + amount + " fits. Room left afterwards: " + c.roomAfter() + ".");
+                case ALLOWANCE -> out.println("OK, within the RRSP allowance: " + amount + " is " + c.excess()
+                        + " over your limit, but CRA allows up to $2,000 over without tax. You can't deduct the extra.");
                 case OVER -> out.println("OVER: " + amount + " is " + c.excess() + " more than your " + type
                         + " room (" + c.room().available() + "). CRA charges 1% per month on the excess.");
                 case UNKNOWN -> out.println("UNKNOWN: missing " + String.join(", ", c.missingFields()) + ".");

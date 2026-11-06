@@ -208,6 +208,33 @@ public class MapleCfoFacade {
         return registered.checkContribution(t, amt, today());
     }
 
+    /** The same check as {@link #checkContribution} but without raising an alert (live preview while typing). */
+    public ContributionCheck previewContribution(AccountType t, Money amt) {
+        return registered.previewContribution(t, amt, today());
+    }
+
+    /** Logged contributions and withdrawals for one registered account type, newest first. */
+    public List<ContributionRecord> getContributions(AccountType t) {
+        return registered.getContributions(t).stream()
+                .sorted(java.util.Comparator.comparing(ContributionRecord::date).reversed()).toList();
+    }
+
+    /** This year's [contributed, withdrawn] for one registered account type. */
+    public Money[] getContributionTotals(AccountType t, int year) {
+        return registered.yearTotals(t, year);
+    }
+
+    /** All imported transactions of one account, newest first. */
+    public List<Transaction> getAccountActivity(String accountId) {
+        return txService.findAll().stream().filter(t -> t.getAccountId().equalsIgnoreCase(accountId))
+                .sorted(java.util.Comparator.comparing(Transaction::getDate).reversed()).toList();
+    }
+
+    /** Income, spending and savings between two dates (transfers are not spending). */
+    public com.maplecfo.reports.PeriodSummary summarize(LocalDate from, LocalDate to) {
+        return com.maplecfo.reports.PeriodSummary.of(txService.findAll(), from, to);
+    }
+
     public ContributionRoom getContributionRoom(AccountType t, int year) {
         return registered.computeRoom(t, year);
     }

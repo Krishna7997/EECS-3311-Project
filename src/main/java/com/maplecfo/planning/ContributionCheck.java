@@ -13,7 +13,11 @@ import java.util.List;
 public record ContributionCheck(Status status, AccountType accountType, Money amount,
                                 ContributionRoom room, Money excess, List<String> missingFields) {
 
-    public enum Status { OK, OVER, UNKNOWN }
+    /**
+     * OK: fits. ALLOWANCE: RRSP only, over the limit but within the $2,000 CRA allows without tax.
+     * OVER: over the limit (for an RRSP, by more than $2,000), CRA charges 1% a month. UNKNOWN: profile incomplete.
+     */
+    public enum Status { OK, ALLOWANCE, OVER, UNKNOWN }
 
     public ContributionCheck {
         missingFields = List.copyOf(missingFields);

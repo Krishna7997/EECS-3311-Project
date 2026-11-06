@@ -84,16 +84,38 @@ final class RegisteredView implements View {
         }
         ContributionRoom r = app.getContributionRoom(t, year);
         Label available = Ui.big(r.available().toString());
-        Label chip = r.isOverContributed() ? Ui.chip("Over the limit", "bad") : Ui.chip("Room left", "ok");
+        Label chip = r.isOverContributed() ? Ui.chip("Over the limit", "bad")
+                : r.isOverLimit() ? Ui.chip("In $2,000 allowance", "warn") : Ui.chip("Room left", "ok");
         Button record = Ui.primary("Add a contribution", Icons.PLUS);
         record.setOnAction(e -> recordDialog(t));
+        Button history = Ui.flat("History");
+        history.setOnAction(e -> historyPopup(t));
+        Money[] totals = app.getContributionTotals(t, year);
         card = Ui.card(Ui.row(name, Ui.spacer(), chip), Ui.small(explain(t)),
                 new VBox(0, available, Ui.muted("available in " + year)),
-                Ui.small("Limit " + r.limit() + " · used " + r.used()), Ui.row(record));
+                Ui.small("Limit " + r.limit() + " · used " + r.used()),
+                Ui.small("This year: put in " + totals[0] + " · taken out " + totals[1]), Ui.row(record, history));
         if (r.isOverContributed()) {
             card.getChildren().add(Ui.banner("CRA charges 1% a month on the extra amount. Withdraw it soon.", "bad"));
+        } else if (r.isOverLimit()) {
+            card.getChildren().add(Ui.banner("Over your deduction limit but within the $2,000 CRA allows without tax. "
+                    + "You can't deduct the extra, and don't add more.", "warn"));
         }
         return card;
+    }
+
+    /** Every contribution and withdrawal logged for this account type. */
+    private void historyPopup(AccountType t) {
+        javafx.scene.control.TableView<ContributionRecord> table = Ui.table("Nothing recorded yet.");
+        table.getColumns().add(Ui.column("Date", ContributionRecord::date, 120));
+        table.getColumns().add(Ui.column("What", r -> r.kind() == ContributionKind.WITHDRAWAL ? "Withdrawal"
+                : "Contribution", 140));
+        table.getColumns().add(Ui.moneyColumn("Amount", r -> r.kind() == ContributionKind.WITHDRAWAL
+                ? r.amount().negate() : r.amount(), 140, false));
+        table.getItems().setAll(app.getContributions(t));
+        Ui.fitRows(table, 10);
+        Money[] totals = app.getContributionTotals(t, app.today().getYear());
+        Ui.view(t + " history", "This year you put in " + totals[0] + " and took out " + totals[1] + ".", table);
     }
 
     private Node profileCard() {
@@ -147,12 +169,14 @@ final class RegisteredView implements View {
         CheckBox withdrawal = new CheckBox("This was a withdrawal");
         // the room check happens while typing, so there is no separate "check" step
         javafx.scene.control.Label preview = new javafx.scene.control.Label();
+        javafx.beans.property.SimpleStringProperty okText = new javafx.beans.property.SimpleStringProperty("Save");
         preview.setWrapText(true);
         preview.setMaxWidth(Double.MAX_VALUE);
         preview.managedProperty().bind(preview.visibleProperty());
         preview.setVisible(false);
         Runnable update = () -> {
-            preview.getStyleClass().removeAll("room-ok", "room-over", "room-info");
+            preview.getStyleClass().removeAll("room-ok", "room-over", "room-info", "room-warn");
+            okText.set("Save");
             String text = amount.getText() == null ? "" : amount.getText().trim();
             if (text.isEmpty()) {
                 preview.setVisible(false);
@@ -165,16 +189,23 @@ final class RegisteredView implements View {
                             : "Withdrawals don't give " + t + " room back.");
                     preview.getStyleClass().add("room-info");
                 } else {
-                    ContributionCheck c = app.checkContribution(t, m);
+                    ContributionCheck c = app.previewContribution(t, m);
                     switch (c.status()) {
                         case OK -> {
                             preview.setText("✓ Fits. You'll have " + c.roomAfter() + " of " + t + " room left this year.");
                             preview.getStyleClass().add("room-ok");
                         }
+                        case ALLOWANCE -> {
+                            preview.setText("⚠ " + c.excess() + " over your RRSP limit, but within the $2,000 CRA "
+                                    + "allows without tax. You can't deduct the extra.");
+                            preview.getStyleClass().add("room-warn");
+                        }
                         case OVER -> {
-                            preview.setText("⚠ That's " + c.excess() + " more than your room (" + c.room().available()
-                                    + "). CRA charges 1% a month on the extra. Put in at most " + c.room().available() + ".");
+                            preview.setText("⚠ That's " + c.excess() + " more than your room ("
+                                    + c.room().available().max(Money.zero()) + "). CRA charges 1% a month on the extra. "
+                                    + "Only save this if it already happened.");
                             preview.getStyleClass().add("room-over");
+                            okText.set("Save anyway — it already happened");
                         }
                         case UNKNOWN -> {
                             preview.setText("Fill in your details on this page to check the room.");
@@ -196,7 +227,7 @@ final class RegisteredView implements View {
                 .note(preview)
                 .add("Date", date, null)
                 .note(withdrawal);
-        Ui.dialog("Add a " + t + " contribution", "MapleCFO checks your room as you type.", form, "Save", () -> {
+        Ui.dialog("Add a " + t + " contribution", "MapleCFO checks your room as you type.", form, okText, () -> {
             Money m = Ui.money(amount, "an amount");
             if (date.getValue() == null) throw new IllegalArgumentException("Choose the date.");
             app.recordContribution(new ContributionRecord(t, date.getValue(), m,

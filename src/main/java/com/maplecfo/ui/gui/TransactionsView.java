@@ -46,6 +46,8 @@ final class TransactionsView implements View {
     private final ToggleButton allBtn = new ToggleButton("This month");
     private final ToggleButton reviewBtn = new ToggleButton("Needs a category");
     private final VBox resultBox = new VBox();
+    static final String ALL_ACCOUNTS = "All accounts";
+    private final ComboBox<String> accountFilter = new ComboBox<>();
     private final StackPane body = new StackPane();
     private final VBox root;
     private YearMonth month;
@@ -75,10 +77,12 @@ final class TransactionsView implements View {
             if (b == null) a.setSelected(true);
             refresh();
         });
-        search.setPrefWidth(220);
+        search.setPrefWidth(200);
+        accountFilter.setValue(ALL_ACCOUNTS);
+        accountFilter.setOnAction(e -> refresh());
         search.textProperty().addListener((o, a, b) -> refresh());
 
-        HBox toolbar = new HBox(10, prev, monthLabel, next, new HBox(0, allBtn, reviewBtn), Ui.spacer(), search, importBtn);
+        HBox toolbar = new HBox(10, prev, monthLabel, next, new HBox(0, allBtn, reviewBtn), Ui.spacer(), accountFilter, search, importBtn);
         toolbar.setAlignment(Pos.CENTER_LEFT);
 
         table.getColumns().add(Ui.column("Date", Transaction::getDate, 110));
@@ -126,6 +130,16 @@ final class TransactionsView implements View {
         } else {
             rows = app.getTransactions(month);
             table.setPlaceholder(Ui.muted("No transactions in " + monthLabel.getText() + ". Use ‹ › to change month."));
+        }
+        List<String> ids = new ArrayList<>();
+        ids.add(ALL_ACCOUNTS);
+        app.searchTransactions("").stream().map(Transaction::getAccountId).distinct().sorted().forEach(ids::add);
+        String chosen = accountFilter.getValue();
+        if (!accountFilter.getItems().equals(ids)) accountFilter.getItems().setAll(ids);
+        accountFilter.setValue(ids.contains(chosen) ? chosen : ALL_ACCOUNTS);
+        if (!ALL_ACCOUNTS.equals(accountFilter.getValue())) {
+            String acc = accountFilter.getValue();
+            rows = rows.stream().filter(t -> t.getAccountId().equals(acc)).toList();
         }
         table.getItems().setAll(rows);
         body.getChildren().setAll(table);
@@ -195,6 +209,15 @@ final class TransactionsView implements View {
         if (!ids.contains("chequing")) ids.add(0, "chequing");
         account.getItems().setAll(ids);
         account.setValue(guessAccount(f.getName(), ids));
+        java.util.Map<String, String> names = new java.util.HashMap<>();
+        app.getAccounts().forEach(acc -> names.put(acc.getId(), acc.getName()));
+        account.setCellFactory(lv -> new javafx.scene.control.ListCell<>() {
+            @Override
+            protected void updateItem(String id, boolean empty) {
+                super.updateItem(id, empty);
+                setText(empty || id == null ? null : names.containsKey(id) ? names.get(id) + "  (" + id + ")" : id);
+            }
+        });
 
         ComboBox<String> format = new ComboBox<>();
         format.getItems().add(AUTO);
