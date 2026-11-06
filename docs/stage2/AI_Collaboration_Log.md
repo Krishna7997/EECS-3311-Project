@@ -10,7 +10,7 @@ Lines marked ✎ were drafted from the session record and confirmed by me before
 
 | Tool | Model | Used for | Tokens / cost |
 |---|---|---|---|
-| Claude (Cowork mode, Claude desktop app) | claude-opus-5-5 (configured) | Writing all Java code and JUnit tests, design-to-code mapping, GUI, README, bug fixing, Stage 2 planning | See report Section 5 |
+| Claude | claude-opus-5-5 (configured) | Writing all Java code and JUnit tests, design-to-code mapping, GUI, README, bug fixing, Stage 2 planning | See report Section 5 |
 | Anthropic Claude API (inside MapleCFO) | claude-haiku-5-5 | Runtime LLM for the F10 agent, F02 AI categorizer and F12 summaries (my own key, kept in .env) | See report Section 5 |
 
 ## 2. How we worked
