@@ -102,8 +102,8 @@ public class MapleCfoApp extends Application {
 
     /** The tabs, in order. */
     static List<View> createViews(MapleCfoFacade app) {
-        return List.of(new DashboardView(app), new TransactionsView(app), new BudgetsView(app),
-                new AccountsGoalsView(app));
+        return List.of(new DashboardView(app), new ChatView(app), new TransactionsView(app), new BudgetsView(app),
+                new AccountsGoalsView(app), new PlanningView(app), new ReportView(app));
     }
 
     void selectTab(int index) {

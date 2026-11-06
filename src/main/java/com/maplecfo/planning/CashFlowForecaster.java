@@ -60,6 +60,8 @@ public class CashFlowForecaster {
         Money fixed = Money.zero();
         List<Transaction> recent = all.stream().filter(t -> !t.getDate().isBefore(today.minusMonths(6))).toList();
         for (RecurringCharge c : recurring.detect(recent, today)) {
+            // money moved to savings (e.g. a monthly TFSA transfer) is not a bill
+            if (c.occurrences().stream().allMatch(t -> t.getCategory() == Category.TRANSFER)) continue;
             fixed = fixed.plus(c.yearlyCost().dividedBy(12));
         }
 

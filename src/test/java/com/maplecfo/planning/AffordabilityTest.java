@@ -65,6 +65,8 @@ class AffordabilityTest {
         assertEquals(3, cf.monthsOfHistory());
         assertFalse(r.lowConfidence());
         assertTrue(cf.fixedCostsPerMonth().isPositive(), "sample has rent and subscriptions");
+        assertTrue(cf.fixedCostsPerMonth().isLessThan(Money.of(1700)),
+                "the monthly $500 TFSA transfer is savings, not a bill: " + cf.fixedCostsPerMonth());
         assertEquals(Money.of(2500), r.currentCash(), "only chequing and savings count as cash");
         assertEquals(Money.of(2500).plus(cf.averageSurplus().times(3)), r.projectedCash());
         assertEquals(r.projectedCash().minus(Money.of(100)).minus(cf.fixedCostsPerMonth()), r.headroom());
