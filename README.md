@@ -10,7 +10,7 @@ EECS3311 Software Design (Fall 2026) course project by Krishna Patel.
 - 🇨🇦 Calculates TFSA / RRSP / FHSA room and warns before you over-contribute
 - 🧮 Plans debt payoff (avalanche or snowball) and projects when you could retire early (FIRE)
 - 🔄 **Auto-sync:** save bank CSVs into a folder and everything updates itself, including balances, debts, detected contributions and reminders
-- 📅 **Self-updating CRA limits**, kept correct by a weekly checker bot that emails the developer if anything fails
+- 📅 **Self-updating CRA limits**, kept correct by a weekly GitHub Actions bot that opens a pull request (or an issue if something looks wrong)
 - 🤖 **AI CFO chat** answers questions like *"Can I afford a $2,000 trip in December?"* by calling finance tools and explaining the results
 
 ## How the AI stays honest
@@ -33,7 +33,7 @@ EECS3311 Software Design (Fall 2026) course project by Krishna Patel.
 
 All diagrams are made in **[UMLet](https://www.umlet.com)**. Editable UMLet files are in [`docs/stage1/diagrams/uxf/`](docs/stage1/diagrams/uxf/) and the exported images in [`docs/stage1/diagrams/png/`](docs/stage1/diagrams/png/).
 
-## Build and run (Stage 2, in progress)
+## Build and run
 Prerequisites: Java 21 (for example Temurin 21) and Maven 3.9+.
 
 ```
@@ -41,36 +41,68 @@ mvn test          # run the unit tests
 mvn package       # build target/maplecfo.jar (all libraries included)
 ```
 
+### GUI (JavaFX)
+```
+java -jar target/maplecfo.jar gui
+```
+Tabs: Dashboard · Ask MapleCFO (AI chat) · Transactions · Budgets · Accounts & Goals (net worth, goals, "Can I afford it?") · Planning (subscriptions, TFSA/RRSP/FHSA, debt payoff, FIRE) · Monthly Report.
+Undo/Redo are in the top bar (Cmd/Ctrl+Z, Cmd/Ctrl+Shift+Z). While the window is open, CSV files saved into `~/.maplecfo/inbox` are imported automatically.
+
 ### Command-line interface
 ```
 java -jar target/maplecfo.jar --help
-java -jar target/maplecfo.jar            # interactive mode (undo/redo work across commands)
+java -jar target/maplecfo.jar            # interactive mode (undo/redo and AI proposals work across commands)
 ```
 Data is stored locally in `~/.maplecfo/maplecfo.db` (change it with `--db <file>` or the `MAPLECFO_DB` environment variable).
 
 Example session with the fake sample data:
 ```
+# F01/F02 import and categorise
 java -jar target/maplecfo.jar import sample-data/td_chequing_sample.csv -a chequing -p "TD bank account"
 java -jar target/maplecfo.jar import sample-data/rbc_visa_sample.csv -a visa -p RBC
 java -jar target/maplecfo.jar tx list --review
+# F03 net worth, F09 goals, F11 affordability
+java -jar target/maplecfo.jar account add "TD Chequing" CHEQUING 2500 --bank TD
+java -jar target/maplecfo.jar account add "RBC Visa" CREDIT_CARD 800 --bank RBC
+java -jar target/maplecfo.jar networth
+java -jar target/maplecfo.jar goal add "Emergency fund" 5000 --by 2027-06-30 --saved 1000
+java -jar target/maplecfo.jar goal list
+java -jar target/maplecfo.jar afford 1500 --by 2027-03-31
+# F04 budgets, F05 subscriptions
 java -jar target/maplecfo.jar budget set DINING 150 -m 2026-10
 java -jar target/maplecfo.jar budget status -m 2026-10
 java -jar target/maplecfo.jar recurring
+# F06 registered accounts, F14 RRSP estimate
 java -jar target/maplecfo.jar profile set --birth-year 2003 --resident-since 2010 --rrsp-limit 5200 --fhsa-opened 2025
 java -jar target/maplecfo.jar room
 java -jar target/maplecfo.jar room check TFSA 3000
+java -jar target/maplecfo.jar rrsp-estimate -y 2027
+# F07 FIRE, F08 debt payoff
 java -jar target/maplecfo.jar fire --invested 10000 --save 15000 --spend 40000 --age 23
 java -jar target/maplecfo.jar debt add "RBC Visa" --balance 2400 --apr 20.99 --min 60
 java -jar target/maplecfo.jar debt plan --compare --extra 200
+# F10 AI CFO, F12 monthly report
+java -jar target/maplecfo.jar ask "How much did I spend on dining last month?"
+java -jar target/maplecfo.jar ask "Can I afford a 1500 dollar trip by March?"
+java -jar target/maplecfo.jar report -m 2026-09
+# F13 auto-import and reminders, F15 limits
+java -jar target/maplecfo.jar watch --once --folder ~/.maplecfo/inbox
+java -jar target/maplecfo.jar reminders
+java -jar target/maplecfo.jar limits refresh --force
 ```
-
-The GUI launch command will be added here when the GUI is implemented.
+Changes the AI (or the contribution detector) proposes are only applied after `confirm <id>`; use interactive mode or the GUI for that, because proposals live only while the app is open.
 
 ### Local configuration (API key)
 ```
 cp .env.example .env
 ```
 Then put your own key in `.env`. The `.env` file is git-ignored, so the key is never committed.
+Without a key, MapleCFO runs in **demo mode**: an offline mock model answers from the same tools, so every feature can still be tried.
+
+Optional settings (in `.env` or as environment variables): `LLM_MODEL` (default `claude-haiku-5-5`), `LLM_WORKSPACE_ID`, `MAPLECFO_DB`, `MAPLECFO_INBOX` (auto-import folder), `MAPLECFO_LIMITS_URL`.
+
+### Weekly limits bot (F15)
+`.github/workflows/limits-update.yml` runs every Monday. It reads the CRA limits page, validates any new TFSA/RRSP numbers and opens a pull request for review. The app downloads `contribution_limits.json` from this repository at most once a week, validates it again and keeps a local cache.
 
 ## Tech stack
 Java 21 · JavaFX (GUI) · picocli (CLI) · SQLite · Anthropic Claude API · GitHub Actions · JUnit 5 · KUMA
@@ -85,7 +117,7 @@ Java 21 · JavaFX (GUI) · picocli (CLI) · SQLite · Anthropic Claude API · Gi
 | Stage | Status |
 |---|---|
 | 1: Design | ✅ Done |
-| 2: Build with AI | ⏳ Next |
+| 2: Build with AI | 🚧 In progress: all 15 features built (GUI + CLI) |
 | 3: Testing (JUnit + KUMA) | ⏳ |
 
 > *Educational project: MapleCFO provides financial information, not professional financial advice.*
