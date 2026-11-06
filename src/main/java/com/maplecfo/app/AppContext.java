@@ -16,7 +16,10 @@ import com.maplecfo.agent.tools.FireProjectionTool;
 import com.maplecfo.agent.tools.ProposeActionTool;
 import com.maplecfo.agent.tools.RecurringChargesTool;
 import com.maplecfo.agent.tools.SpendingSummaryTool;
+import com.maplecfo.automation.limits.BundledLimitsProvider;
+import com.maplecfo.automation.limits.LimitsCache;
 import com.maplecfo.automation.limits.LimitsService;
+import com.maplecfo.automation.limits.RemoteLimitsProvider;
 import com.maplecfo.categorization.CategorizationService;
 import com.maplecfo.categorization.LlmCategorizer;
 import com.maplecfo.categorization.RuleBasedCategorizer;
@@ -91,6 +94,15 @@ public final class AppContext {
         return Path.of(System.getProperty("user.home"), ".maplecfo", "inbox");
     }
 
+    /** Where newer contribution limits are published (F15); override with MAPLECFO_LIMITS_URL. */
+    public static final String DEFAULT_LIMITS_URL = "https://raw.githubusercontent.com/Krishna7997/EECS-3311-Project/"
+            + "main/src/main/resources/contribution_limits.json";
+
+    static java.net.URI limitsUrl() {
+        String env = System.getenv("MAPLECFO_LIMITS_URL");
+        return java.net.URI.create(env != null && !env.isBlank() ? env : DEFAULT_LIMITS_URL);
+    }
+
     private AppContext() {
     }
 
@@ -129,7 +141,9 @@ public final class AppContext {
         budgets.register();
 
         ProfileRepository profileRepo = new SqliteProfileRepository(db);
-        LimitsService limits = LimitsService.bundledOnly();
+        LimitsCache limitsCache = new LimitsCache(db.dataFolder().resolve("limits_cache.json"));
+        LimitsService limits = new LimitsService(List.of(limitsCache, new BundledLimitsProvider()));
+        limits.configureRefresh(RemoteLimitsProvider.overHttp(limitsUrl()), limitsCache, bus, clock);
         RegisteredAccountService registered = new RegisteredAccountService(limits, profileRepo,
                 new SqliteContributionRepository(db), bus);
 
@@ -165,7 +179,8 @@ public final class AppContext {
         tools.register(new ProposeActionTool(pending, budgets, clock));
         new ContributionDetector(txService, registered, pending, bus).register();
         new BalanceSyncService(accountService, debtRepo, netWorth).register(bus);
-        facade.attachAutomation(new ReminderService(txService, bus, clock), new RrspRoomEstimator(txService, limits));
+        facade.attachAutomation(new ReminderService(txService, bus, clock), new RrspRoomEstimator(txService, limits),
+                limits);
 
         facade.attachAgent(new CfoAgent(llm, tools, new ConversationMemory(10), prompts,
                 validator, pending, profileRepo::load, clock));

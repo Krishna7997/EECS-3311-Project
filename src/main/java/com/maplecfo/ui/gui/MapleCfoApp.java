@@ -68,6 +68,10 @@ public class MapleCfoApp extends Application {
             autoImport.setText("Auto-import is off: " + e.getMessage());
         }
         app.checkReminders();
+        // F15: check for newer contribution limits in the background (at most once a week)
+        Thread limits = new Thread(() -> app.refreshLimits(false), "maplecfo-limits");
+        limits.setDaemon(true);
+        limits.start();
     }
 
     @Override

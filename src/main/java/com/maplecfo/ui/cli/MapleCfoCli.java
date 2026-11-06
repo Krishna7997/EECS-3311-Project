@@ -23,7 +23,7 @@ import java.util.concurrent.Callable;
  * The MapleCFO command-line interface (picocli). Run with no arguments for an
  * interactive session, where undo and redo work across commands.
  */
-@Command(name = "maplecfo", mixinStandardHelpOptions = true, version = "MapleCFO 0.6",
+@Command(name = "maplecfo", mixinStandardHelpOptions = true, version = "MapleCFO 0.7",
         description = "MapleCFO: your AI money CFO for Canada.",
         subcommands = {
                 TransactionCommands.ImportCmd.class,
@@ -50,6 +50,7 @@ import java.util.concurrent.Callable;
                 AutomationCommands.WatchCmd.class,
                 AutomationCommands.RemindersCmd.class,
                 AutomationCommands.RrspEstimateCmd.class,
+                AutomationCommands.LimitsCmd.class,
                 MapleCfoCli.GuiCmd.class,
                 CommandLine.HelpCommand.class
         })
@@ -185,7 +186,7 @@ public class MapleCfoCli implements Callable<Integer> {
         return args;
     }
 
-    @Command(name = "undo", description = "Undo the last edit (budget or category change).")
+    @Command(name = "undo", description = "Undo the last edit (budget, category, goal or confirmed AI change).")
     static class UndoCmd implements Callable<Integer> {
         @CommandLine.ParentCommand MapleCfoCli root;
         @CommandLine.Spec CommandLine.Model.CommandSpec spec;

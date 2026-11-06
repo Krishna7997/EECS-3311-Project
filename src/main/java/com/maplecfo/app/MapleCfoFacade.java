@@ -307,9 +307,27 @@ public class MapleCfoFacade {
     // ---------------------------------------------------------- F13 / F14 automation
 
     void attachAutomation(com.maplecfo.automation.ReminderService reminders,
-                          com.maplecfo.planning.RrspRoomEstimator rrspEstimator) {
+                          com.maplecfo.planning.RrspRoomEstimator rrspEstimator,
+                          com.maplecfo.automation.limits.LimitsService limits) {
         this.reminders = reminders;
         this.rrspEstimator = rrspEstimator;
+        this.limits = limits;
+    }
+
+    // ---------------------------------------------------------- F15 contribution limits updates
+
+    private com.maplecfo.automation.limits.LimitsService limits;
+
+    /** Checks online for newer TFSA/RRSP/FHSA limits (at most weekly unless forced). */
+    public com.maplecfo.automation.limits.LimitsStatus refreshLimits(boolean force) {
+        return limits.refreshIfStale(force ? java.time.Duration.ZERO : java.time.Duration.ofDays(7));
+    }
+
+    /** E.g. "bundled" or "cache", plus the newest TFSA year known. */
+    public String describeLimits() {
+        var l = limits.currentLimits();
+        return "Using " + limits.currentSource() + " limits (TFSA up to " + l.latestTfsaYear() + ": "
+                + l.tfsaLimitFor(l.latestTfsaYear()) + ").";
     }
 
     /**

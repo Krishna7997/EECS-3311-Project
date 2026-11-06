@@ -95,4 +95,26 @@ final class AutomationCommands {
             return 0;
         }
     }
+
+    @Command(name = "limits", description = "Show the contribution limits in use, or check for newer ones (F15).")
+    static class LimitsCmd implements Callable<Integer> {
+        @CommandLine.ParentCommand MapleCfoCli root;
+        @CommandLine.Spec CommandLine.Model.CommandSpec spec;
+        @CommandLine.Parameters(arity = "0..1", description = "refresh") String action;
+        @Option(names = "--force", description = "Check now even if checked this week") boolean force;
+
+        @Override
+        public Integer call() {
+            PrintWriter out = spec.commandLine().getOut();
+            if ("refresh".equalsIgnoreCase(action)) {
+                var s = root.facade().refreshLimits(force);
+                out.println(s.state() + ": " + s.message());
+            } else if (action != null) {
+                throw new IllegalArgumentException("Unknown action '" + action + "'. Try: limits refresh");
+            }
+            out.println(root.facade().describeLimits());
+            root.printNewAlerts(out);
+            return 0;
+        }
+    }
 }

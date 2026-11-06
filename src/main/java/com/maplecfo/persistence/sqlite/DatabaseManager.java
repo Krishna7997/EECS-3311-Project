@@ -35,6 +35,16 @@ public class DatabaseManager {
         return db;
     }
 
+    /** Folder of the database file (used for the limits cache); the working folder for in-memory databases. */
+    public Path dataFolder() {
+        String path = url.startsWith("jdbc:sqlite:") ? url.substring("jdbc:sqlite:".length()) : "";
+        if (path.isEmpty() || path.startsWith(":memory:") || path.startsWith("file:")) {
+            return Path.of(System.getProperty("user.home"), ".maplecfo");
+        }
+        Path parent = Path.of(path).toAbsolutePath().getParent();
+        return parent != null ? parent : Path.of(".");
+    }
+
     public Connection getConnection() throws SQLException {
         Connection c = DriverManager.getConnection(url);
         try (Statement s = c.createStatement()) {
