@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/branding/maplecfo-logo.jpg" alt="MapleCFO logo" width="520"></p>
+
 # MapleCFO 🍁
 
 **An AI "CFO" for Canadian students and young professionals.** Import your bank CSVs and get clear answers about budgets, savings, TFSA/RRSP/FHSA room and debt. The AI never invents a number.
