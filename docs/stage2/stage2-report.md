@@ -455,7 +455,7 @@ the AI log and the UML are not). Every commit was pushed during its period.
 | [`5ef8658`](https://github.com/Krishna7997/EECS-3311-Project/commit/5ef8658) | Nov 6 | F19 extra money |
 | [`f9070e6`](https://github.com/Krishna7997/EECS-3311-Project/commit/f9070e6) | Nov 6 | F17 AI monthly review |
 | [`4666a5d`](https://github.com/Krishna7997/EECS-3311-Project/commit/4666a5d) | Nov 6 | F07 FIRE options |
-| [TODO hash] | Nov 7 | Logo: app icon and sidebar |
+| [`e4aff8a`](https://github.com/Krishna7997/EECS-3311-Project/commit/e4aff8a) | Nov 7 | Logo: app icon and sidebar |
 
 ### 6.2 Checks performed
 
