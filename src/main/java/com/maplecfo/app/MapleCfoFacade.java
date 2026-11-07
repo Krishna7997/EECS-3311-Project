@@ -359,6 +359,7 @@ public class MapleCfoFacade {
     // ---------------------------------------------------------- F07 / F08 planning
 
     public FireProjection projectFire(FireInputs in) {
+        if (settings != null) settings.put(FIRE_KEY, encodeFire(in));   // the page remembers your last plan
         return fire.project(in);
     }
 
@@ -380,6 +381,63 @@ public class MapleCfoFacade {
     }
 
     // ---------------------------------------------------------- F03 accounts and net worth
+
+    private com.maplecfo.planning.CashFlowForecaster cashFlow;
+    private static final String FIRE_KEY = "fire.lastInputs";
+
+    void attachCashFlow(com.maplecfo.planning.CashFlowForecaster cashFlow) {
+        this.cashFlow = cashFlow;
+    }
+
+    /** The FIRE inputs used last time, if any (F07). */
+    public java.util.Optional<FireInputs> lastFireInputs() {
+        if (settings == null) return java.util.Optional.empty();
+        return settings.get(FIRE_KEY).flatMap(MapleCfoFacade::decodeFire);
+    }
+
+    /**
+     * FIRE inputs from your own data (F07): investments = TFSA, RRSP, FHSA and other investment accounts; saving
+     * and spending per year = 12 x your recent monthly averages; age from your profile.
+     */
+    public FireInputs suggestFireInputs() {
+        Money invested = accounts == null ? Money.zero() : getAccounts().stream()
+                .filter(a -> a.getType().isRegistered() || a.getType() == com.maplecfo.domain.AccountType.NON_REGISTERED)
+                .map(com.maplecfo.domain.Account::getBalance).reduce(Money.zero(), Money::plus);
+        Money save = Money.zero();
+        Money spend = Money.zero();
+        if (cashFlow != null) {
+            com.maplecfo.planning.CashFlowForecast f = cashFlow.forecast();
+            if (f.hasData()) {
+                save = f.averageSurplus().times(12).max(Money.zero());
+                spend = f.averageSpending().times(12);
+            }
+        }
+        if (!spend.isPositive()) {
+            throw new IllegalStateException("Import a few months of transactions first, so MapleCFO knows your spending.");
+        }
+        Integer born = getProfile().getBirthYear();
+        int age = born != null ? today().getYear() - born : 22;
+        return new FireInputs(invested, save, spend, 0.05, 0.04, age);
+    }
+
+    static String encodeFire(FireInputs in) {
+        return String.join(";", in.invested().getAmount().toPlainString(), in.yearlySaving().getAmount().toPlainString(),
+                in.annualSpending().getAmount().toPlainString(), String.valueOf(in.realReturn()),
+                String.valueOf(in.withdrawalRate()), String.valueOf(in.currentAge()),
+                in.targetOverride() == null ? "" : in.targetOverride().getAmount().toPlainString(),
+                in.targetAge() == null ? "" : String.valueOf(in.targetAge()));
+    }
+
+    static java.util.Optional<FireInputs> decodeFire(String s) {
+        try {
+            String[] p = s.split(";", -1);
+            return java.util.Optional.of(new FireInputs(Money.of(p[0]), Money.of(p[1]), Money.of(p[2]),
+                    Double.parseDouble(p[3]), Double.parseDouble(p[4]), Integer.parseInt(p[5]),
+                    p[6].isEmpty() ? null : Money.of(p[6]), p[7].isEmpty() ? null : Integer.valueOf(p[7])));
+        } catch (RuntimeException e) {
+            return java.util.Optional.empty();   // old or damaged value: start fresh
+        }
+    }
 
     void attachPlanning(com.maplecfo.planning.AccountService accounts, com.maplecfo.planning.NetWorthService netWorth,
                         com.maplecfo.planning.GoalService goals,

@@ -23,28 +23,57 @@ final class PlanningCommands {
     private PlanningCommands() {
     }
 
-    @Command(name = "fire", description = "Project when you could reach financial independence (F07).")
+    @Command(name = "fire", description = "Project when you could reach financial independence (F07). "
+            + "e.g. fire --mine, or fire --save 15000 --spend 40000 --target 1000000 --retire-at 50")
     static class FireCmd implements Callable<Integer> {
         @CommandLine.ParentCommand MapleCfoCli root;
         @CommandLine.Spec CommandLine.Model.CommandSpec spec;
-        @Option(names = "--invested", defaultValue = "0", description = "Invested today") Money invested;
-        @Option(names = "--save", required = true, description = "Saved per year") Money save;
-        @Option(names = "--spend", required = true, description = "Spending per year") Money spend;
-        @Option(names = "--return", defaultValue = "0.05", description = "Real return, e.g. 0.05 (default)") double realReturn;
-        @Option(names = "--withdrawal", defaultValue = "0.04", description = "Withdrawal rate (default 0.04)") double withdrawal;
-        @Option(names = "--age", defaultValue = "22") int age;
+        @Option(names = "--mine", description = "Start from your own accounts and recent cash flow") boolean mine;
+        @Option(names = "--invested", description = "Invested today") Money invested;
+        @Option(names = "--save", description = "Saved per year") Money save;
+        @Option(names = "--spend", description = "Spending per year") Money spend;
+        @Option(names = "--return", description = "Real return, e.g. 0.05 (default)") Double realReturn;
+        @Option(names = "--withdrawal", description = "Withdrawal rate (default 0.04)") Double withdrawal;
+        @Option(names = "--age", description = "Your age (default: from your profile, else 22)") Integer age;
+        @Option(names = "--target", description = "Your own target instead of spending / withdrawal rate") Money target;
+        @Option(names = "--retire-at", description = "Age you'd like to retire at: shows the saving needed") Integer retireAt;
 
         @Override
         public Integer call() {
-            FireProjection p = root.facade().projectFire(
-                    new FireInputs(invested, save, spend, realReturn, withdrawal, age));
+            FireInputs base = mine ? root.facade().suggestFireInputs() : null;
+            if (base == null && (save == null || spend == null)) {
+                throw new CommandLine.ParameterException(spec.commandLine(), "Give --save and --spend, or use --mine");
+            }
+            Integer born = root.facade().getProfile().getBirthYear();
+            int a = age != null ? age : base != null ? base.currentAge()
+                    : born != null ? root.facade().today().getYear() - born : 22;
+            FireInputs in = new FireInputs(
+                    invested != null ? invested : base != null ? base.invested() : Money.zero(),
+                    save != null ? save : base.yearlySaving(), spend != null ? spend : base.annualSpending(),
+                    realReturn != null ? realReturn : 0.05, withdrawal != null ? withdrawal : 0.04, a, target, retireAt);
+            FireProjection p = root.facade().projectFire(in);
             PrintWriter out = spec.commandLine().getOut();
-            out.println("FIRE target: " + p.targetAmount() + " (" + spend + " / " + Math.round(withdrawal * 1000) / 10.0 + "%)");
+            if (mine) {
+                out.println("Your numbers: invested " + in.invested() + ", saving " + in.yearlySaving() + " a year, spending "
+                        + in.annualSpending() + " a year, age " + in.currentAge() + ".");
+            }
+            out.println("FIRE target: " + p.targetAmount() + (in.hasCustomTarget() ? " (your own target)"
+                    : " (" + in.annualSpending() + " / " + com.maplecfo.planning.FireCalculator.percent(in.withdrawalRate()) + ")")
+                    + "; it lets you spend " + p.safeYearlySpending() + " a year.");
+            if (in.hasCustomTarget() && p.safeYearlySpending().isLessThan(in.annualSpending())) {
+                out.println("Note: that is less than the " + in.annualSpending() + " a year you plan to spend.");
+            }
             if (p.reachable()) {
                 out.println("You reach it in " + p.yearsToFire() + " years, at age " + p.fireAge() + ".");
             } else {
                 out.println("Not reachable within 70 years with these inputs. Try saving more or spending less.");
             }
+            if (p.savingNeeded() != null) {
+                out.println("To retire at " + in.targetAge() + ": save about " + p.savingNeeded() + " a year (you save "
+                        + in.yearlySaving() + ").");
+            }
+            out.println("Coast FIRE number (age " + p.coastAge() + "): " + p.coastNumber()
+                    + (p.coastReached() ? " - already reached" : ""));
             List<List<String>> rows = new ArrayList<>();
             for (FireProjection.Scenario s : p.scenarios()) {
                 rows.add(List.of(s.label(), s.yearlySaving().toString(), s.annualSpending().toString(),

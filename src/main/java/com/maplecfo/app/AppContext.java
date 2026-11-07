@@ -164,6 +164,7 @@ public final class AppContext {
         AccountService accountService = new AccountService(new SqliteAccountRepository(db), bus);
         NetWorthService netWorth = new NetWorthService(accountService, new SqliteNetWorthHistoryRepository(db), clock);
         CashFlowForecaster cashFlow = new CashFlowForecaster(txService, recurring, clock);
+        facade.attachCashFlow(cashFlow);
         GoalService goals = new GoalService(new SqliteGoalRepository(db), cashFlow, bus, clock);
         AffordabilityAnalyzer affordability = new AffordabilityAnalyzer(accountService, cashFlow, goals, clock);
         facade.attachPlanning(accountService, netWorth, goals, affordability);

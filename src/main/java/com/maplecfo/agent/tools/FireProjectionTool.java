@@ -29,7 +29,9 @@ public class FireProjectionTool extends AbstractFinanceTool {
     @Override public String name() { return "fire_projection"; }
 
     @Override public String description() {
-        return "Years and age until financial independence. Needs yearly spending and yearly saving; optional current investments, real return (0.05 = 5%) and withdrawal rate (0.04).";
+        return "Years and age until financial independence. Needs yearly spending and yearly saving; optional current "
+                + "investments, real return (0.05 = 5%), withdrawal rate (0.04), the user's own target amount and the "
+                + "age they want to retire at (then it returns the yearly saving needed). Also returns the Coast FIRE number.";
     }
 
     @Override public JsonNode schema() {
@@ -37,7 +39,9 @@ public class FireProjectionTool extends AbstractFinanceTool {
                 "yearly_saving:number!::Amount saved per year",
                 "invested:number::Investments today (default 0)",
                 "real_return:number::Expected real return, e.g. 0.05",
-                "withdrawal_rate:number::Safe withdrawal rate, e.g. 0.04");
+                "withdrawal_rate:number::Safe withdrawal rate, e.g. 0.04",
+                "target_amount:number::The user's own target instead of spending / withdrawal rate",
+                "target_age:number::Age the user wants to retire at");
     }
 
     @Override
@@ -46,13 +50,18 @@ public class FireProjectionTool extends AbstractFinanceTool {
         int age = birthYear == null ? 22 : LocalDate.now(clock).getYear() - birthYear;
         FireInputs in = new FireInputs(money(args, "invested", Money.zero()), money(args, "yearly_saving", Money.zero()),
                 money(args, "annual_spending", Money.zero()), args.path("real_return").asDouble(0.05),
-                args.path("withdrawal_rate").asDouble(0.04), age);
+                args.path("withdrawal_rate").asDouble(0.04), age, money(args, "target_amount", null),
+                args.hasNonNull("target_age") ? Integer.valueOf(args.get("target_age").asInt()) : null);
         FireProjection p = calculator.project(in);
         ObjectNode out = obj();
         out.put("target_amount", p.targetAmount().toString());
         out.put("current_age", age);
         out.put("years_to_fire", p.yearsToFire());
         out.put("fire_age", p.fireAge());
+        out.put("safe_yearly_spending", p.safeYearlySpending().toString());
+        out.put("coast_fire_number", p.coastNumber().toString());
+        out.put("coast_age", p.coastAge());
+        if (p.savingNeeded() != null) out.put("yearly_saving_needed_for_target_age", p.savingNeeded().toString());
         var sc = out.putArray("scenarios");
         p.scenarios().forEach(s -> sc.addObject().put("label", s.label()).put("yearly_saving", s.yearlySaving().toString())
                 .put("years_to_fire", s.yearsToFire()));
