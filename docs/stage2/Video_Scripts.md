@@ -65,7 +65,7 @@ alias m='java -jar ~/Projects/MapleCFO/target/maplecfo.jar'
 | B0 | Intro | `m --help` | "The same features from the command line; the GUI and CLI share one facade." |
 | B1 | F01 | `m import sample-data/demo/errors/visa_bad_rows.csv -a visa` | Detected format, 3 imported, 3 rejected rows with reasons. |
 | B2 | F16 | `m learn-format sample-data/demo/errors/unknown_bank_format.csv --name Tangerine` then add `--save -a chequing` | AI suggestion, test read, preview; saved only with --save. |
-| B3 | F02 | `m tx search hakka --limit 3` then `m tx recategorize <id> SHOPPING` then `m undo` | Source AI = categorised by the AI at import (the rules don't know the shop). `m tx list --review` is empty with a key. |
+| B3 | F02 | `m tx search hakka --limit 3` then `m tx recategorize <id> SHOPPING` (undo is shown in B11: one-shot commands do not share an undo history) | Source AI = categorised by the AI at import (the rules don't know the shop). `m tx list --review` is empty with a key. |
 | B4 | F18 | `m tx find uber eats over 30 in october` | Shows "Showing ..." and "[understood by the AI]". |
 | B5 | F04 | `m budget set DINING 300 -m 2026-11` then `m budget status -m 2026-10` | Error: `m budget set DINING -5` |
 | B6 | F05 | `m recurring` | |
