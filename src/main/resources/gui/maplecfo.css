@@ -30,7 +30,6 @@
 .sidebar { -fx-background-color: #14181f; -fx-padding: 18 12 16 12; -fx-pref-width: 236; -fx-min-width: 236; }
 .brand-row { -fx-padding: 0 8 14 8; }
 .sidebar .brand { -fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; }
-.brand-icon { -fx-background-color: #e8213f; }
 .nav-section { -fx-text-fill: #6b7385; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 14 12 4 12; }
 .sidebar .nav-item {
     -fx-background-color: transparent;

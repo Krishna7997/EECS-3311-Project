@@ -1,4 +1,3 @@
-<p align="center"><img src="../branding/maplecfo-logo.jpg" width="360"></p>
 
 # MapleCFO: Stage 2 Implementation Report
 
@@ -294,7 +293,6 @@ No Stage 1 feature or pattern was removed.
 |---|---|---|---|---|
 | Claude (Anthropic) | claude-opus-5-5 (configured) | Writing all Java code and JUnit tests from the Stage 1 design (all 19 features, 8 patterns, GUI, CLI), bug diagnosis, demo dataset, README, UML updates, this report draft | **[TODO Krishna: from claude.ai usage]** | **[TODO Krishna]** |
 | Anthropic Claude API (inside MapleCFO) | claude-haiku-5-5 | Runtime LLM for F02 categorization, F10 chat, F12 summary, F16-F19 (my own key in `.env`) | **[TODO Krishna: Anthropic Console → Usage]** | **[TODO Krishna: Console → Cost]** |
-| **[TODO Krishna, if used]** image tool for the logo | **[model]** | MapleCFO logo (`docs/branding/maplecfo-logo.jpg`) | - | - |
 
 **About the model name.** The Claude app was set to `claude-opus-5-5`, but the app does not show which model served
 each individual reply, and it can switch models (for example as a fallback). So `claude-opus-5-5` is the configured

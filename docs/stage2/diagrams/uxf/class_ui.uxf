@@ -31,8 +31,7 @@ JavaFX Application, implements Nav
 +start(stage: Stage): void
 +buildScene(): Scene
 +go(pageId: String): void
-+importFolderChanged(): void
-~setAppIcons(stage: Stage): void</panel_attributes>
++importFolderChanged(): void</panel_attributes>
     <additional_attributes />
   </element>
   <element>

@@ -67,7 +67,6 @@ public class MapleCfoApp extends Application implements Nav {
         app = preset != null ? preset : AppContext.create(AppContext.defaultDatabasePath());
         stage.setScene(buildScene());
         stage.setTitle("MapleCFO — your AI personal CFO");
-        setAppIcons(stage);
         stage.setWidth(1320);
         stage.setHeight(860);
         stage.setMinWidth(980);
@@ -75,38 +74,6 @@ public class MapleCfoApp extends Application implements Nav {
         stage.show();
         startAutomation();
         refreshCurrent();
-    }
-
-    /** The MapleCFO icon for the window, the taskbar and (on macOS) the Dock. A missing icon never stops the app. */
-    static void setAppIcons(Stage stage) {
-        for (int size : new int[] {16, 32, 64, 128, 256, 512}) {
-            var in = MapleCfoApp.class.getResourceAsStream("/gui/icons/maplecfo-" + size + ".png");
-            if (in != null) stage.getIcons().add(new javafx.scene.image.Image(in));
-        }
-        try {
-            if (java.awt.Taskbar.isTaskbarSupported()
-                    && java.awt.Taskbar.getTaskbar().isSupported(java.awt.Taskbar.Feature.ICON_IMAGE)) {
-                var url = MapleCfoApp.class.getResource("/gui/icons/maplecfo-512.png");
-                if (url != null) java.awt.Taskbar.getTaskbar().setIconImage(java.awt.Toolkit.getDefaultToolkit().getImage(url));
-            }
-        } catch (RuntimeException | Error e) {
-            // no desktop taskbar (e.g. a headless test machine): the window icon is enough
-        }
-    }
-
-    /** The logo shown in the sidebar, or the old leaf shape if the image is missing. */
-    static javafx.scene.Node brandLogo(double size) {
-        var in = MapleCfoApp.class.getResourceAsStream("/gui/icons/maplecfo-mark-128.png");
-        if (in == null) {
-            Region leaf = Icons.of(Icons.LEAF, size);
-            leaf.getStyleClass().add("brand-icon");
-            return leaf;
-        }
-        javafx.scene.image.ImageView v = new javafx.scene.image.ImageView(new javafx.scene.image.Image(in));
-        v.setFitWidth(size);
-        v.setFitHeight(size);
-        v.setSmooth(true);
-        return v;
     }
 
     /** F13: watch the inbox folder for bank CSVs; raise reminders; F15: check limits in the background. */
@@ -151,10 +118,9 @@ public class MapleCfoApp extends Application implements Nav {
         views.addAll(createViews(app, this));
 
         // ---- sidebar: brand, grouped pages, status at the bottom
-        javafx.scene.Node leaf = brandLogo(42);
         Label brand = new Label("MapleCFO");
         brand.getStyleClass().add("brand");
-        HBox brandRow = new HBox(10, leaf, brand);
+        HBox brandRow = new HBox(10, brand);
         brandRow.getStyleClass().add("brand-row");
         brandRow.setAlignment(Pos.CENTER_LEFT);
         VBox nav = new VBox(2, brandRow);

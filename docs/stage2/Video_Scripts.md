@@ -25,7 +25,7 @@ Start: `MAPLECFO_DB=~/.maplecfo/demo.db java -jar target/maplecfo.jar gui`
 
 | # | Feature | What to do | What to say |
 |---|---|---|---|
-| A0 | Intro | Show the window, sidebar, logo. | "MapleCFO is a personal-finance agent for young Canadians. This video shows all 19 features in the GUI, using fake demo data for 'Alex'." |
+| A0 | Intro | Show the window and the sidebar. | "MapleCFO is a personal-finance agent for young Canadians. This video shows all 19 features in the GUI, using fake demo data for 'Alex'." |
 | A1 | **F13 Auto-sync + monthly check-in** | Home: point at the November check-in card. In Finder copy `sample-data/demo/inbox/chequing_nov2026.csv` and `visa_nov2026.csv` into `~/MapleCFO-demo-inbox`. Wait for the alert. Settings: show the import folder. | "Deterministic. MapleCFO watches a folder; a dropped bank CSV is imported automatically, the format is detected and the account is taken from the file name. The chequing balance updates from the file." Alternative: Settings → change folder. |
 | A2 | **F14 Detected contribution** | Home → "Needs your attention": the TFSA $300 and FHSA $500 contributions from the November file. Confirm the TFSA one; show the TFSA account balance went up. Undo, Redo. | "Hybrid rules: transfers that name TFSA/RRSP/FHSA are detected and proposed; nothing changes until I confirm, and it can be undone." |
 | A3 | **F01 Import + duplicates + bad rows** | Transactions → Import bank CSV → `sample-data/demo/errors/chequing_overlap_oct25-nov6.csv` → "Detected: TD" → Import. Then `errors/visa_bad_rows.csv`. | "Deterministic. The overlap file only adds new rows: duplicates are skipped by fingerprint. The bad file imports 3 rows and reports the 3 rows it could not read and why." |
