@@ -66,8 +66,9 @@ public class MonthlyReviewService {
                    first), call propose_action with action set_budget, that category, the suggested amount and month
                    %2$s. Propose nothing else.
                 4. Answer with one sentence on how %1$s went, then 3 to 5 bullet points starting with "- " of concrete
-                   things to do this month (budgets that went over, price increases, goals that are behind, unused
-                   room), and a last line saying the proposed budgets are waiting for my confirmation.
+                   things to do this month (budgets that went over, price increases that already happened, goals that
+                   are behind, unused room), and a last line saying the proposed budgets are waiting for my
+                   confirmation. A next_charge_date is only when the next charge is due; it is not a price change.
                 """.formatted(month, next, MAX_PROPOSALS);
     }
 

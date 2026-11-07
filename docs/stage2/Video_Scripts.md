@@ -30,9 +30,9 @@ Start: `MAPLECFO_DB=~/.maplecfo/demo.db java -jar target/maplecfo.jar gui`
 | A2 | **F14 Detected contribution** | Home → "Needs your attention": the TFSA $300 and FHSA $500 contributions from the November file. Confirm the TFSA one; show the TFSA account balance went up. Undo, Redo. | "Hybrid rules: transfers that name TFSA/RRSP/FHSA are detected and proposed; nothing changes until I confirm, and it can be undone." |
 | A3 | **F01 Import + duplicates + bad rows** | Transactions → Import bank CSV → `sample-data/demo/errors/chequing_overlap_oct25-nov6.csv` → "Detected: TD" → Import. Then `errors/visa_bad_rows.csv`. | "Deterministic. The overlap file only adds new rows: duplicates are skipped by fingerprint. The bad file imports 3 rows and reports the 3 rows it could not read and why." |
 | A4 | **F16 AI reads an unknown bank format** | Import `errors/unknown_bank_format.csv` → "MapleCFO could not recognise these columns" → **Let the AI read this file** → preview → name "Tangerine" → Save format and import. Import it again to show it is detected automatically. | "AI + checks: Claude reads the first lines and proposes the columns; Java test-reads the whole file and shows a preview. The format is saved only when I accept it." |
-| A5 | **F02 Categorization (rules + AI) + learning** | Transactions → "Needs a category": shops like HAKKA LEGEND, CINEPLEX now have AI categories (Source AI). Change one category with the drop-down; Undo. | "Hybrid: about 120 Canadian merchant rules first, the AI only for unknown shops, and only one of our category names is accepted. Corrections teach a new rule and are undoable." |
+| A5 | **F02 Categorization (rules + AI) + learning** | Transactions → search "HAKKA": with a key, shops the rules don't know (Hakka Legend, Cineplex, Kensington Bakery) were categorised by the AI during import (Source AI), so "Needs a category" is empty. Change one category with the drop-down; Undo. | "Hybrid: about 120 Canadian merchant rules first, the AI only for unknown shops, and only one of our category names is accepted. Corrections teach a new rule and are undoable." |
 | A6 | **F18 Ask your transactions** | Type "Uber Eats over $30 in October" → Find. Show the filled-in filters and totals. Change one filter by hand. Clear filters. | "AI + checks: the AI turns my sentence into the filters below; Java checks each field and does the search, so I can see and change what it understood." |
-| A7 | **F04 Budgets + alerts** | Budgets: October, Dining is red (266%). Set a new budget for Groceries; show the 80%/100% alert in Home or Alerts. Undo. | "Deterministic, Observer: imports and edits publish events; budgets recompute and warn at 80% and 100%." Error: enter a negative amount → message. |
+| A7 | **F04 Budgets + alerts** | Budgets: October, Dining is red (291%). Set a new budget for Groceries; show the 80%/100% alert in Home or Alerts. Undo. | "Deterministic, Observer: imports and edits publish events; budgets recompute and warn at 80% and 100%." Error: enter a negative amount → message. |
 | A8 | **F05 Subscriptions & bills** | Subscriptions: Netflix, Rogers, Spotify and rent "Price went up"; Hydro "Amount varies"; Presto weekly; Disney+ not shown (cancelled). | "Deterministic detection of monthly, weekly and yearly charges, price steps and cancelled subscriptions." |
 | A9 | **F03 Accounts & net worth** | Accounts: groups (cash, registered, debts), net worth. Add an account, update a balance, open Activity for TFSA. | "Composite pattern: accounts form a tree and the net worth is the sum. Card and loan balances count as debts." |
 | A10 | **F09 Savings goals** | Goals: Japan trip "Behind". Add a goal; open the forecast. | "Deterministic forecast from my average monthly surplus, shared between goals." |
@@ -52,14 +52,20 @@ Start: `MAPLECFO_DB=~/.maplecfo/demo.db java -jar target/maplecfo.jar gui`
 ## Video B: CLI (about 8 minutes)
 
 Use a fresh copy of the demo database so the GUI video is not affected:
-`cp ~/.maplecfo/demo.db ~/.maplecfo/cli.db && export MAPLECFO_DB=~/.maplecfo/cli.db && alias m='java -jar target/maplecfo.jar'`
+run these three lines first, each on its own (zsh only knows an alias from the next line you type):
+
+```
+cd ~/Projects/MapleCFO && cp ~/.maplecfo/demo.db ~/.maplecfo/cli.db
+export MAPLECFO_DB=~/.maplecfo/cli.db
+alias m='java -jar ~/Projects/MapleCFO/target/maplecfo.jar'
+```
 
 | # | Feature | Commands | Notes |
 |---|---|---|---|
 | B0 | Intro | `m --help` | "The same features from the command line; the GUI and CLI share one facade." |
 | B1 | F01 | `m import sample-data/demo/errors/visa_bad_rows.csv -a visa` | Detected format, 3 imported, 3 rejected rows with reasons. |
 | B2 | F16 | `m learn-format sample-data/demo/errors/unknown_bank_format.csv --name Tangerine` then add `--save -a chequing` | AI suggestion, test read, preview; saved only with --save. |
-| B3 | F02 | `m tx list --review --limit 5` then `m tx recategorize <id> DINING` then `m undo` | |
+| B3 | F02 | `m tx search hakka --limit 3` then `m tx recategorize <id> SHOPPING` then `m undo` | Source AI = categorised by the AI at import (the rules don't know the shop). `m tx list --review` is empty with a key. |
 | B4 | F18 | `m tx find uber eats over 30 in october` | Shows "Showing ..." and "[understood by the AI]". |
 | B5 | F04 | `m budget set DINING 300 -m 2026-11` then `m budget status -m 2026-10` | Error: `m budget set DINING -5` |
 | B6 | F05 | `m recurring` | |

@@ -50,8 +50,13 @@ public class RecurringChargesTool extends AbstractFinanceTool {
             o.put("frequency", c.frequency().name().toLowerCase());
             o.put("average_amount", c.averageAmount().toString());
             o.put("yearly_cost", c.yearlyCost().toString());
-            o.put("next_date", c.nextExpectedDate().toString());
+            o.put("next_charge_date", c.nextExpectedDate().toString());
             o.put("price_increased", c.priceIncreased());
+            if (c.priceIncreased()) {
+                // Said in words so the model does not read the next charge date as the date of the increase.
+                o.put("price_note", "The price already went up; " + c.averageAmount() + " is the new price, "
+                        + "and the next charge on " + c.nextExpectedDate() + " is at that price.");
+            }
             yearly = yearly.plus(c.yearlyCost());
         }
         out.put("total_yearly_cost", yearly.toString());

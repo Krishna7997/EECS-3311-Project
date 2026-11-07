@@ -95,6 +95,7 @@ class FinanceToolsTest {
         for (JsonNode c : r.get("charges")) {
             if (c.get("merchant").asText().startsWith("SPOTIFY")) {
                 assertTrue(c.get("price_increased").asBoolean(), "the sample raises Spotify's price");
+                assertTrue(c.get("price_note").asText().startsWith("The price already went up"));
             }
         }
         assertTrue(r.get("total_yearly_cost").asText().startsWith("$"));
