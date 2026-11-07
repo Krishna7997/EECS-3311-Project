@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLSequenceAllInOne</id>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>1700</w>
+      <h>1100</h>
+    </coordinates>
+    <panel_attributes>title=SD16 (new): F16 the AI reads an unknown bank CSV format
+obj=User~u ACTOR
+obj=:TransactionsView~v
+obj=:MapleCfoFacade~f
+obj=:AiFormatReader~r
+obj=:LlmClient~l
+obj=:CsvTransactionAdapter~c
+obj=:TransactionService~t
+u-&gt;v : Import bank CSV (file)
+v-&gt;f : detectImportFormat(file)
+f.&gt;v : empty (no saved format fits)
+u-&gt;v : Let the AI read this file
+v-&gt;f : proposeImportFormat(file, name)
+f-&gt;r : propose(file, uniqueName)
+r-&gt;l : chat(format prompt, first 8 lines)
+l.&gt;r : JSON: columns, date format, sign (Java builds a ColumnMapping and rejects invalid answers)
+r-&gt;c : importFile(file) with the new mapping (test read)
+c.&gt;r : rows read + rows rejected
+r.&gt;f : Proposal(mapping, preview, rowsRead, rowsRejected)
+f.&gt;v : Proposal
+v.&gt;u : preview of the first rows, OK / rejected counts
+u-&gt;v : Save format and import
+v-&gt;f : saveFormatAndImport(proposal, file, account)
+f-&gt;t : saveMappingProfile(mapping)
+f-&gt;t : importFrom(file, account, name)
+t.&gt;f : ImportResult
+f.&gt;v : ImportResult (next time the format is detected automatically)</panel_attributes>
+    <additional_attributes />
+  </element>
+</diagram>

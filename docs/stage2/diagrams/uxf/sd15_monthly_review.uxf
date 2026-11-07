@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLSequenceAllInOne</id>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>1700</w>
+      <h>1000</h>
+    </coordinates>
+    <panel_attributes>title=SD15 (new): F17 AI monthly review with proposed budgets
+obj=User~u ACTOR
+obj=:ReportView~v
+obj=:MapleCfoFacade~f
+obj=:MonthlyReviewService~m
+obj=:CfoAgent~a
+obj=:LlmClient~l
+obj=:ToolRegistry~r
+obj=:PendingActionStore~p
+obj=:CommandHistory~h
+u-&gt;v : AI review &amp; next month's budgets
+v-&gt;f : runMonthlyReview(month)
+f-&gt;m : review(month)
+m-&gt;a : runTask(instruction, maxSteps=10)
+a-&gt;l : chat(instruction, tool schemas)
+l.&gt;a : tool calls: spending_summary, budget_status, suggest_budgets
+a-&gt;r : execute(each call)
+r.&gt;a : results (figures from Java)
+a-&gt;l : chat(+ tool results)
+l.&gt;a : propose_action(set_budget, category, amount, month) x up to 5
+a-&gt;r : execute(propose_action)
+r-&gt;p : add(SetBudgetCommand)
+p.&gt;r : action id
+a-&gt;l : chat(+ results)
+l.&gt;a : review text with to-do list
+a.&gt;m : AgentResponse (every amount checked against tool results)
+m.&gt;f : MonthlyReview(text, proposals)
+f.&gt;v : MonthlyReview
+v.&gt;u : review + Confirm / Dismiss per budget
+u-&gt;v : Confirm
+v-&gt;f : confirmProposedAction(id)
+f-&gt;p : take(id)
+f-&gt;h : run(SetBudgetCommand)  (undoable)</panel_attributes>
+    <additional_attributes />
+  </element>
+</diagram>

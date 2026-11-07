@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLSequenceAllInOne</id>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>1500</w>
+      <h>1000</h>
+    </coordinates>
+    <panel_attributes>title=SD18 (new): F19 where could extra money go?
+obj=User~u ACTOR
+obj=:AffordView~v
+obj=:MapleCfoFacade~f
+obj=:ExtraMoneyPlanner~e
+obj=:CfoAgent~a
+obj=:LlmClient~l
+obj=:ExtraMoneyTool~t
+u-&gt;v : Have extra money? 3000
+v-&gt;f : planExtraMoney(3000)
+f-&gt;e : plan(3000)
+e.&gt;f : Plan(steps, facts, leftover) from debts by rate, cash vs 3 months of spending, FHSA/TFSA/RRSP room
+f.&gt;v : Plan
+v.&gt;u : steps with amounts and reasons (shown right away)
+v-&gt;f : explainExtraMoney(3000)  (background thread)
+f-&gt;a : handle("I have $3,000 extra...")
+a-&gt;l : chat(question, tool schemas)
+l.&gt;a : call extra_money_plan(amount=3000)
+a-&gt;t : execute
+t-&gt;e : plan(3000)
+e.&gt;t : Plan
+t.&gt;a : JSON (steps, facts, summary)
+a-&gt;l : chat(+ tool result)
+l.&gt;a : explanation
+a.&gt;f : AgentResponse (amounts checked)
+f.&gt;v : explanation
+v.&gt;u : explanation under the plan</panel_attributes>
+    <additional_attributes />
+  </element>
+</diagram>

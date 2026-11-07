@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLSequenceAllInOne</id>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>1500</w>
+      <h>900</h>
+    </coordinates>
+    <panel_attributes>title=SD17 (new): F18 find transactions by asking in plain English
+obj=User~u ACTOR
+obj=:TransactionsView~v
+obj=:MapleCfoFacade~f
+obj=:TransactionQueryParser~p
+obj=:LlmClient~l
+obj=:TransactionFilter~tf
+u-&gt;v : "Uber Eats over $30 in October"
+v-&gt;f : understandTransactionQuery(question)
+f-&gt;p : parse(question, accountIds, today)
+p-&gt;l : chat(filter prompt with today, accounts, categories)
+l.&gt;p : JSON: from, to, account, category, direction, min, max, text
+p.&gt;f : ParsedQuery(filter, ignored) after Java checks each field
+f.&gt;v : ParsedQuery (fills the filter controls, which the user can change)
+v-&gt;f : findTransactions(filter)
+f-&gt;tf : apply(all transactions)
+tf.&gt;f : matching rows, newest first
+f.&gt;v : rows
+v.&gt;u : table + totals + "Showing ..." explanation</panel_attributes>
+    <additional_attributes />
+  </element>
+</diagram>

@@ -37,6 +37,8 @@ EECS3311 Software Design (Fall 2026) course project by Krishna Patel.
 | Sequence: subscriptions · goals · **AI CFO agent** · afford check · monthly summary | [SD06](docs/stage1/diagrams/png/sd06_insights.png) · [SD07](docs/stage1/diagrams/png/sd07_goal.png) · [SD08](docs/stage1/diagrams/png/sd08_agent.png) · [SD09](docs/stage1/diagrams/png/sd09_afford.png) · [SD10](docs/stage1/diagrams/png/sd10_report.png) |
 | Sequence: auto-sync · limits refresh · weekly limits bot · RRSP estimate | [SD11](docs/stage1/diagrams/png/sd11_autosync.png) · [SD12](docs/stage1/diagrams/png/sd12_limits_refresh.png) · [SD13](docs/stage1/diagrams/png/sd13_limits_bot.png) · [SD14](docs/stage1/diagrams/png/sd14_rrsp_estimate.png) |
 
+**Stage 2 (as implemented):** updated class diagrams 1-8, use cases and new sequence diagrams SD15-SD18 are in [`docs/stage2/diagrams`](docs/stage2/diagrams/README.md).
+
 All diagrams are made in **[UMLet](https://www.umlet.com)**. Editable UMLet files are in [`docs/stage1/diagrams/uxf/`](docs/stage1/diagrams/uxf/) and the exported images in [`docs/stage1/diagrams/png/`](docs/stage1/diagrams/png/).
 
 ## Build and run

@@ -1,0 +1,654 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>1800</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Class diagram (8/8): New AI features in Stage 2: F16 AI bank-format reader, F17 AI monthly review, F18 plain-English search, F19 extra money (Adapter, Strategy, Template Method, Command, Facade)</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>760</x>
+      <y>70</y>
+      <w>599</w>
+      <h>181</h>
+    </coordinates>
+    <panel_attributes>*MapleCfoFacade*
+--
++proposeImportFormat(file: Path, name: String): AiFormatReader.Proposal
++saveFormatAndImport(p: Proposal, file: Path, accountId: String): ImportResult
++understandTransactionQuery(question: String): ParsedQuery
++findTransactions(f: TransactionFilter): List&lt;Transaction&gt;
++runMonthlyReview(month: YearMonth): MonthlyReview
++suggestBudgets(month: YearMonth): List&lt;BudgetPlanner.Suggestion&gt;
++planExtraMoney(amount: Money): ExtraMoneyPlanner.Plan
++explainExtraMoney(amount: Money): AgentResponse
++confirmProposedAction(id: String): String</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>380</y>
+      <w>395</w>
+      <h>129</h>
+    </coordinates>
+    <panel_attributes>*AiFormatReader*
+F16
+--
+-llm: LlmClient
+-prompts: PromptBuilder
+--
++propose(file: Path, formatName: String): Proposal
+~parseJson(reply: String): JsonNode</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>620</y>
+      <w>249</w>
+      <h>191</h>
+    </coordinates>
+    <panel_attributes>«record»
+*AiFormatReader.Proposal*
+--
+mapping: ColumnMapping
+explanation: String
+preview: List&lt;Transaction&gt;
+rowsRead: int
+rowsRejected: List&lt;String&gt;
+--
++looksRight(): boolean
++named(name: String): Proposal
++describeColumns(): String</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>920</y>
+      <w>373</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>«record»
+*ColumnMapping*
+--
+profileName, hasHeader, dateColumn, dateFormat,
+descriptionColumn, amountColumn, debitColumn,
+creditColumn, negateAmounts, balanceColumn
+--
++withName(name: String): ColumnMapping
++matchesFirstRow(row: List&lt;String&gt;): boolean</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>1140</y>
+      <w>475</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>*CsvTransactionAdapter*
+--
++importFile(file: Path, accountId: String): List&lt;Transaction&gt;
++getRejectedRows(): List&lt;String&gt;</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>560</x>
+      <y>380</y>
+      <w>489</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>*TransactionQueryParser*
+F18
+--
+-llm: LlmClient
+-prompts: PromptBuilder
+--
++parse(question: String, accountIds: List&lt;String&gt;,
+       today: LocalDate): ParsedQuery
+~fromJson(reply: String, accountIds: List&lt;String&gt;): ParsedQuery
+~byRules(question: String, ...): ParsedQuery</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>560</x>
+      <y>660</y>
+      <w>212</w>
+      <h>129</h>
+    </coordinates>
+    <panel_attributes>«record»
+*ParsedQuery*
+--
+filter: TransactionFilter
+byAi: boolean
+ignored: List&lt;String&gt;
+--
++explanation(): String</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>560</x>
+      <y>860</y>
+      <w>387</w>
+      <h>206</h>
+    </coordinates>
+    <panel_attributes>«record»
+*TransactionFilter*
+--
+from, to: LocalDate
+accountId: String
+category: Category
+direction: Direction
+minAmount, maxAmount: Money
+text: String
+--
++matches(t: Transaction): boolean
++apply(all: List&lt;Transaction&gt;): List&lt;Transaction&gt;
++describe(): String</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1160</x>
+      <y>380</y>
+      <w>373</w>
+      <h>191</h>
+    </coordinates>
+    <panel_attributes>*MonthlyReviewService*
+F17
+--
++MAX_STEPS: int = 10
++MAX_PROPOSALS: int = 5
+-agent: CfoAgent
+-tools: ToolRegistry
+-planner: BudgetPlanner
+--
++review(month: YearMonth): MonthlyReview
+~instruction(month, next: YearMonth): String
+-byRules(month, next: YearMonth): MonthlyReview</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1160</x>
+      <y>700</y>
+      <w>249</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>«record»
+*MonthlyReview*
+--
+month: YearMonth
+text: String
+toolsUsed: List&lt;String&gt;
+proposals: Map&lt;String, String&gt;
+byAi: boolean
+grounded: boolean</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1160</x>
+      <y>920</y>
+      <w>351</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>*BudgetPlanner*
+--
+-txService: TransactionService
+-budgets: BudgetService
+--
++suggest(month: YearMonth): List&lt;Suggestion&gt;</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1160</x>
+      <y>1090</y>
+      <w>307</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>*BudgetSuggestionTool*
+--
++name(): "suggest_budgets"
+#doExecute(args: JsonNode): ObjectNode</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1640</x>
+      <y>380</y>
+      <w>300</w>
+      <h>175</h>
+    </coordinates>
+    <panel_attributes>*ExtraMoneyPlanner*
+F19
+--
++HIGH_INTEREST_PERCENT: double = 8
++EMERGENCY_MONTHS: int = 3
+-registered: RegisteredAccountService
+-debts: DebtRepository
+-accounts: AccountService
+-cashFlow: CashFlowForecaster
+--
++plan(amount: Money): Plan</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1640</x>
+      <y>700</y>
+      <w>205</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>«record»
+*ExtraMoneyPlanner.Plan*
+--
+amount: Money
+steps: List&lt;Step&gt;
+facts: List&lt;String&gt;
+leftover: Money
+--
++summary(): String</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1900</x>
+      <y>920</y>
+      <w>307</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>*ExtraMoneyTool*
+--
++name(): "extra_money_plan"
+#doExecute(args: JsonNode): ObjectNode</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>470</x>
+      <y>1300</y>
+      <w>526</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>«interface»
+*LlmClient*
+--
++chat(msgs: List&lt;ChatMessage&gt;, tools: List&lt;ToolSchema&gt;): LlmResponse
++isMock(): boolean</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1040</x>
+      <y>1300</y>
+      <w>460</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>*CfoAgent*
+--
++handle(userMessage: String): AgentResponse
++runTask(instruction: String, maxSteps: int): AgentResponse</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1560</x>
+      <y>1300</y>
+      <w>292</w>
+      <h>57</h>
+    </coordinates>
+    <panel_attributes>*ToolRegistry*
+--
++execute(call: ToolCall): ToolResult</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1640</x>
+      <y>1090</y>
+      <w>409</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>/AbstractFinanceTool/
+--
++execute(callId: String, args: JsonNode): ToolResult
+#doExecute(args: JsonNode): ObjectNode</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1890</x>
+      <y>1300</y>
+      <w>351</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>*PendingActionStore*
+--
++add(c: UndoableCommand): String
++take(id: String): Optional&lt;UndoableCommand&gt;</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>207</x>
+      <y>241</y>
+      <w>862</w>
+      <h>149</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>852.0;10.0;10.0;139.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>794</x>
+      <y>241</y>
+      <w>275</w>
+      <h>149</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>265.0;10.0;10.0;139.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1049</x>
+      <y>241</y>
+      <w>307</w>
+      <h>149</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;297.0;139.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1049</x>
+      <y>241</y>
+      <w>600</w>
+      <h>236</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;590.5;226.5</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>134</x>
+      <y>499</y>
+      <w>93</w>
+      <h>131</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+creates</panel_attributes>
+    <additional_attributes>83.0;10.0;10.0;121.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>134</x>
+      <y>801</y>
+      <w>82</w>
+      <h>129</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;72.0;119.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>-2</x>
+      <y>473</y>
+      <w>32</w>
+      <h>712</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+test-reads the file</panel_attributes>
+    <additional_attributes>22.0;10.0;10.0;10.0;10.0;702.8;22.0;702.8</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>196</x>
+      <y>1054</y>
+      <w>71</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+uses</panel_attributes>
+    <additional_attributes>61.0;86.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>656</x>
+      <y>530</y>
+      <w>158</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+creates</panel_attributes>
+    <additional_attributes>148.5;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>656</x>
+      <y>779</y>
+      <w>107</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;97.5;81.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1274</x>
+      <y>561</y>
+      <w>82</w>
+      <h>149</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+creates</panel_attributes>
+    <additional_attributes>72.0;10.0;10.0;139.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1501</x>
+      <y>532</y>
+      <w>72</w>
+      <h>446</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>32.0;10.0;62.0;10.0;62.0;436.6;10.0;436.6</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1303</x>
+      <y>1008</y>
+      <w>42</w>
+      <h>92</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;82.0;32.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1457</x>
+      <y>1116</y>
+      <w>193</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>183.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1834</x>
+      <y>982</y>
+      <w>229</w>
+      <h>118</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;108.0;219.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1930</x>
+      <y>457</y>
+      <w>133</w>
+      <h>472</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+uses</panel_attributes>
+    <additional_attributes>123.5;462.5;123.5;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1732</x>
+      <y>545</y>
+      <w>67</w>
+      <h>165</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+creates</panel_attributes>
+    <additional_attributes>57.5;10.0;10.0;155.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>207</x>
+      <y>499</y>
+      <w>272</w>
+      <h>855</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;130.0;70.0;130.0;845.0;262.5;845.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>520</x>
+      <y>506</y>
+      <w>354</w>
+      <h>804</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>40.0;10.0;10.0;10.0;10.0;744.0;344.5;744.0;344.5;794.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>986</x>
+      <y>1326</y>
+      <w>64</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>54.0;10.0;10.0;18.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1490</x>
+      <y>1318</y>
+      <w>80</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;17.5;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1260</x>
+      <y>1362</y>
+      <w>815</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0;805.5;40.0;805.5;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1110</x>
+      <y>532</y>
+      <w>78</w>
+      <h>777</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+runTask</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;10.0;10.0;737.6;68.0;737.6;68.0;767.6</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1523</x>
+      <y>551</y>
+      <w>193</w>
+      <h>758</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+demo mode</panel_attributes>
+    <additional_attributes>10.0;10.0;97.0;10.0;97.0;718.5;183.0;718.5;183.0;748.5</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>20</x>
+      <y>1440</y>
+      <w>900</w>
+      <h>93</h>
+    </coordinates>
+    <panel_attributes>Rules in all four features
+- The AI proposes; Java checks every answer (columns, dates, categories, amounts) before using it.
+- All amounts come from Java (BudgetPlanner, ExtraMoneyPlanner, TransactionFilter); the agent's text is validated.
+- Changes (budgets, new bank formats) wait for the user's confirmation; budgets go through PendingActionStore and are undoable.
+- Without an API key, F17-F19 use fixed rules (demo mode); F16 asks the user to choose the format.
+bg=#fff8dc</panel_attributes>
+    <additional_attributes />
+  </element>
+</diagram>

@@ -1,0 +1,382 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>1400</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Class diagram (4/8): Events and undoable commands (Observer, Command) - as implemented in Stage 2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>70</y>
+      <w>520</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*EventBus*
+--
+-listeners: Map&lt;EventType, List&lt;FinanceEventListener&gt; &gt;
+--
++subscribe(t: EventType, l: FinanceEventListener): void
++unsubscribe(t: EventType, l: FinanceEventListener): void
++publish(e: FinanceEvent): void</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>280</y>
+      <w>300</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+*FinanceEventListener*
+--
++onEvent(e: FinanceEvent): void</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>640</x>
+      <y>90</y>
+      <w>200</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>*FinanceEvent*
+--
+-type: EventType
+-payload: Object
+-timestamp: Instant</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>920</x>
+      <y>70</y>
+      <w>240</w>
+      <h>243</h>
+    </coordinates>
+    <panel_attributes>«enumeration»
+*EventType*
+--
+TRANSACTIONS_IMPORTED
+TRANSACTION_RECATEGORIZED
+BUDGET_CHANGED
+BUDGET_WARNING (80%)
+BUDGET_EXCEEDED
+GOAL_UPDATED
+CONTRIBUTION_WARNING
+ACCOUNT_BALANCE_UPDATED
+CONTRIBUTION_DETECTED
+LIMITS_UPDATED
+REMINDER_DUE
+AUTO_IMPORTED</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>440</y>
+      <w>300</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*AlertService*
+--
+-alerts: List&lt;Alert&gt;
+--
++onEvent(e: FinanceEvent): void
++getActiveAlerts(): List&lt;Alert&gt;</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>420</x>
+      <y>420</y>
+      <w>420</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>*BudgetService*
+--
+-budgetRepo: BudgetRepository
+-txRepo: TransactionRepository
+-eventBus: EventBus
+--
++setBudget(b: Budget): Optional&lt;Budget&gt;
++removeBudget(c: Category, m: YearMonth): void
++getStatus(m: YearMonth): List&lt;BudgetStatus&gt;
++onEvent(e: FinanceEvent): void</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1100</x>
+      <y>760</y>
+      <w>440</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>*GoalService*
+--
++createGoal(g: SavingsGoal): void
++deleteGoal(goalId: String): void
++recordDeposit(goalId: String, amt: Money): void
++forecast(goalId: String): GoalForecast</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>440</x>
+      <y>710</y>
+      <w>200</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+*UndoableCommand*
+--
++execute(): void
++undo(): void
++describe(): String</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>720</x>
+      <y>910</y>
+      <w>290</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>*RecategorizeCommand*
+--
+-txService: TransactionService
+-txId: String
+-newCategory: Category
+-oldCategory: Category</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>720</x>
+      <y>640</y>
+      <w>280</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>*SetBudgetCommand*
+--
+-budgetService: BudgetService
+-newBudget: Budget
+-previous: Budget</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>720</x>
+      <y>780</y>
+      <w>250</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*CreateGoalCommand*
+--
+-goalService: GoalService
+-goal: SavingsGoal</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>700</y>
+      <w>320</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>*CommandHistory*
+--
+-undoStack: Deque&lt;UndoableCommand&gt;
+-redoStack: Deque&lt;UndoableCommand&gt;
+--
++run(c: UndoableCommand): void
++undo(): boolean
++redo(): boolean</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1100</x>
+      <y>960</y>
+      <w>460</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*TransactionService*
+--
++recategorize(txId: String, c: Category): Category</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1000</x>
+      <y>963</y>
+      <w>110</w>
+      <h>25</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;15.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>203</x>
+      <y>180</y>
+      <w>72</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=0..*
+notifies</panel_attributes>
+    <additional_attributes>62.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>550</x>
+      <y>123</y>
+      <w>100</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;11.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>830</x>
+      <y>142</y>
+      <w>100</w>
+      <h>33</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;23.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>275</x>
+      <y>350</y>
+      <w>163</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;153.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>180</x>
+      <y>350</y>
+      <w>20</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>619</x>
+      <y>810</y>
+      <w>167</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;157.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>710</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;30.0;90.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>773</y>
+      <w>100</w>
+      <h>34</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;24.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>350</x>
+      <y>755</y>
+      <w>100</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=0..*</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>729</x>
+      <y>580</y>
+      <w>83</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>73.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>960</x>
+      <y>807</y>
+      <w>150</w>
+      <h>22</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;12.0;140.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1100</x>
+      <y>1080</y>
+      <w>541</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>Stage 2: AI proposals (F10 chat, F17 monthly review: SetBudgetCommand)
+and detected contributions (F14: RecordContributionCommand) are
+UndoableCommands kept in PendingActionStore; they run through
+CommandHistory only after the user confirms them, so Undo works.
+bg=#fff8dc</panel_attributes>
+    <additional_attributes />
+  </element>
+</diagram>

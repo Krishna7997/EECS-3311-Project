@@ -1,0 +1,494 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>1500</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Class diagram (6/8): Presentation, Facade and persistence (Facade, MVC, Repository/DAO) - as implemented in Stage 2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>70</y>
+      <w>278</w>
+      <h>206</h>
+    </coordinates>
+    <panel_attributes>*MapleCfoApp*
+JavaFX Application, implements Nav
+--
+-app: MapleCfoFacade
+-views: List&lt;View&gt;
+-modal: ModalPane
+-watcher: ImportFolderWatcher
+--
++start(stage: Stage): void
++buildScene(): Scene
++go(pageId: String): void
++importFolderChanged(): void
+~setAppIcons(stage: Stage): void</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>400</y>
+      <w>234</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>«interface»
+*Nav*
+--
++go(pageId: String): void
++importFolderChanged(): void</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>440</x>
+      <y>400</y>
+      <w>168</w>
+      <h>165</h>
+    </coordinates>
+    <panel_attributes>«interface»
+*View*
+--
++id(): String
++title(): String
++subtitle(): String
++section(): String
++icon(): String
++root(): Node
++refresh(): void</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>440</x>
+      <y>680</y>
+      <w>300</w>
+      <h>258</h>
+    </coordinates>
+    <panel_attributes>«13 pages»
+*View implementations*
+--
+HomeView (check-in, attention, tiles)
+ChatView (F10)
+TransactionsView (F01, F02, F16, F18)
+BudgetsView (F04)
+SubscriptionsView (F05)
+AccountsView (F03)
+GoalsView (F09)
+AffordView (F11, F19)
+RegisteredView (F06, F14)
+DebtView (F08)
+RetirementView (F07)
+ReportView (F12, F17)
+SettingsView (F13, F15)</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>560</y>
+      <w>373</w>
+      <h>181</h>
+    </coordinates>
+    <panel_attributes>*Ui*
+helpers for all pages
+--
++dialog(title, intro, form, ok, action, onDone)
++view(title, intro, body): void
++confirm(msg, ok, onYes): void
++card(title, help, action, body...): VBox
++table(empty: String): TableView
++banner(text, kind, actions...): HBox
++chip(text, kind): Label
++attempt(action): void</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>880</y>
+      <w>270</w>
+      <h>57</h>
+    </coordinates>
+    <panel_attributes>*ResponsiveGrid*
+--
+tiles that wrap on narrow windows</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>980</y>
+      <w>249</w>
+      <h>57</h>
+    </coordinates>
+    <panel_attributes>*Icons*
+--
+SVG path icons for the sidebar</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>800</x>
+      <y>70</y>
+      <w>584</w>
+      <h>454</h>
+    </coordinates>
+    <panel_attributes>*MapleCfoFacade*
+--
+-txService, budgets, registered, fire, debtPlanner,
+ recurring, alerts, history, eventBus, reports,
+ accounts, netWorth, goals, affordability, cashFlow,
+ agent, reminders, rrspEstimator, limits, settings,
+ formatReader, queryParser, monthlyReview,
+ budgetPlanner, extraMoney
+--
+F01/F02: importTransactions, importTransactionsAuto, detectImportFormat,
+ getTransactions, findTransactions, searchTransactions, recategorize
+F16: proposeImportFormat, saveFormatAndImport
+F18: understandTransactionQuery
+undo: undoLastEdit, redoLastEdit, canRedo, describeUndo
+F04: setBudget, getBudgetStatus      F17: runMonthlyReview, suggestBudgets
+F05: getRecurringCharges
+F06/F14: getContributionRoom, previewContribution, checkContribution,
+ recordContribution, getContributions, getRepaymentPlans, estimateRrspRoom
+F07: projectFire, suggestFireInputs, lastFireInputs
+F08: addDebt, getDebts, planDebtPayoff
+F03: addAccount, updateAccountBalance, getAccounts, getNetWorthHistory,
+ getAccountActivity, summarize
+F09: createGoal, getGoals, forecastGoals    F11: checkAffordability
+F19: planExtraMoney, explainExtraMoney
+F10: askCfo, confirmProposedAction, dismissProposedAction, getPendingActions
+F12: generateMonthlyReport
+F13: getImportFolder, setImportFolder, newImportWatcher,
+ isMonthlyCheckinDue, completeMonthlyCheckin, checkReminders
+F15: describeLimits, refreshLimits</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>760</x>
+      <y>640</y>
+      <w>314</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>*AppContext*
+composition root
+--
++create(dbFile: Path): MapleCfoFacade
++create(db, clock, llm): MapleCfoFacade
++defaultDatabasePath(): Path
++defaultImportFolder(): Path</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>760</x>
+      <y>820</y>
+      <w>351</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>*MapleCfoCli*
+picocli, interactive mode keeps undo history
+--
+-facade: MapleCfoFacade
+-renderer: CliRenderer
+--
++main(args: String[]): void
++facade(): MapleCfoFacade
++printNewAlerts(out: PrintWriter): void</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>760</x>
+      <y>1030</y>
+      <w>614</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>«subcommands»
+*Command classes*
+--
+TransactionCommands: import, learn-format, profiles, tx list/find/search
+BudgetCommands, RoomCommands, AccountCommands (account, networth, afford, extra)
+GoalCommands, PlanningCommands (fire, debt, recurring), ReportCommands
+AgentCommands (ask, confirm, dismiss, ai, review), AutomationCommands</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1260</x>
+      <y>820</y>
+      <w>241</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>*CliRenderer*
+--
++table(headers, rows): String
++truncate(s, n): String</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1560</x>
+      <y>70</y>
+      <w>249</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>«interface»
+*Repository&lt;T, ID&gt;*
+--
++save(entity: T): void
++findById(id: ID): Optional&lt;T&gt;
++findAll(): List&lt;T&gt;
++delete(id: ID): void</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1560</x>
+      <y>290</y>
+      <w>402</w>
+      <h>134</h>
+    </coordinates>
+    <panel_attributes>«interfaces»
+*Repositories*
+--
+TransactionRepository, AccountRepository,
+BudgetRepository, GoalRepository, DebtRepository,
+MappingProfileRepository, ProfileRepository,
+ContributionRepository, CategoryRuleRepository,
+NetWorthHistoryRepository, SettingsRepository (new)</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1560</x>
+      <y>530</y>
+      <w>482</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>«11 classes»
+*Sqlite...Repository*
+--
+SqliteTransactionRepository, SqliteAccountRepository,
+SqliteBudgetRepository, SqliteGoalRepository,
+SqliteDebtRepository, SqliteMappingProfileRepository,
+SqliteProfileRepository, SqliteContributionRepository,
+SqliteCategoryRuleRepository, SqliteNetWorthHistoryRepository,
+SqliteSettingsRepository</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1560</x>
+      <y>760</y>
+      <w>285</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>«test doubles»
+*InMemory...Repository*
+--
+same interfaces, used by unit tests</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1560</x>
+      <y>900</y>
+      <w>416</w>
+      <h>113</h>
+    </coordinates>
+    <panel_attributes>*DatabaseManager*
+--
+-file: Path
+--
++forFile(path: Path): DatabaseManager
++connection(): Connection
+-migrate(): void   (adds new columns, keeps old data)</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>127</x>
+      <y>266</y>
+      <w>42</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;134.0;32.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>288</x>
+      <y>163</y>
+      <w>522</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;512.0;134.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>288</x>
+      <y>163</y>
+      <w>246</w>
+      <h>247</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+1..13</panel_attributes>
+    <additional_attributes>10.0;10.0;236.0;237.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>514</x>
+      <y>555</y>
+      <w>86</w>
+      <h>135</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;76.0;125.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>907</x>
+      <y>514</y>
+      <w>195</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+creates</panel_attributes>
+    <additional_attributes>10.0;126.0;185.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>907</x>
+      <y>749</y>
+      <w>38</w>
+      <h>81</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>28.5;71.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1101</x>
+      <y>846</y>
+      <w>169</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;46.0;159.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>925</x>
+      <y>954</y>
+      <w>151</w>
+      <h>86</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;141.5;76.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1674</x>
+      <y>179</y>
+      <w>96</w>
+      <h>121</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;86.5;111.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1751</x>
+      <y>414</y>
+      <w>60</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;116.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1520</x>
+      <y>640</y>
+      <w>50</w>
+      <h>326</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>40.0;10.0;10.0;10.0;10.0;316.5;40.0;316.5</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1835</x>
+      <y>347</y>
+      <w>167</w>
+      <h>459</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>127.0;10.0;157.0;10.0;157.0;449.0;10.0;449.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1374</x>
+      <y>196</y>
+      <w>196</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+uses services that use</panel_attributes>
+    <additional_attributes>10.0;10.0;156.0;10.0;156.0;160.8;186.0;160.8</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>383</x>
+      <y>658</y>
+      <w>67</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>57.0;240.7;27.0;240.7;27.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>

@@ -1,0 +1,381 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>1400</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Class diagram (2/8): Import and categorization (Adapter, Strategy) - as implemented, with F16 AI format reader</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>130</y>
+      <w>550</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+*TransactionImporter*
+--
++importFile(file: Path, accountId: String): List&lt;Transaction&gt;</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>90</x>
+      <y>430</y>
+      <w>550</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>*CsvTransactionAdapter*
+--
+-mapping: ColumnMapping
+-reader: CsvReader
+--
++importFile(file: Path, accountId: String): List&lt;Transaction&gt;
++readHeader(file: Path): List&lt;String&gt;
+-parseRow(row: Map): Transaction
+-validate(t: Transaction): List&lt;String&gt;</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>460</x>
+      <y>760</y>
+      <w>390</w>
+      <h>268</h>
+    </coordinates>
+    <panel_attributes>*ColumnMapping*
+«record»
+--
+-profileName: String
+-hasHeader: boolean
+-dateColumn: String
+-dateFormat: String
+-descriptionColumn: String
+-amountColumn: String
+-debitColumn: String
+-creditColumn: String
+-negateAmounts: boolean
+-balanceColumn: String
+--
++isValidFor(header: List&lt;String&gt;): boolean
++matchesFirstRow(row: List&lt;String&gt;): boolean
++withName(name: String): ColumnMapping</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>760</x>
+      <y>450</y>
+      <w>460</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+*MappingProfileRepository*
+--
++save(m: ColumnMapping): void
++findByName(name: String): Optional&lt;ColumnMapping&gt;
++findAll(): List&lt;ColumnMapping&gt;</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1340</x>
+      <y>820</y>
+      <w>430</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+*CategorizationStrategy*
+--
++categorize(t: Transaction): Optional&lt;Category&gt;</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1020</x>
+      <y>1110</y>
+      <w>500</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*RuleBasedCategorizer*
+--
+-rules: List&lt;CategoryRule&gt;
+--
++categorize(t: Transaction): Optional&lt;Category&gt;
++learnFromCorrection(t: Transaction, c: Category): void</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1570</x>
+      <y>1100</y>
+      <w>450</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*LlmCategorizer*
+--
+-llm: LlmClient
+-promptBuilder: PromptBuilder
+--
++categorize(t: Transaction): Optional&lt;Category&gt;
+-parseCategory(reply: String): Optional&lt;Category&gt;</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1300</x>
+      <y>460</y>
+      <w>520</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*CategorizationService*
+--
+-strategies: List&lt;CategorizationStrategy&gt;
+--
++categorizeAll(txs: List&lt;Transaction&gt;): List&lt;Transaction&gt;
++learn(t: Transaction, c: Category): void</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1120</x>
+      <y>1340</y>
+      <w>310</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*CategoryRule*
+--
+-keyword: String
+-category: Category
+--
++matches(t: Transaction): boolean</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>910</x>
+      <y>58</y>
+      <w>680</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>*TransactionService*
+--
+-mappings: MappingProfileRepository
+-categorizer: CategorizationService
+-repo: TransactionRepository
+-eventBus: EventBus
+--
++importFrom(file: Path, accountId: String, profileName: String): ImportResult
++detectProfile(file: Path): Optional&lt;ColumnMapping&gt;
++recategorize(txId: String, c: Category): Category
++findByMonth(m: YearMonth): List&lt;Transaction&gt;
++search(query: String): List&lt;Transaction&gt;</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1870</x>
+      <y>450</y>
+      <w>260</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>*ImportResult*
+--
+-imported: int
+-duplicatesSkipped: int
+-rejectedRows: List&lt;String&gt;
+-uncategorized: int</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>311</x>
+      <y>200</y>
+      <w>53</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;43.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>416</x>
+      <y>570</y>
+      <w>167</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=1
+m2=1
+uses</panel_attributes>
+    <additional_attributes>10.0;10.0;157.0;190.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>739</x>
+      <y>550</y>
+      <w>209</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;</panel_attributes>
+    <additional_attributes>199.0;10.0;10.0;210.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1308</x>
+      <y>890</y>
+      <w>219</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>209.0;10.0;10.0;220.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1577</x>
+      <y>890</y>
+      <w>180</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;170.0;210.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1261</x>
+      <y>1200</y>
+      <w>23</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=0..*</panel_attributes>
+    <additional_attributes>10.0;10.0;13.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1546</x>
+      <y>550</y>
+      <w>23</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=1..*
+ordered chain</panel_attributes>
+    <additional_attributes>13.0;10.0;10.0;270.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1022</x>
+      <y>250</y>
+      <w>165</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>155.0;10.0;10.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>550</x>
+      <y>250</y>
+      <w>463</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+creates with mapping</panel_attributes>
+    <additional_attributes>453.0;10.0;10.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1325</x>
+      <y>250</y>
+      <w>200</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;190.0;210.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1450</x>
+      <y>250</y>
+      <w>439</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;429.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>1080</y>
+      <w>416</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>*AiFormatReader*
+F16, new in Stage 2
+--
+-llm: LlmClient
+-prompts: PromptBuilder
+--
++propose(file: Path, formatName: String): Proposal
+(the proposal is test-read with CsvTransactionAdapter
+ and saved only when the user accepts it)</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>446</x>
+      <y>884</y>
+      <w>24</w>
+      <h>278</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+proposes</panel_attributes>
+    <additional_attributes>10.0;268.0;14.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>113</x>
+      <y>570</y>
+      <w>41</w>
+      <h>520</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+test-reads</panel_attributes>
+    <additional_attributes>10.0;510.0;10.0;130.0;31.8;130.0;31.8;10.0</additional_attributes>
+  </element>
+</diagram>
