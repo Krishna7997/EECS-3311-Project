@@ -388,8 +388,74 @@ Lines marked ✎ were drafted from the session record and confirmed by me before
 - **AI Contribution:** New contribution kinds: Home Buyers' Plan and Lifelong Learning Plan withdrawals and repayments (no room used; repayment schedule 1/15 or 1/10 a year, HBP 2022-2025 deferral, $60,000 HBP and $10,000/$20,000 LLP limits), FHSA transfer to RRSP (no RRSP room used), pension adjustment in the profile (lowers the RRSP estimate; DB column added with a migration that keeps old data). The contribution form asks 'What happened?' and explains each choice; the RRSP card shows what to repay this year. TransactionFilter (date range, account, category, money in/out, amount range, text) used by a filter bar on the Transactions page with totals, and by 'tx list'. 13 new tests (246).
 - **Decisions made while coding:** LLP repayment start simplified to the 5th year after the first withdrawal; noted in the report.
 - **Human Contribution:** Asked how CRA limits work and asked to implement them; asked for transaction filters.
-- **Outcome:** ✎ Committed Nov 6. 246 tests pass.
+- **Outcome:** ✎ Committed Nov 6 (a985778). Tests pass.
 - **Commit:** HBP/LLP repayments, FHSA-to-RRSP transfer, pension adjustment, transaction filters
+
+### 35. Demo dataset for testing and videos
+
+- **Date:** 2026-11-06
+- **Task:** Build a realistic fake dataset to test every feature and record the videos.
+- **Input/Instruction:** Krishna: add more CSV files / information so there is a good dataset for testing, and record the videos from it.
+- **AI Contribution:** sample-data/demo: 22 months of fake TD chequing, RBC Visa and savings data (~1,300 rows), November files for the auto-import demo, error files (overlap/duplicates, 3 bad rows, unknown format), and load-demo.sh that sets up profile, 8 accounts, TFSA/RRSP/FHSA history, budgets, goals and debts in a separate demo database. DemoDatasetTest (5 tests) checks what each feature should find. 254 tests pass.
+- **Decisions made while coding:** The realistic data exposed two F05 gaps: a price change from a few months ago showed as 'amount varies' instead of 'price went up', and cancelled subscriptions kept showing. Fixed with a price-step check, a 12-month window, dropping charges that missed two dates, and using the new price for yearly cost. Report tip no longer suggests a budget that already exists.
+- **Human Contribution:** Asked for a richer dataset for testing and videos.
+- **Outcome:** ✎ Committed Nov 6 (f7058dd). Tests pass.
+- **Commit:** 22-month demo dataset, price-step detection for recurring charges, clearer report tip
+
+### 36. F16 AI reads an unknown bank CSV
+
+- **Date:** 2026-11-06
+- **Task:** Import a bank format MapleCFO doesn't know without the user mapping columns by hand.
+- **Input/Instruction:** Krishna: introduce more AI features / use AI to drive things. Chose all four proposed features.
+- **AI Contribution:** AiFormatReader: the LLM reads the first 8 lines and returns the columns as JSON; Java builds a ColumnMapping (rejects invalid answers), test-reads the whole file and shows a preview. Saved only when the user accepts. GUI button in the import dialog; CLI learn-format. 6 tests.
+- **Decisions made while coding:** The AI never imports directly: a wrong date format shows up as rejected rows in the preview and the format is not saved.
+- **Human Contribution:** ✎ 
+- **Outcome:** ✎ Committed Nov 6 (f76b1dc). Tests pass.
+- **Commit:** F16 AI reads an unknown bank CSV format
+
+### 37. F18 find transactions in plain English
+
+- **Date:** 2026-11-06
+- **Task:** Search transactions with a sentence instead of setting filters.
+- **Input/Instruction:** Same request (more AI features).
+- **AI Contribution:** TransactionQueryParser: the LLM fills in the filter fields as JSON; Java checks each one (real dates, known categories/accounts, sensible amounts) and reports what it ignored. The answer fills the visible filter controls. Keyword rules in demo mode. GUI ask box; CLI tx find. 5 tests.
+- **Decisions made while coding:** The search itself stays the deterministic TransactionFilter; the AI only translates the question.
+- **Human Contribution:** ✎ 
+- **Outcome:** ✎ Committed Nov 6 (1b9f20b). Tests pass.
+- **Commit:** F18 find transactions by asking in plain English
+
+### 38. F19 where to put extra money
+
+- **Date:** 2026-11-06
+- **Task:** Help decide where a refund or bonus could go.
+- **Input/Instruction:** Same request (more AI features).
+- **AI Contribution:** ExtraMoneyPlanner (Java): high-interest debt, 3-month emergency fund, FHSA, TFSA, RRSP, then low-interest debt, with amounts and reasons; extra_money_plan tool; the agent explains it. GUI card on 'Can I afford it?'; CLI extra. 5 tests.
+- **Decisions made while coding:** All amounts are computed in Java; the order is labelled as common education, not advice.
+- **Human Contribution:** ✎ 
+- **Outcome:** ✎ Committed Nov 6 (5ef8658). Tests pass.
+- **Commit:** F19 where to put extra money
+
+### 39. F17 AI monthly review
+
+- **Date:** 2026-11-06
+- **Task:** A monthly review that plans its own steps and proposes next month's budgets.
+- **Input/Instruction:** Same request (more AI features).
+- **AI Contribution:** MonthlyReviewService runs a multi-step agent task (up to 10 steps): spending, budgets, recurring, goals, room, suggest_budgets, then up to 5 propose_action calls and a to-do list. BudgetPlanner/suggest_budgets tool computes 3-month averages rounded up to $10. CfoAgent now tracks several proposals per answer. GUI review pop-up with Confirm/Dismiss per budget; Home check-in step; CLI review. 3 tests (273 total).
+- **Decisions made while coding:** Fixed-order fallback in demo mode uses the same tools. Proposals never apply without confirmation.
+- **Human Contribution:** ✎ 
+- **Outcome:** ✎ Committed Nov 6 (f9070e6). Tests pass.
+- **Commit:** F17 AI monthly review with proposed budgets
+
+### 40. F07 FIRE: own target and more options
+
+- **Date:** 2026-11-06
+- **Task:** Let the user change the FIRE target and other assumptions.
+- **Input/Instruction:** Krishna: in FIRE make it possible to change the target, and anything else you recommend.
+- **AI Contribution:** FireInputs gained an optional own target and target age; FireCalculator adds the yearly saving needed for a target age (annuity formula), the Coast FIRE number, what the target lets you spend, and return scenarios 1 point lower/higher. GUI: 'Use my numbers' (investment accounts + 12 x average cash flow), advanced section (target, retire-at age, return %, withdrawal %), target line on the chart, last plan remembered. CLI fire --mine --target --retire-at. Agent tool accepts target_amount/target_age. 6 new tests (279 total).
+- **Decisions made while coding:** Return and withdrawal rate stay within the Stage 1 validation ranges; a custom target that pays for less than planned spending shows a warning.
+- **Human Contribution:** ✎ 
+- **Outcome:** ✎ Committed Nov 6 (4666a5d). Tests pass.
+- **Commit:** F07 FIRE: own target, target age, editable return and withdrawal rate, coast FIRE, use my numbers
 
 ## 4. Where the AI's work needed human correction
 
@@ -401,7 +467,8 @@ Lines marked ✎ were drafted from the session record and confirmed by me before
 - Two tests depended on an environment variable in my terminal; dialogs opened as separate windows on macOS (entry 31).
 - Over-limit RRSP contributions ignored the CRA $2,000 allowance; TFSA stayed negative after a withdrawal (entries 32–33).
 - A flaky folder-watcher test was found by the AI itself while measuring coverage (entry 25).
-- iCloud Desktop sync created duplicate 'Name 2.java' files on my Mac that broke compilation; they were never committed and were moved out of src.
+- iCloud Desktop sync created duplicate 'Name 2.java' files on my Mac that broke compilation; they were never committed, and the project was moved out of iCloud.
+- The 22-month demo dataset showed that F05 labelled old price changes as 'amount varies' and kept listing cancelled subscriptions (entry 35).
 
 ## 5. Changes from the Stage 1 design
 
@@ -432,6 +499,6 @@ Lines marked ✎ were drafted from the session record and confirmed by me before
 |---|---|---|
 | Oct 20–26 | 5 | 0ca6048 Maven project and Money; a2ff9b2 Domain model; 5051cb3 F07 FIRE; a369c1b F08 debt planner; db01f84 F05 recurring charges |
 | Oct 27–Nov 2 | 7 | 7c29fe5 F06 room + EventBus; 1904991 F04 budgets; 4e43342 Command undo/redo; 395b727 F02 rules; 7643cbb F01 CSV import; 0c503e2 SQLite; 0d2ae51 Facade + CLI |
-| Nov 3–9 | 20 | e832174 LLM layer + F05 fixes; 439f701 F10 agent; e494302 F02 AI + F12 report; c4d5af8 F03 + F09; b925d3a F11; 06d505b GUI part 1; fd9a000 GUI part 2; 05e7ee7 F13 + F14; fc1ab76 F15; 7efe645 README; 5f45d8a More tests; 63a6ed7 GUI redesign; 8535411 Format detection; 60d6ae5 GUI UX rework; ada881a Money flow + check-in; 921f649 In-window pop-ups; 6f536e4 Activity + allowance; 3ec76b8 Withdrawals clear excess; (pending) HBP/LLP, filters; (pending) This log |
+| Nov 3–9 | 26 | e832174 LLM layer + F05 fixes; 439f701 F10 agent; e494302 F02 AI + F12 report; c4d5af8 F03 + F09; b925d3a F11; 06d505b GUI part 1; fd9a000 GUI part 2; 05e7ee7 F13 + F14; fc1ab76 F15; 7efe645 README; 5f45d8a More tests; 63a6ed7 GUI redesign; 8535411 Format detection; 60d6ae5 GUI UX rework; ada881a Money flow + check-in; 921f649 In-window pop-ups; 6f536e4 Activity + allowance; 3ec76b8 Withdrawals clear excess; a985778 HBP/LLP, filters; f7058dd Demo dataset; f76b1dc F16; 1b9f20b F18; 5ef8658 F19; f9070e6 F17; 4666a5d FIRE options; (Nov 7) Logo / app icon |
 
-Test count grew from 8 (first commit) to 246; the build is `mvn test` / `mvn package`.
+Test count grew from 8 (first commit) to 279; the build is `mvn test` / `mvn package`.
