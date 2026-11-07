@@ -78,6 +78,31 @@ Type: **D** deterministic, **AI** AI-based, **H** hybrid. Video codes refer to S
 | F18 Find transactions in plain English | New | Implemented | `TransactionQueryParser` (AI fills filter fields; Java checks them); `TransactionFilter` | `parse`, `fromJson`, `apply`, `describe` | - | H | A6, B4 |
 | F19 Where extra money could go | New | Implemented | `ExtraMoneyPlanner` (Java split); `ExtraMoneyTool`; `CfoAgent` explains | `plan`, `explainExtraMoney` | Template Method | H | A12, B8 |
 
+### Design-to-implementation traceability (Stage 1 classes → implemented files)
+
+The "Designed classes" column is copied from the Stage 1 traceability table (Stage 1 report, Section 8). Every designed
+class exists under the same name in `src/main/java/com/maplecfo/` unless the last column says otherwise; the reasons
+for each change are in Section 4.
+
+| Feature | Designed classes (Stage 1) | Implemented classes / files | Status | Differences from the design |
+|---|---|---|---|---|
+| F01 | TransactionsView, MapleCfoFacade, TransactionService, MappingProfileRepository, ColumnMapping, TransactionImporter, CsvTransactionAdapter, TransactionRepository | All designed classes, plus `DefaultProfiles`, `ImportResult`, `TransactionFilter` | Modified | Format detected automatically (`detectProfile`) |
+| F02 | CategorizationService, RuleBasedCategorizer, LlmCategorizer, LlmClient, PromptBuilder, RecategorizeCommand, CommandHistory, TransactionService | All designed classes, plus `DefaultRules` | Implemented | - |
+| F03 | DashboardView, MapleCfoFacade, AccountService, NetWorthService, AssetComponent, AccountGroup, Account, AccountRepository | All except DashboardView → `HomeView` + `AccountsView` | Implemented | Dashboard split into GUI pages |
+| F04 | BudgetView, BudgetService, SetBudgetCommand, CommandHistory, EventBus, AlertService, FinanceEventListener | All; BudgetView → `BudgetsView` | Implemented | Renamed view |
+| F05 | DashboardView, MapleCfoFacade, TransactionService, RecurringChargeDetector | All; DashboardView → `SubscriptionsView`; plus `RecurringCharge` | Modified | Price steps and cancelled charges |
+| F06 | PlanningView, RegisteredAccountService, ContributionLimits, ProfileRepository, ContributionRepository, EventBus | All; PlanningView → `RegisteredView`; plus `ContributionRoom`, `ContributionCheck`, `ContributionKind`, `RepaymentPlan` | Modified | HBP/LLP, FHSA transfer, RRSP allowance |
+| F07 | PlanningView, MapleCfoFacade, FireCalculator | All; PlanningView → `RetirementView`; plus `FireInputs`, `FireProjection` | Modified | Own target, target age, Coast FIRE |
+| F08 | PlanningView, DebtPayoffPlanner, PayoffStrategy, AvalancheStrategy, SnowballStrategy, DebtRepository | All; PlanningView → `DebtView`; plus `PayoffPlan` | Implemented | - |
+| F09 | GoalsView, GoalService, CreateGoalCommand, CommandHistory, CashFlowForecaster | All, plus `GoalForecast` | Modified | Surplus shared between goals |
+| F10 | ChatView, MapleCfoCli, CfoAgent, ConversationMemory, PromptBuilder, LlmClient, ClaudeClientAdapter, ToolRegistry, FinanceTool, AbstractFinanceTool, ResponseValidator, PendingActionStore | All, plus `LlmClientFactory`, `MockLlmClient`, `DemoRules`, 12 tool classes | Implemented | - |
+| F11 | GoalsView / ChatView, AffordabilityTool, AffordabilityAnalyzer, CashFlowForecaster, GoalService, BudgetService, ProposeActionTool, PendingActionStore, CommandHistory | All; the GUI page is `AffordView`; plus `AffordabilityResult` | Modified | TIGHT verdict added |
+| F12 | ReportView, MapleCfoCli, ReportService, ReportSummarizer, LlmClient, BudgetService, NetWorthService, RecurringChargeDetector | All, plus `MonthlyReport` | Implemented | - |
+| F13 | ImportFolderWatcher, TransactionService, BalanceSyncService, AccountService, DebtRepository, ReminderService, EventBus | All, plus `SettingsRepository`, `SettingsView` | Modified | User-chosen folder, monthly check-in |
+| F14 | ContributionDetector, RecordContributionCommand, PendingActionStore, CommandHistory, RegisteredAccountService, RrspRoomEstimator | All designed classes | Modified | Partial-year scaling, pension adjustment |
+| F15 | LimitsService, LimitsProvider, RemoteLimitsProvider, BundledLimitsProvider, LimitsValidator, LimitsCache, LimitsUpdateJob, CraLimitsScraper, FailureNotifier, GitHubIssueNotifier, EmailNotifier | All except FailureNotifier → `LimitsNotifier` and EmailNotifier → `ConsoleNotifier` | Modified | No e-mail; bot opens a pull request or an issue |
+| F16-F19 | New in Stage 2 (no Stage 1 classes) | See the mapping table above | New | UC16-UC19, SD15-SD18 |
+
 ### How the classes collaborate (user input to result)
 
 - **F01 Import.** The user picks a file (GUI) or runs `import file -a chequing` (CLI). `MapleCfoFacade.importTransactionsAuto`
@@ -265,11 +290,16 @@ No Stage 1 feature or pattern was removed.
 
 ### 5.1 Tools and models
 
-| Tool / platform | LLM / model | Used for | Total tokens | Money cost |
+| Tool / platform | LLM / model | Purpose and example tasks | Total tokens | Money cost |
 |---|---|---|---|---|
 | Claude (Anthropic) | claude-opus-5-5 (configured) | Writing all Java code and JUnit tests from the Stage 1 design (all 19 features, 8 patterns, GUI, CLI), bug diagnosis, demo dataset, README, UML updates, this report draft | **[TODO Krishna: from claude.ai usage]** | **[TODO Krishna]** |
 | Anthropic Claude API (inside MapleCFO) | claude-haiku-5-5 | Runtime LLM for F02 categorization, F10 chat, F12 summary, F16-F19 (my own key in `.env`) | **[TODO Krishna: Anthropic Console → Usage]** | **[TODO Krishna: Console → Cost]** |
 | **[TODO Krishna, if used]** image tool for the logo | **[model]** | MapleCFO logo (`docs/branding/maplecfo-logo.jpg`) | - | - |
+
+**About the model name.** The Claude app was set to `claude-opus-5-5`, but the app does not show which model served
+each individual reply, and it can switch models (for example as a fallback). So `claude-opus-5-5` is the configured
+model, not a guarantee for every interaction. The model used inside MapleCFO is exact, because the app sends it with
+every API call (`LLM_MODEL`, default `claude-haiku-5-5`).
 
 The app itself shows the tokens used in a session (`ai` command in the CLI), which helped estimate the runtime cost.
 

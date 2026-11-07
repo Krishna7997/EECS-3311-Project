@@ -143,7 +143,7 @@ Optional settings (in `.env` or as environment variables): `LLM_MODEL` (default 
 Java 21 · JavaFX (GUI) · picocli (CLI) · SQLite · Anthropic Claude API · GitHub Actions · JUnit 5 · KUMA
 
 ## Design at a glance
-- **15 features** (11 deterministic, 1 AI, 3 hybrid)
+- **19 features**: the 15 designed in Stage 1 plus 4 new AI features in Stage 2 (F16-F19)
 - **8 design patterns:** Facade, Adapter, Template Method, Factory Method, Strategy, Observer, Command, Composite
 
 📄 Full design (UML, use cases, sequence diagrams, traceability): [Stage 1 Design Report](docs/stage1/Stage1_Design_Report.md) · [PDF](docs/stage1/Stage1_Design_Report.pdf)
@@ -152,7 +152,7 @@ Java 21 · JavaFX (GUI) · picocli (CLI) · SQLite · Anthropic Claude API · Gi
 | Stage | Status |
 |---|---|
 | 1: Design | ✅ Done |
-| 2: Build with AI | 🚧 In progress: all 15 features built (GUI + CLI) |
+| 2: Build with AI | ✅ Done: all 19 features built (GUI + CLI). [Stage 2 report](docs/stage2/stage2-report.pdf) · [video scripts](docs/stage2/Video_Scripts.md) · [AI collaboration log](docs/stage2/AI_Collaboration_Log.md) |
 | 3: Testing (JUnit + KUMA) | ⏳ |
 
 > *Educational project: MapleCFO provides financial information, not professional financial advice.*
