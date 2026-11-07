@@ -77,7 +77,7 @@ alias m='java -jar ~/Projects/MapleCFO/target/maplecfo.jar'
 | B12 | F12 | `m report -m 2026-10` | |
 | B13 | F13 | `m inbox`, `m checkin`, `m watch --once`, `m reminders` | |
 | B14 | F15 | `m limits` and `m limits refresh --force` | |
-| B15 | Demo mode | `mv .env .env.off && m ask how much did I spend on dining last month && mv .env.off .env` | Shows that without a key the app still runs, with clearly labelled fixed rules. Do not open `.env`. |
+| B15 | Demo mode | `LLM_API_KEY= m ask how much did I spend on dining last month` | An empty key in the environment overrides `.env` for this one command: the app still runs, with clearly labelled fixed rules. `.env` is never opened. |
 
 ## After recording
 

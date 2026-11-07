@@ -57,7 +57,8 @@ public class RecurringChargeDetector {
     public List<RecurringCharge> detect(List<Transaction> txs, LocalDate today) {
         Map<String, List<Transaction>> groups = new LinkedHashMap<>();
         for (Transaction t : txs) {
-            if (t.isExpense()) {
+            // Transfers between your own accounts (card payments, savings, TFSA/RRSP/FHSA) are not bills.
+            if (t.isExpense() && t.getCategory() != com.maplecfo.domain.Category.TRANSFER) {
                 String key = normaliseMerchant(t.getMerchant());
                 if (!key.isEmpty()) {
                     groups.computeIfAbsent(key, k -> new ArrayList<>()).add(t);

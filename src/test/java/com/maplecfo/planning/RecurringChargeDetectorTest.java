@@ -40,6 +40,21 @@ class RecurringChargeDetectorTest {
     }
 
     @Test
+    void ignoresTransfersBetweenOwnAccounts() {
+        List<Transaction> txs = new java.util.ArrayList<>();
+        for (String d : List.of("2026-06-02", "2026-07-02", "2026-08-03", "2026-09-02")) {
+            Transaction t = tx(d, "TFSA CONTRIBUTION - WEALTHSIMPLE", "-300.00");
+            t.setCategory(com.maplecfo.domain.Category.TRANSFER, com.maplecfo.domain.CategorySource.RULE);
+            txs.add(t);
+        }
+        txs.addAll(List.of(tx("2026-06-03", "NETFLIX.COM", "-18.99"), tx("2026-07-03", "NETFLIX.COM", "-18.99"),
+                tx("2026-08-03", "NETFLIX.COM", "-18.99")));
+        List<RecurringCharge> found = detector.detect(txs);
+        assertEquals(1, found.size(), "only the subscription, not the TFSA transfer");
+        assertEquals("NETFLIX.COM", found.get(0).merchant());
+    }
+
+    @Test
     void flagsPriceIncreaseAboveFivePercent() {
         List<Transaction> txs = List.of(
                 tx("2026-06-10", "Spotify", "-11.99"),
