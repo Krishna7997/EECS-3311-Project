@@ -38,14 +38,14 @@ Without an API key the app runs in a clearly labelled **demo mode** (`MockLlmCli
 installed and tried offline. Demo mode is a fallback, not the AI feature: the videos use the real model.
 
 **Status.** All 15 Stage 1 features are implemented and working, and four new AI features were added (F16-F19), for 19
-features in total. 279 JUnit tests pass. 8 design patterns from the course are implemented (Section 3). Limitations
+features in total. 280 JUnit tests pass. 8 design patterns from the course are implemented (Section 3). Limitations
 are listed honestly in Section 6.4.
 
 | | Count |
 |---|---|
 | Features (Stage 1 + new) | 15 + 4 = 19 |
 | Java source files (main) | 200 in 21 packages |
-| JUnit tests | 279 (all passing), 32 test classes |
+| JUnit tests | 280 (all passing), 32 test classes |
 | Line coverage (JaCoCo) | 59.7% overall, 89.7% excluding the JavaFX GUI package |
 | Code commits Oct 20-26 / Oct 27-Nov 2 / Nov 3-9 | 5 / 7 / 25 |
 
@@ -487,7 +487,7 @@ the AI log and the UML are not). Every commit was pushed during its period.
 
 ### 6.2 Checks performed
 
-- **Automated tests:** 279 JUnit 5 tests in 32 classes, all passing (`mvn test`). They cover the domain rules, every
+- **Automated tests:** 280 JUnit 5 tests in 32 classes, all passing (`mvn test`). They cover the domain rules, every
   calculator with exact expected values (FIRE, debt, room, affordability, goals), import (duplicates, bad rows,
   format detection), categorization, events and undo/redo, SQLite repositories and migration, every agent tool and its
   argument validation, the agent loop with scripted model replies (tool use, grounding check, correction round,
@@ -495,7 +495,8 @@ the AI log and the UML are not). Every commit was pushed during its period.
   end, and the 22-month demo dataset (`DemoDatasetTest`).
 - **Coverage (JaCoCo 0.8.12):** 59.7% of lines overall and 89.7% outside the JavaFX GUI package.
 - **Running the application:** after each patch I ran `mvn test`, the CLI commands and the GUI on my Mac with the fake
-  sample and demo data. **[TODO Krishna: after you test the AI features with your real key, keep: "and with my real API key for the AI features."]**
+  sample and demo data, and on Nov 7 ran F02, F10, F12 and F16-F19 with my real API key (this found the F17 defect
+  below). Both demonstration videos were recorded with the real key.
 - **GUI screenshots:** every page and pop-up was rendered headlessly (with and without data, at small and large window
   sizes) to catch layout problems before each commit.
 - **Security checks:** `.env` and real bank CSVs are git-ignored, `.env.example` holds only a placeholder, and no key
@@ -517,6 +518,8 @@ Full testing and the KUMA agent validation follow in Stage 3.
 | TFSA stayed over-contributed after a withdrawal | Using the GUI | Same-year withdrawal clears the excess (`3ec76b8`) |
 | Price changes from months ago showed as "amount varies"; cancelled subscriptions listed | 22-month demo data | Price-step detection, 12-month window, stopped charges dropped (`f7058dd`) |
 | iCloud Desktop created "Name 2.java" copies and changed build output | Failing builds on my Mac | Never committed; project moved out of iCloud |
+| AI monthly review said "Rent rises to $1,525 on 2026-12-01", but the rent had already gone up (it read the next charge date as the date of the increase) | Testing F17 with my real API key | `recurring_charges` now says in words that the increase already happened; the review instruction says a next charge date is not a price change (`560cc56`) |
+| Card payments, savings transfers and TFSA/FHSA contributions were listed as monthly bills, doubling the yearly total ($49,409 instead of $28,483) | Recording the CLI demo video | Transfers between own accounts are skipped; new test `ignoresTransfersBetweenOwnAccounts` (`5f3de3d`) |
 
 ### 6.4 Remaining limitations
 
@@ -526,7 +529,8 @@ Full testing and the KUMA agent validation follow in Stage 3.
   the user to choose the format.
 - Tax rules are simplified for education: the RRSP estimate uses after-tax pay (so it is low), LLP repayments start in
   the 5th year, provincial differences and tax refunds are not calculated, and nothing is tax or investment advice.
-- Proposals waiting for confirmation are kept in memory, so in the CLI they must be confirmed in interactive mode.
+- Proposals waiting for confirmation and the undo history are kept in memory, so in the CLI they work across commands
+  only in interactive mode (each one-shot command is a new process).
 - Recurring detection needs at least 3 charges, so yearly charges appear only after three years of data.
 - Net-worth history records a snapshot only when a balance changes.
 - The JavaFX GUI is tested by running it and by screenshots, not by unit tests (hence the lower overall coverage).
@@ -538,11 +542,37 @@ Full testing and the KUMA agent validation follow in Stage 3.
 
 ## 7. Demonstration index
 
-Video A (GUI): **[TODO Krishna: link]** · Video B (CLI): **[TODO Krishna: link]** · Both are unlisted and open without
-an access request. Replace each `t=?` with the start of the segment in seconds.
+Video A (GUI, 6:25): VIDEO_A_URL · Video B (CLI, 5:17): VIDEO_B_URL · Both are unlisted on YouTube and open
+without an access request. Each link below starts at the feature's segment. Every segment shows the feature ID and
+name, how it is started, the input, the result, and a caption saying what it does and where the AI is involved; error
+cases are included where they exist (A7, B5, B10). Both videos were recorded on my Mac with the fake demo data and my
+real API key (the key is never shown). The GUI tour clicks through the app by itself (a recording helper in a separate
+file, not part of the app) and the CLI video is a recording of the terminal session.
 
-| Feature | GUI segment (Video A) | CLI segment (Video B) |
+| Feature | GUI (Video A) | CLI (Video B) |
 |---|---|---|
+| F01 Import bank CSVs | [A3 0:49](VIDEO_A_URL?t=49) | [B1 0:18](VIDEO_B_URL?t=18) |
+| F02 Categorize and correct | [A5 1:34](VIDEO_A_URL?t=94) | [B3 0:54](VIDEO_B_URL?t=54) |
+| F03 Accounts and net worth | [A9 2:44](VIDEO_A_URL?t=164) | [B7 1:59](VIDEO_B_URL?t=119) |
+| F04 Budgets and alerts | [A7 2:09](VIDEO_A_URL?t=129) | [B5 1:24](VIDEO_B_URL?t=84) |
+| F05 Recurring charges | [A8 2:34](VIDEO_A_URL?t=154) | [B6 1:48](VIDEO_B_URL?t=108) |
+| F06 TFSA/RRSP/FHSA room | [A13 3:41](VIDEO_A_URL?t=221) | [B9 2:34](VIDEO_B_URL?t=154) |
+| F07 FIRE projection | [A16 4:24](VIDEO_A_URL?t=264) | [B10 3:10](VIDEO_B_URL?t=190) |
+| F08 Debt payoff | [A15 4:11](VIDEO_A_URL?t=251) | [B10 3:10](VIDEO_B_URL?t=190) |
+| F09 Savings goals | [A10 2:58](VIDEO_A_URL?t=178) | [B7 1:59](VIDEO_B_URL?t=119) |
+| F10 AI CFO chat | [A17 4:48](VIDEO_A_URL?t=288) | [B11 3:35](VIDEO_B_URL?t=215) |
+| F11 Can I afford it? | [A11 3:06](VIDEO_A_URL?t=186) | [B7 1:59](VIDEO_B_URL?t=119) |
+| F12 Monthly report | [A18 5:22](VIDEO_A_URL?t=322) | [B12 4:09](VIDEO_B_URL?t=249) |
+| F13 Auto-sync and reminders | [A1 0:09](VIDEO_A_URL?t=9) | [B13 4:21](VIDEO_B_URL?t=261) |
+| F14 Detected contributions, RRSP estimate | [A2 0:27](VIDEO_A_URL?t=27), [A14 4:02](VIDEO_A_URL?t=242) | [B9 2:34](VIDEO_B_URL?t=154) |
+| F15 Self-updating limits | [A20 6:04](VIDEO_A_URL?t=364) | [B14 4:49](VIDEO_B_URL?t=289) |
+| F16 AI reads an unknown bank format | [A4 1:12](VIDEO_A_URL?t=72) | [B2 0:30](VIDEO_B_URL?t=30) |
+| F17 AI monthly review | [A19 5:36](VIDEO_A_URL?t=336) | [B11 3:35](VIDEO_B_URL?t=215) |
+| F18 Find transactions in plain English | [A6 1:53](VIDEO_A_URL?t=113) | [B4 1:12](VIDEO_B_URL?t=72) |
+| F19 Where extra money could go | [A12 3:27](VIDEO_A_URL?t=207) | [B8 2:22](VIDEO_B_URL?t=142) |
+| Demo mode (no API key) | - | [B15 5:06](VIDEO_B_URL?t=306) |
+
+---|---|---|
 | F01 Import bank CSVs | A3 [link?t=] | B1 [link?t=] |
 | F02 Categorize and correct | A5 [link?t=] | B3 [link?t=] |
 | F03 Accounts and net worth | A9 [link?t=] | B7 [link?t=] |
