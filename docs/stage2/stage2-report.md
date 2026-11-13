@@ -542,7 +542,7 @@ Full testing and the KUMA agent validation follow in Stage 3.
 
 ## 7. Demonstration index
 
-Video A (GUI, 6:25): VIDEO_A_URL · Video B (CLI, 4:10): VIDEO_B_URL · Both are unlisted on YouTube and open
+Video A (GUI, 6:25): https://youtu.be/kkj3KK_1WIg · Video B (CLI, 4:10): https://youtu.be/VF4bBqEF96I · Both are unlisted on YouTube and open
 without an access request. Each link below starts at the feature's segment. Every segment shows the feature ID and
 name, how it is started, the input, the result, and a caption saying what it does and where the AI is involved; error
 cases are included where they exist (A7, B5, B10). Both videos were recorded on my Mac with the fake demo data and my
@@ -551,26 +551,26 @@ separate file, not part of the app); in the CLI video a helper script types each
 
 | Feature | GUI (Video A) | CLI (Video B) |
 |---|---|---|
-| F01 Import bank CSVs | [A3 0:49](VIDEO_A_URL?t=49) | [B1 0:09](VIDEO_B_URL?t=9) |
-| F02 Categorize and correct | [A5 1:34](VIDEO_A_URL?t=94) | [B3 0:41](VIDEO_B_URL?t=41) |
-| F03 Accounts and net worth | [A9 2:44](VIDEO_A_URL?t=164) | [B7 1:28](VIDEO_B_URL?t=88) |
-| F04 Budgets and alerts | [A7 2:09](VIDEO_A_URL?t=129) | [B5 1:04](VIDEO_B_URL?t=64) |
-| F05 Recurring charges | [A8 2:34](VIDEO_A_URL?t=154) | [B6 1:21](VIDEO_B_URL?t=81) |
-| F06 TFSA/RRSP/FHSA room | [A13 3:41](VIDEO_A_URL?t=221) | [B9 1:54](VIDEO_B_URL?t=114) |
-| F07 FIRE projection | [A16 4:24](VIDEO_A_URL?t=264) | [B10 2:20](VIDEO_B_URL?t=140) |
-| F08 Debt payoff | [A15 4:11](VIDEO_A_URL?t=251) | [B10 2:20](VIDEO_B_URL?t=140) |
-| F09 Savings goals | [A10 2:58](VIDEO_A_URL?t=178) | [B7 1:28](VIDEO_B_URL?t=88) |
-| F10 AI CFO chat | [A17 4:48](VIDEO_A_URL?t=288) | [B11 2:39](VIDEO_B_URL?t=159) |
-| F11 Can I afford it? | [A11 3:06](VIDEO_A_URL?t=186) | [B7 1:28](VIDEO_B_URL?t=88) |
-| F12 Monthly report | [A18 5:22](VIDEO_A_URL?t=322) | [B12 3:13](VIDEO_B_URL?t=193) |
-| F13 Auto-sync and reminders | [A1 0:09](VIDEO_A_URL?t=9) | [B13 3:24](VIDEO_B_URL?t=204) |
-| F14 Detected contributions, RRSP estimate | [A2 0:27](VIDEO_A_URL?t=27), [A14 4:02](VIDEO_A_URL?t=242) | [B9 1:54](VIDEO_B_URL?t=114) |
-| F15 Self-updating limits | [A20 6:04](VIDEO_A_URL?t=364) | [B14 3:46](VIDEO_B_URL?t=226) |
-| F16 AI reads an unknown bank format | [A4 1:12](VIDEO_A_URL?t=72) | [B2 0:19](VIDEO_B_URL?t=19) |
-| F17 AI monthly review | [A19 5:36](VIDEO_A_URL?t=336) | [B11 2:39](VIDEO_B_URL?t=159) |
-| F18 Find transactions in plain English | [A6 1:53](VIDEO_A_URL?t=113) | [B4 0:54](VIDEO_B_URL?t=54) |
-| F19 Where extra money could go | [A12 3:27](VIDEO_A_URL?t=207) | [B8 1:44](VIDEO_B_URL?t=104) |
-| Demo mode (no API key) | - | [B15 3:58](VIDEO_B_URL?t=238) |
+| F01 Import bank CSVs | [A3 0:49](https://youtu.be/kkj3KK_1WIg?t=49) | [B1 0:09](https://youtu.be/VF4bBqEF96I?t=9) |
+| F02 Categorize and correct | [A5 1:34](https://youtu.be/kkj3KK_1WIg?t=94) | [B3 0:41](https://youtu.be/VF4bBqEF96I?t=41) |
+| F03 Accounts and net worth | [A9 2:44](https://youtu.be/kkj3KK_1WIg?t=164) | [B7 1:28](https://youtu.be/VF4bBqEF96I?t=88) |
+| F04 Budgets and alerts | [A7 2:09](https://youtu.be/kkj3KK_1WIg?t=129) | [B5 1:04](https://youtu.be/VF4bBqEF96I?t=64) |
+| F05 Recurring charges | [A8 2:34](https://youtu.be/kkj3KK_1WIg?t=154) | [B6 1:21](https://youtu.be/VF4bBqEF96I?t=81) |
+| F06 TFSA/RRSP/FHSA room | [A13 3:41](https://youtu.be/kkj3KK_1WIg?t=221) | [B9 1:54](https://youtu.be/VF4bBqEF96I?t=114) |
+| F07 FIRE projection | [A16 4:24](https://youtu.be/kkj3KK_1WIg?t=264) | [B10 2:20](https://youtu.be/VF4bBqEF96I?t=140) |
+| F08 Debt payoff | [A15 4:11](https://youtu.be/kkj3KK_1WIg?t=251) | [B10 2:20](https://youtu.be/VF4bBqEF96I?t=140) |
+| F09 Savings goals | [A10 2:58](https://youtu.be/kkj3KK_1WIg?t=178) | [B7 1:28](https://youtu.be/VF4bBqEF96I?t=88) |
+| F10 AI CFO chat | [A17 4:48](https://youtu.be/kkj3KK_1WIg?t=288) | [B11 2:39](https://youtu.be/VF4bBqEF96I?t=159) |
+| F11 Can I afford it? | [A11 3:06](https://youtu.be/kkj3KK_1WIg?t=186) | [B7 1:28](https://youtu.be/VF4bBqEF96I?t=88) |
+| F12 Monthly report | [A18 5:22](https://youtu.be/kkj3KK_1WIg?t=322) | [B12 3:13](https://youtu.be/VF4bBqEF96I?t=193) |
+| F13 Auto-sync and reminders | [A1 0:09](https://youtu.be/kkj3KK_1WIg?t=9) | [B13 3:24](https://youtu.be/VF4bBqEF96I?t=204) |
+| F14 Detected contributions, RRSP estimate | [A2 0:27](https://youtu.be/kkj3KK_1WIg?t=27), [A14 4:02](https://youtu.be/kkj3KK_1WIg?t=242) | [B9 1:54](https://youtu.be/VF4bBqEF96I?t=114) |
+| F15 Self-updating limits | [A20 6:04](https://youtu.be/kkj3KK_1WIg?t=364) | [B14 3:46](https://youtu.be/VF4bBqEF96I?t=226) |
+| F16 AI reads an unknown bank format | [A4 1:12](https://youtu.be/kkj3KK_1WIg?t=72) | [B2 0:19](https://youtu.be/VF4bBqEF96I?t=19) |
+| F17 AI monthly review | [A19 5:36](https://youtu.be/kkj3KK_1WIg?t=336) | [B11 2:39](https://youtu.be/VF4bBqEF96I?t=159) |
+| F18 Find transactions in plain English | [A6 1:53](https://youtu.be/kkj3KK_1WIg?t=113) | [B4 0:54](https://youtu.be/VF4bBqEF96I?t=54) |
+| F19 Where extra money could go | [A12 3:27](https://youtu.be/kkj3KK_1WIg?t=207) | [B8 1:44](https://youtu.be/VF4bBqEF96I?t=104) |
+| Demo mode (no API key) | - | [B15 3:58](https://youtu.be/VF4bBqEF96I?t=238) |
 
 ---|---|---|
 | F01 Import bank CSVs | A3 [link?t=] | B1 [link?t=] |
