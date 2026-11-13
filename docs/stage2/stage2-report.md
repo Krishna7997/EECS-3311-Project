@@ -305,7 +305,14 @@ The app itself shows the tokens used in a session (`ai` command in the CLI), whi
 Following the course rule, the code was written by the AI from the Stage 1 design; I gave the instructions, reviewed
 each change, made the design decisions, ran the tests and the application on my own computer, reported defects, and
 made every commit. Each change came as one patch per commit; I applied it, ran `mvn test` and the app, and pushed only
-when it worked. The full log (40 entries) is in
+when it worked. I tested
+each feature as it was built. When a feature did not pass (a wrong figure, a confusing screen, an error on my Mac), we
+worked on it together and changed it until it did. I also asked for UI and UX changes to make the app easier for the
+end user: a sidebar with grouped pages instead of tabs, a Home page with a check-in list and "Needs your attention",
+pop-ups inside the window, live checks while typing (for example the over-contribution warning), plain-English
+labels and messages, and the option to ask questions in plain language.
+
+The full log (40 entries) is in
 [`docs/stage2/AI_Collaboration_Log.md`](https://github.com/Krishna7997/EECS-3311-Project/blob/main/docs/stage2/AI_Collaboration_Log.md).
 
 ### 5.3 Representative interactions

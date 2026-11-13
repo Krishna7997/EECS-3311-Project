@@ -2,7 +2,7 @@
 
 EECS 3311 · Krishna Patel · Repository: https://github.com/Krishna7997/EECS-3311-Project
 
-This log records how the Stage 2 code was produced with an AI coding tool. Following the course rule, all Java code was written by the AI; I (Krishna) gave the instructions, reviewed every change, made the design decisions, ran the tests and the app on my own Mac, reported bugs, and made every commit.
+This log records how the Stage 2 code was produced with an AI coding tool. Following the course rule, all Java code was written by the AI; I (Krishna) gave the instructions, reviewed every change, made the design decisions, ran the tests and the app on my own Mac, reported bugs, and made every commit. I tested each feature as it was built; when one did not pass, we worked on it and changed it until it did, and I asked for UI and UX changes (sidebar navigation, a Home check-in list, in-window pop-ups, live checks while typing, plain-English wording) to make the app easier for the end user.
 
 Lines marked ✎ were drafted from the session record and confirmed by me before submission.
 
