@@ -572,27 +572,6 @@ separate file, not part of the app); in the CLI video a helper script types each
 | F19 Where extra money could go | [A12 3:27](https://youtu.be/VF4bBqEF96I?t=207) | [B8 1:44](https://youtu.be/kkj3KK_1WIg?t=104) |
 | Demo mode (no API key) | - | [B15 3:58](https://youtu.be/kkj3KK_1WIg?t=238) |
 
----|---|---|
-| F01 Import bank CSVs | A3 [link?t=] | B1 [link?t=] |
-| F02 Categorize and correct | A5 [link?t=] | B3 [link?t=] |
-| F03 Accounts and net worth | A9 [link?t=] | B7 [link?t=] |
-| F04 Budgets and alerts | A7 [link?t=] | B5 [link?t=] |
-| F05 Recurring charges | A8 [link?t=] | B6 [link?t=] |
-| F06 TFSA/RRSP/FHSA room | A13 [link?t=] | B9 [link?t=] |
-| F07 FIRE projection | A16 [link?t=] | B10 [link?t=] |
-| F08 Debt payoff | A15 [link?t=] | B10 [link?t=] |
-| F09 Savings goals | A10 [link?t=] | B7 [link?t=] |
-| F10 AI CFO chat | A17 [link?t=] | B11 [link?t=] |
-| F11 Can I afford it? | A11 [link?t=] | B7 [link?t=] |
-| F12 Monthly report | A18 [link?t=] | B12 [link?t=] |
-| F13 Auto-sync and reminders | A1 [link?t=] | B13 [link?t=] |
-| F14 Detected contributions, RRSP estimate | A2, A14 [link?t=] | B9 [link?t=] |
-| F15 Self-updating limits | A20 [link?t=] | B14 [link?t=] |
-| F16 AI reads an unknown bank format | A4 [link?t=] | B2 [link?t=] |
-| F17 AI monthly review | A19 [link?t=] | B11 [link?t=] |
-| F18 Find transactions in plain English | A6 [link?t=] | B4 [link?t=] |
-| F19 Where extra money could go | A12 [link?t=] | B8 [link?t=] |
-| Demo mode (no API key) | - | B15 [link?t=] |
 
 ---
 
