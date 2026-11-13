@@ -430,7 +430,7 @@ CRA rules instead of the simplified Stage 1 ones; and checked that every amount 
 
 ### 6.1 Weekly commit summary
 
-Only commits that change implementation or test code are counted (documentation-only commits such as the README,
+The full per-period list, including documentation commits, is in [`docs/stage2/weekly-commits.md`](https://github.com/Krishna7997/EECS-3311-Project/blob/main/docs/stage2/weekly-commits.md). Only commits that change implementation or test code are counted (documentation-only commits such as the README,
 the AI log and the UML are not). Every commit was pushed during its period.
 
 | Period | Code commits | Minimum |

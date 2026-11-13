@@ -10,6 +10,7 @@ EECS3311 Software Design (Fall 2026) course project by Krishna Patel.
 | 🎬 GUI demo (all 19 features, 6:25) | https://youtu.be/VF4bBqEF96I |
 | 💻 CLI demo (all 19 features, 4:10) | https://youtu.be/kkj3KK_1WIg |
 | 📄 Stage 2 report (feature-by-feature video links in Section 7) | [stage2-report.pdf](docs/stage2/stage2-report.pdf) |
+| 📅 Weekly commit report (code commits per period, with links) | [weekly-commits.md](docs/stage2/weekly-commits.md) · [PDF](docs/stage2/weekly-commits.pdf) |
 
 ## What it does
 - 📥 Imports bank CSVs and categorizes transactions, using rules first and AI for the rest
