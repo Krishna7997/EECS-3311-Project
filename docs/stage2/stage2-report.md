@@ -4,7 +4,6 @@
 **EECS 3311 Software Design, Fall 2026 · Krishna Patel**  
 Repository: <https://github.com/Krishna7997/EECS-3311-Project> · Videos: see Section 7
 
-> Items marked **[TODO Krishna]** still need your input (video links, token/cost figures, your own wording). Remove this note before submitting.
 
 ---
 
@@ -47,7 +46,7 @@ are listed honestly in Section 6.4.
 | Java source files (main) | 200 in 21 packages |
 | JUnit tests | 280 (all passing), 32 test classes |
 | Line coverage (JaCoCo) | 59.7% overall, 89.7% excluding the JavaFX GUI package |
-| Code commits Oct 20-26 / Oct 27-Nov 2 / Nov 3-9 | 5 / 7 / 25 |
+| Code commits Oct 20-26 / Oct 27-Nov 2 / Nov 3-9 | 5 / 7 / 28 |
 
 ---
 
@@ -318,7 +317,7 @@ when it worked. The full log (40 entries) is in
 - *AI contribution:* checked the local files without printing the key; found the key had been typed into
   `.env.example` (a committed file) instead of `.env`; confirmed it was never committed or pushed; restored the
   placeholder and verified `.env` is git-ignored.
-- *Human contribution:* **[TODO Krishna: e.g. "I created a new key, put it only in .env and deleted the exposed key in the Anthropic Console."]**
+- *Human contribution:* I created a new key, put it only in `.env`, and revoked the exposed key in the Anthropic Console.
 - *Outcome:* no key in the repository or its history; the handout's key-protection rules are followed.
 
 **2. Testing the CLI found two F05 defects**
@@ -326,7 +325,7 @@ when it worked. The full log (40 entries) is in
 - *Task:* run the built application on real use and check the results.
 - *Input:* I ran `--help`, `import`, `recurring` and `fire` on my Mac and shared the output.
 - *AI contribution:* found a next-expected date in the past and a "price went up" flag on a variable utility bill.
-- *Human contribution:* ran the commands on my own machine and shared the real output for review; **[TODO Krishna: your words]**
+- *Human contribution:* I ran the commands on my own Mac and shared the real output; I noticed the odd dates and flags in the list and asked for them to be checked.
 - *Outcome:* next dates now roll forward and variable bills are not flagged (commit `e832174`).
 
 **3. F10 AI CFO agent**
@@ -394,7 +393,7 @@ when it worked. The full log (40 entries) is in
 - *Input:* "How does the limit work in real life?", then "let's implement this".
 - *AI contribution:* explained the rules, then implemented the RRSP $2,000 allowance, HBP/LLP withdrawals and
   repayments, FHSA-to-RRSP transfers and the pension adjustment, with a database migration.
-- *Human contribution:* asked for the real rules to be implemented and reviewed them; **[TODO Krishna: anything you checked on canada.ca]**
+- *Human contribution:* asked how the limits work in real life, asked for the real rules to be implemented, and reviewed the result in the GUI (over-contribution warning, HBP repayment banner).
 - *Decision:* LLP repayment start simplified (noted in limitations).
 - *Outcome:* `6f536e4`, `a985778`.
 
@@ -403,7 +402,7 @@ when it worked. The full log (40 entries) is in
 - *Input:* "Can we add more CSV files so there is a good dataset for testing and the videos?"
 - *AI contribution:* a 22-month fake dataset with a load script and `DemoDatasetTest`; the data showed that price
   changes from months ago were labelled "amount varies" and cancelled subscriptions were still listed; both fixed.
-- *Human contribution:* asked for the dataset; **[TODO Krishna: what you checked in the demo]**
+- *Human contribution:* asked for the dataset, loaded it on my Mac and used it for the real-key test and both demonstration videos.
 - *Outcome:* `f7058dd`.
 
 **12. New AI features F16-F19 and FIRE options**
@@ -411,7 +410,7 @@ when it worked. The full log (40 entries) is in
 - *Input:* "Can we introduce more AI features or use AI to drive things?"; later "in FIRE can we change the target".
 - *AI contribution:* proposed four features; I chose all four. Each keeps numbers in Java and asks before changing
   anything. FIRE gained an own target, a target age, Coast FIRE and editable assumptions.
-- *Human contribution:* chose the features; **[TODO Krishna: what you tested with your key]**
+- *Human contribution:* chose the features; on Nov 7 I ran F16-F19, F10 and F12 with my own API key and shared the output, which found the F17 wording defect (Section 6.3).
 - *Outcome:* `f76b1dc`, `1b9f20b`, `5ef8658`, `f9070e6`, `4666a5d`.
 
 **What I rejected or corrected.** I rejected the first two GUI designs; reported every failing build and test on my
@@ -431,7 +430,7 @@ the AI log and the UML are not). Every commit was pushed during its period.
 |---|---|---|
 | Period 1: Oct 20-26 | 5 | 5 |
 | Period 2: Oct 27-Nov 2 | 7 | 5 |
-| Period 3: Nov 3-9 | 25 | 5 |
+| Period 3: Nov 3-9 | 28 | 5 |
 
 **Period 1: Oct 20-26**
 
@@ -484,6 +483,9 @@ the AI log and the UML are not). Every commit was pushed during its period.
 | [`f9070e6`](https://github.com/Krishna7997/EECS-3311-Project/commit/f9070e6) | Nov 6 | F17 AI monthly review |
 | [`4666a5d`](https://github.com/Krishna7997/EECS-3311-Project/commit/4666a5d) | Nov 6 | F07 FIRE options |
 | [`e4aff8a`](https://github.com/Krishna7997/EECS-3311-Project/commit/e4aff8a) | Nov 7 | Logo: app icon and sidebar |
+| [`8eb9bb2`](https://github.com/Krishna7997/EECS-3311-Project/commit/8eb9bb2) | Nov 7 | Logo removed again: icons, sidebar image, class diagram 6 |
+| [`560cc56`](https://github.com/Krishna7997/EECS-3311-Project/commit/560cc56) | Nov 7 | F17 fix: review misread a next charge date as a price rise |
+| [`5f3de3d`](https://github.com/Krishna7997/EECS-3311-Project/commit/5f3de3d) | Nov 7 | F05 fix: transfers no longer listed as recurring bills (+ test) |
 
 ### 6.2 Checks performed
 
