@@ -4,6 +4,13 @@
 
 EECS3311 Software Design (Fall 2026) course project by Krishna Patel.
 
+## Demo videos and Stage 2 report
+| | Link |
+|---|---|
+| 🎬 GUI demo (all 19 features, 6:25) | https://youtu.be/VF4bBqEF96I |
+| 💻 CLI demo (all 19 features, 4:10) | https://youtu.be/kkj3KK_1WIg |
+| 📄 Stage 2 report (feature-by-feature video links in Section 7) | [stage2-report.pdf](docs/stage2/stage2-report.pdf) |
+
 ## What it does
 - 📥 Imports bank CSVs and categorizes transactions, using rules first and AI for the rest
 - 📊 Tracks net worth, budgets, subscriptions and savings goals
@@ -150,7 +157,7 @@ Java 21 · JavaFX (GUI) · picocli (CLI) · SQLite · Anthropic Claude API · Gi
 | Stage | Status |
 |---|---|
 | 1: Design | ✅ Done |
-| 2: Build with AI | ✅ Done: all 19 features built (GUI + CLI). [Stage 2 report](docs/stage2/stage2-report.pdf) · [video scripts](docs/stage2/Video_Scripts.md) · [AI collaboration log](docs/stage2/AI_Collaboration_Log.md) |
+| 2: Build with AI | ✅ Done: all 19 features built (GUI + CLI). [Stage 2 report](docs/stage2/stage2-report.pdf) · [GUI video](https://youtu.be/VF4bBqEF96I) · [CLI video](https://youtu.be/kkj3KK_1WIg) · [video scripts](docs/stage2/Video_Scripts.md) · [AI collaboration log](docs/stage2/AI_Collaboration_Log.md) |
 | 3: Testing (JUnit + KUMA) | ⏳ |
 
 > *Educational project: MapleCFO provides financial information, not professional financial advice.*
