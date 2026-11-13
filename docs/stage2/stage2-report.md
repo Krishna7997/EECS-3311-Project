@@ -291,8 +291,8 @@ No Stage 1 feature or pattern was removed.
 
 | Tool / platform | LLM / model | Purpose and example tasks | Total tokens | Money cost |
 |---|---|---|---|---|
-| Claude (Anthropic) | claude-opus-5-5 (configured) | Writing all Java code and JUnit tests from the Stage 1 design (all 19 features, 8 patterns, GUI, CLI), bug diagnosis, demo dataset, README, UML updates, this report draft | **[TODO Krishna: from claude.ai usage]** | **[TODO Krishna]** |
-| Anthropic Claude API (inside MapleCFO) | claude-haiku-5-5 | Runtime LLM for F02 categorization, F10 chat, F12 summary, F16-F19 (my own key in `.env`) | **[TODO Krishna: Anthropic Console → Usage]** | **[TODO Krishna: Console → Cost]** |
+| Claude (Anthropic), Claude Pro plan, single user | claude-opus-5-5 (configured) | Writing all Java code and JUnit tests from the Stage 1 design (all 19 features, 8 patterns, GUI, CLI), bug diagnosis, demo dataset, README, UML updates, recording helpers for the videos, this report draft | Not shown per message on a subscription. Measured from the session log for Nov 2-13: about 0.33 million output tokens, 5.0 million tokens written to the prompt cache and 131 million read from it (repeated context). Earlier sessions (Oct 20-Nov 1) are not available | Flat subscription: Claude Pro, US$20 a month (list price with monthly billing), no per-token charge |
+| Anthropic Claude API (inside MapleCFO, my own key `maple-cfo-local`) | claude-haiku-5-5 | Runtime LLM for F02 categorization, F10 chat, F12 summary, F16-F19, used while testing and recording the videos | 478,875 tokens (Nov 3-12, from the Anthropic Console usage export): 429,296 input, 49,579 output, no cache | About US$0.07: 429,296 x $0.10 + 49,579 x $0.50 per million tokens (Haiku 5.5 list prices) |
 
 **About the model name.** The Claude app was set to `claude-opus-5-5`, but the app does not show which model served
 each individual reply, and it can switch models (for example as a fallback). So `claude-opus-5-5` is the configured
