@@ -144,7 +144,7 @@ same facade, so the results are the same as when typed (useful for scripts and f
 | A script file, one command per line (`#` = comment; one session, so `confirm` and `undo` work across lines) | `java -jar target/maplecfo.jar run sample-data/cli/demo-script.txt` |
 | Standard input (a script, or questions) | `cat my-commands.txt \| java -jar target/maplecfo.jar run -`<br>`echo "How much TFSA room do I have?" \| java -jar target/maplecfo.jar ask -`<br>`java -jar target/maplecfo.jar < my-commands.txt` (interactive mode reading a file) |
 | A file of questions for the AI, with JSON output (one JSON object per line) | `java -jar target/maplecfo.jar ask --file sample-data/cli/questions.txt --json` |
-| A local HTTP API (127.0.0.1 only) | `java -jar target/maplecfo.jar serve --port 8080`, then:<br>`curl localhost:8080/health`<br>`curl -X POST localhost:8080/ask -d '{"question":"How much TFSA room do I have?"}'`<br>`curl -X POST localhost:8080/command -d '{"command":"budget status -m 2026-10"}'` |
+| A local HTTP API (127.0.0.1 only) | `java -jar target/maplecfo.jar serve --port 8080`, then open <http://127.0.0.1:8080/> in a browser for the list of endpoints, or:<br>`curl "http://127.0.0.1:8080/ask?question=How+much+TFSA+room+do+I+have%3F"`<br>`curl localhost:8080/health`<br>`curl -X POST localhost:8080/ask -d '{"question":"How much TFSA room do I have?"}'`<br>`curl -X POST localhost:8080/command -d '{"command":"budget status -m 2026-10"}'` |
 
 `run` exits with code 1 if any command failed (add `--stop-on-error` to stop at the first one). The JSON from `ask --json`
 and `/ask` has `question`, `answer`, `toolsUsed`, `grounded` (every dollar amount matched the tool results),

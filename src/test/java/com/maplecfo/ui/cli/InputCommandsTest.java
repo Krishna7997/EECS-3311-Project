@@ -158,6 +158,19 @@ class InputCommandsTest {
         assertEquals(0, c.get("exitCode").asInt(), cmd.body());
         assertTrue(c.get("output").asText().contains("Budget set: DINING $150.00"), cmd.body());
 
+        HttpResponse<String> home = http.send(HttpRequest.newBuilder(URI.create(base + "/")).build(),
+                HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, home.statusCode());
+        assertTrue(home.body().contains("POST /ask"), home.body());
+        HttpResponse<String> unknown = http.send(HttpRequest.newBuilder(URI.create(base + "/nope")).build(),
+                HttpResponse.BodyHandlers.ofString());
+        assertEquals(404, unknown.statusCode());
+        assertTrue(unknown.body().contains("endpoints"), "a wrong path explains the API: " + unknown.body());
+        HttpResponse<String> getAsk = http.send(HttpRequest.newBuilder(URI.create(
+                base + "/ask?question=How+much+TFSA+room+do+I+have%3F")).build(), HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, getAsk.statusCode(), getAsk.body());
+        assertEquals("How much TFSA room do I have?", JSON.readTree(getAsk.body()).get("question").asText());
+
         HttpResponse<String> bad = http.send(post(base + "/ask", "{}"), HttpResponse.BodyHandlers.ofString());
         assertEquals(400, bad.statusCode());
         HttpResponse<String> notAllowed = http.send(post(base + "/command", "{\"command\":\"serve\"}"),

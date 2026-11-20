@@ -96,7 +96,8 @@ final class InputCommands {
 
     @Command(name = "serve", description = {
             "Start a local HTTP API on this computer (127.0.0.1 only), e.g. serve --port 8080. Stop with Ctrl+C.",
-            "GET /health; POST /ask with {\"question\": \"...\"}; POST /command with {\"command\": \"budget status\"}."})
+            "GET / lists the endpoints; GET /health; GET /ask?question=...; POST /ask with {\"question\": \"...\"};",
+            "POST /command with {\"command\": \"budget status\"}."})
     static class ServeCmd implements Callable<Integer> {
         @CommandLine.ParentCommand MapleCfoCli root;
         @CommandLine.Spec CommandLine.Model.CommandSpec spec;
@@ -107,7 +108,9 @@ final class InputCommands {
             HttpServer server = start(root, port);
             PrintWriter out = spec.commandLine().getOut();
             out.println("MapleCFO API on http://127.0.0.1:" + server.getAddress().getPort()
-                    + "  (GET /health, POST /ask, POST /command). Press Ctrl+C to stop.");
+                    + "  (GET /, GET /health, GET or POST /ask, POST /command). Press Ctrl+C to stop.");
+            out.println("Try it in a browser: http://127.0.0.1:" + server.getAddress().getPort()
+                    + "/ask?question=How+much+TFSA+room+do+I+have%3F");
             out.flush();
             new CountDownLatch(1).await();
             return 0;
@@ -119,6 +122,19 @@ final class InputCommands {
         root.markInteractive();
         HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", port), 0);
         Object lock = new Object();
+        server.createContext("/", ex -> {
+            // Any other path (for example the address opened in a browser): explain how to use the API.
+            ObjectNode o = JSON.createObjectNode();
+            o.put("service", "MapleCFO API");
+            boolean root0 = "/".equals(ex.getRequestURI().getPath());
+            if (!root0) o.put("error", "No such endpoint: " + ex.getRequestURI().getPath());
+            ArrayNode e = o.putArray("endpoints");
+            e.add("GET  /health");
+            e.add("GET  /ask?question=How+much+TFSA+room+do+I+have%3F   (easy to try in a browser)");
+            e.add("POST /ask      body: {\"question\": \"How much TFSA room do I have?\"}");
+            e.add("POST /command  body: {\"command\": \"budget status -m 2026-10\"}");
+            send(ex, root0 ? 200 : 404, o);
+        });
         server.createContext("/health", ex -> {
             ObjectNode o = JSON.createObjectNode();
             o.put("status", "ok");
@@ -127,9 +143,13 @@ final class InputCommands {
             send(ex, 200, o);
         });
         server.createContext("/ask", ex -> {
-            if (!"POST".equals(ex.getRequestMethod())) { send(ex, 405, error("Use POST with {\"question\": \"...\"}")); return; }
+            boolean get = "GET".equals(ex.getRequestMethod());
+            if (!get && !"POST".equals(ex.getRequestMethod())) {
+                send(ex, 405, error("Use POST with {\"question\": \"...\"} or GET /ask?question=..."));
+                return;
+            }
             try {
-                String q = field(ex.getRequestBody(), "question");
+                String q = get ? queryParam(ex, "question") : field(ex.getRequestBody(), "question");
                 AgentResponse r;
                 synchronized (lock) {
                     r = root.facade().askCfo(q);
@@ -178,6 +198,21 @@ final class InputCommands {
             throw new IllegalArgumentException("The JSON body needs a \"" + name + "\" field.");
         }
         return n.get(name).asText();
+    }
+
+    private static String queryParam(HttpExchange ex, String name) {
+        String query = ex.getRequestURI().getRawQuery();
+        if (query != null) {
+            for (String pair : query.split("&")) {
+                int eq = pair.indexOf('=');
+                String key = eq < 0 ? pair : pair.substring(0, eq);
+                if (key.equals(name) && eq >= 0) {
+                    String v = java.net.URLDecoder.decode(pair.substring(eq + 1), StandardCharsets.UTF_8);
+                    if (!v.isBlank()) return v;
+                }
+            }
+        }
+        throw new IllegalArgumentException("Add ?" + name + "=... to the address, e.g. /ask?question=How+much+TFSA+room+do+I+have%3F");
     }
 
     private static ObjectNode error(String msg) {
