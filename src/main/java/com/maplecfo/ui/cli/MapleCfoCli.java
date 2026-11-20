@@ -66,6 +66,44 @@ public class MapleCfoCli implements Callable<Integer> {
     @Option(names = "--db", description = "Database file (default: ~/.maplecfo/maplecfo.db)")
     Path databaseFile;
 
+    @CommandLine.Spec
+    CommandLine.Model.CommandSpec rootSpec;
+
+    // ---- standalone task mode: java -jar maplecfo.jar -LLMAPI -input task.txt
+    @Option(names = {"-input", "--input", "-i"}, paramLabel = "<task.txt>",
+            description = "Run the agent on the task written in this file (use - for standard input), print the "
+                    + "result and exit. Without this option and a command, MapleCFO starts the interactive mode.")
+    String taskFile;
+
+    @Option(names = {"-LLMAPI", "--llm-api"},
+            description = "Require the real LLM API (Claude, key in .env). Stops with an error instead of falling "
+                    + "back to demo mode when no key is set.")
+    boolean requireLlmApi;
+
+    @Option(names = {"-offline", "--offline"},
+            description = "Do not call the LLM API: use the built-in demo rules (no key or network needed).")
+    boolean offline;
+
+    @Option(names = {"-model", "--model"}, paramLabel = "<name>",
+            description = "LLM model to use, e.g. claude-haiku-5-5 (default: LLM_MODEL in .env, else claude-haiku-5-5)")
+    String model;
+
+    @Option(names = {"-output", "--output", "-o"}, paramLabel = "<file>",
+            description = "With -input: also write the result to this file.")
+    Path outputFile;
+
+    @Option(names = {"-json", "--json"}, description = "With -input: print the result as JSON.")
+    boolean taskJson;
+
+    @Option(names = {"-max-steps", "--max-steps"}, defaultValue = "10", paramLabel = "<n>",
+            description = "With -input: most tool-calling steps the agent may take (1-20, default 10).")
+    int maxSteps;
+
+    @Option(names = {"-confirm", "--confirm"},
+            description = "With -input: apply the changes the agent proposes (for example a new budget). "
+                    + "Without it they are only listed, because nothing changes without your OK.")
+    boolean confirmChanges;
+
     private MapleCfoFacade facade;
     private final CliRenderer renderer = new CliRenderer();
     private int alertsShown;
@@ -108,7 +146,17 @@ public class MapleCfoCli implements Callable<Integer> {
     /** The facade, created on first use so "--help" works without a database. */
     MapleCfoFacade facade() {
         if (facade == null) {
-            facade = AppContext.create(databaseFile != null ? databaseFile : AppContext.defaultDatabasePath());
+            if (offline && requireLlmApi) {
+                throw new IllegalArgumentException("Use either -LLMAPI or -offline, not both.");
+            }
+            com.maplecfo.app.AppConfig config = com.maplecfo.app.AppConfig.load();
+            if (model != null && !model.isBlank()) config = config.with("LLM_MODEL", model);
+            if (offline) config = config.with("LLM_API_KEY", "");
+            if (requireLlmApi && !com.maplecfo.agent.llm.LlmClientFactory.hasApiKey(config)) {
+                throw new IllegalArgumentException("-LLMAPI needs an API key: copy .env.example to .env and set "
+                        + "LLM_API_KEY (or leave out -LLMAPI to run in demo mode).");
+            }
+            facade = AppContext.create(databaseFile != null ? databaseFile : AppContext.defaultDatabasePath(), config);
         }
         return facade;
     }
@@ -145,6 +193,9 @@ public class MapleCfoCli implements Callable<Integer> {
     /** No sub-command: start an interactive session. */
     @Override
     public Integer call() throws IOException {
+        if (taskFile != null) {
+            return TaskMode.run(this, rootSpec.commandLine().getOut(), rootSpec.commandLine().getErr());
+        }
         CommandLine cl = newCommandLine(this);
         PrintWriter out = cl.getOut();
         interactive = true;

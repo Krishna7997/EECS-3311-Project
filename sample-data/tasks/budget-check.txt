@@ -1,0 +1,4 @@
+# A task for the MapleCFO agent (lines starting with # are ignored). Run it with:
+#   java -jar target/maplecfo.jar -LLMAPI -input sample-data/tasks/budget-check.txt
+Look at my spending in October 2026. Which budgets went over, by how much,
+and what is one practical thing I could do about the biggest overspend?

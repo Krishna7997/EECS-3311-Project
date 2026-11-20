@@ -134,6 +134,50 @@ java -jar target/maplecfo.jar limits refresh --force
 ```
 Changes the AI (or the contribution detector) proposes are only applied after `confirm <id>`; use interactive mode or the GUI for that, because proposals live only while the app is open.
 
+### Standalone agent: run one task from a file
+Run the agent directly from a terminal on a task written in plain English in a text file:
+
+```
+java -jar target/maplecfo.jar -LLMAPI -input sample-data/tasks/budget-check.txt
+```
+
+The whole file is one task (lines starting with `#` are ignored). The agent picks its own tools, works for up to
+`-max-steps` steps, prints the result and exits. Changes it wants to make (for example a new budget) are only listed,
+unless you add `-confirm`.
+
+| Option | Meaning |
+|---|---|
+| `-input <file>` (also `-i`, `--input`) | The task file. Use `-` to read the task from standard input. |
+| `-LLMAPI` (also `--llm-api`) | Use the real LLM API (Claude, key in `.env`). Stops with an error if no key is set, instead of falling back to demo mode. |
+| `-offline` | Do not call the LLM API; use the built-in demo rules (no key or network needed). |
+| `-model <name>` | The model, e.g. `claude-haiku-5-5` (default: `LLM_MODEL` in `.env`, else `claude-haiku-5-5`). |
+| `-max-steps <n>` | Most tool-calling steps the agent may take, 1-20 (default 10). |
+| `-confirm` | Apply the changes the agent proposes. Without it nothing in your data changes. |
+| `-json` | Print the result as JSON (task, answer, tools used, grounded, proposed and applied changes, model). |
+| `-output <file>` (also `-o`) | Also save the result to a file. |
+| `--db <file>` | Database to use (default `~/.maplecfo/maplecfo.db`, or `MAPLECFO_DB`). |
+
+Ready-made task files are in [`sample-data/tasks/`](sample-data/tasks). Working example with the demo data
+(`sample-data/demo/load-demo.sh` creates it):
+
+```
+$ java -jar target/maplecfo.jar --db ~/.maplecfo/demo.db -LLMAPI -input sample-data/tasks/afford-laptop.txt
+Task: Can I afford a $1,500 laptop by March 31, 2027? Answer in two sentences.
+Model: claude-haiku-5-5  (LLM API)
+
+<the agent's answer>
+
+Tools used: affordability
+Every amount checked against the tool results: yes
+```
+
+```
+java -jar target/maplecfo.jar --db ~/.maplecfo/demo.db -LLMAPI -input sample-data/tasks/set-budget.txt -confirm
+java -jar target/maplecfo.jar --db ~/.maplecfo/demo.db -LLMAPI -input sample-data/tasks/monthly-review.txt -max-steps 12 -output review.txt
+echo "How much TFSA room do I have?" | java -jar target/maplecfo.jar -input -
+java -jar target/maplecfo.jar -offline -input sample-data/tasks/budget-check.txt -json      # no key needed
+```
+
 ### CLI input from a file, standard input or an API
 Besides typing commands, the CLI accepts its input in four other ways. All of them run the same commands through the
 same facade, so the results are the same as when typed (useful for scripts and for the Stage 3 tests).

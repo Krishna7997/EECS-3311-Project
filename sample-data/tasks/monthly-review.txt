@@ -1,0 +1,5 @@
+# A longer task with several tool calls:
+#   java -jar target/maplecfo.jar -LLMAPI -input sample-data/tasks/monthly-review.txt -max-steps 12 -output review.txt
+Review my October 2026: how much I earned and spent, which budgets went over,
+which subscriptions went up in price, and whether my savings goals are on track.
+Finish with three things I should do in November.

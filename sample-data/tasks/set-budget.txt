@@ -1,0 +1,3 @@
+# The agent proposes the change; add -confirm to apply it:
+#   java -jar target/maplecfo.jar -LLMAPI -input sample-data/tasks/set-budget.txt -confirm
+Set my dining budget for December 2026 to $300.

@@ -108,6 +108,11 @@ public final class AppContext {
         return create(DatabaseManager.forFile(databaseFile), Clock.systemDefaultZone(), AppConfig.load());
     }
 
+    /** The real app with given settings (the standalone task mode can change the model or force offline mode). */
+    public static MapleCfoFacade create(Path databaseFile, AppConfig config) {
+        return create(DatabaseManager.forFile(databaseFile), Clock.systemDefaultZone(), config);
+    }
+
     public static MapleCfoFacade create(DatabaseManager db, Clock clock) {
         return create(db, clock, AppConfig.of(java.util.Map.of()));
     }

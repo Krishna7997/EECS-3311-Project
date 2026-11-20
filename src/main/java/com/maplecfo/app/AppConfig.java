@@ -83,6 +83,13 @@ public final class AppConfig {
         return v;
     }
 
+    /** A copy with one setting changed, e.g. a model chosen on the command line (an empty value clears it). */
+    public AppConfig with(String key, String value) {
+        Map<String, String> copy = new HashMap<>(values);
+        copy.put(key, value == null ? "" : value);
+        return new AppConfig(copy);
+    }
+
     /** The API key, or empty when none is set or it is still the placeholder. */
     public Optional<String> apiKey() {
         String k = values.get("LLM_API_KEY");

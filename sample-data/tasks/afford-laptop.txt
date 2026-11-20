@@ -1,0 +1,2 @@
+# java -jar target/maplecfo.jar -LLMAPI -input sample-data/tasks/afford-laptop.txt
+Can I afford a $1,500 laptop by March 31, 2027? Answer in two sentences.

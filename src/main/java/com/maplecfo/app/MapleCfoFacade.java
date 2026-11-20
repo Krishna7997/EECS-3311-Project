@@ -634,6 +634,20 @@ public class MapleCfoFacade {
         this.agent = agent;
     }
 
+    /**
+     * Standalone task mode: the agent works on one task (for example from a task file) with up to {@code maxSteps}
+     * tool calls. Changes it wants to make are proposed, not applied; see {@link #confirmProposedAction(String)}.
+     */
+    public AgentResponse runAgentTask(String task, int maxSteps) {
+        if (task == null || task.isBlank()) {
+            throw new IllegalArgumentException("The task is empty.");
+        }
+        if (maxSteps < 1 || maxSteps > 20) {
+            throw new IllegalArgumentException("--max-steps must be between 1 and 20.");
+        }
+        return requireAgent().runTask(task.trim(), maxSteps);
+    }
+
     public AgentResponse askCfo(String message) {
         return requireAgent().handle(message);
     }
