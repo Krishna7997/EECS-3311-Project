@@ -468,6 +468,17 @@ Lines marked ✎ were drafted from the session record and confirmed by me before
 - **Outcome:** ✎ Committed and pushed before the Nov 24 deadline. Tests pass.
 - **Commit:** CLI input from a file, standard input and a local HTTP API; screenshots in the report
 
+### 42. Instructor feedback: standalone agent, per-feature documentation, task demo video
+
+- **Date:** 2026-11-20
+- **Task:** Act on the instructor's second email: a demo that completes a task in the GUI and then in the CLI; a standalone CLI version of the agent (for example `java -jar Agent.jar -LLMAPI -input task.txt`) documented in the README; documentation with screenshots, implementation and original requirement for each feature.
+- **Input/Instruction:** Krishna forwarded the email.
+- **AI Contribution:** `TaskMode` and root options `-input`, `-LLMAPI`, `-offline`, `-model`, `-max-steps`, `-json`, `-output`, `-confirm`; `MapleCfoFacade.runAgentTask`; `AppConfig.with`; sample task files in `sample-data/tasks`; README section with every option and examples; 6 new tests (294 total). `docs/stage2/features.md` and report Appendix C with GUI and CLI screenshots (frames from the demo videos) for all 19 features. A task video that shows the same tasks in the GUI and then in the CLI.
+- **Decisions made while coding:** The task file is one task for the agent's multi-step loop; proposed changes are only listed unless `-confirm` is given, keeping the rule that nothing changes without the user's OK; `-LLMAPI` fails clearly without a key instead of silently using demo mode.
+- **Human Contribution:** ✎ Forwarded the instructor's requirements and decided to cover all three.
+- **Outcome:** ✎ Committed and pushed before Nov 24. Tests pass.
+- **Commit:** Standalone agent: java -jar maplecfo.jar -LLMAPI -input task.txt; feature documentation
+
 ## 4. Where the AI's work needed human correction
 
 - API key pasted into `.env.example` (a tracked file) instead of `.env` — caught before any commit; key deleted and replaced (entry 13).
@@ -512,4 +523,4 @@ Lines marked ✎ were drafted from the session record and confirmed by me before
 | Oct 27–Nov 2 | 7 | 7c29fe5 F06 room + EventBus; 1904991 F04 budgets; 4e43342 Command undo/redo; 395b727 F02 rules; 7643cbb F01 CSV import; 0c503e2 SQLite; 0d2ae51 Facade + CLI |
 | Nov 3–9 | 28 | e832174 LLM layer + F05 fixes; 439f701 F10 agent; e494302 F02 AI + F12 report; c4d5af8 F03 + F09; b925d3a F11; 06d505b GUI part 1; fd9a000 GUI part 2; 05e7ee7 F13 + F14; fc1ab76 F15; 7efe645 README; 5f45d8a More tests; 63a6ed7 GUI redesign; 8535411 Format detection; 60d6ae5 GUI UX rework; ada881a Money flow + check-in; 921f649 In-window pop-ups; 6f536e4 Activity + allowance; 3ec76b8 Withdrawals clear excess; a985778 HBP/LLP, filters; f7058dd Demo dataset; f76b1dc F16; 1b9f20b F18; 5ef8658 F19; f9070e6 F17; 4666a5d FIRE options; (Nov 7) Logo / app icon; e4aff8a logo; 8eb9bb2 logo removed; 560cc56 F17 fix; 5f3de3d F05 fix |
 
-Test count grew from 8 (first commit) to 288; the build is `mvn test` / `mvn package`.
+Test count grew from 8 (first commit) to 294; the build is `mvn test` / `mvn package`.
