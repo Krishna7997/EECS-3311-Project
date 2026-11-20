@@ -3,7 +3,7 @@
 For each of the 19 features: the original requirement (the Stage 1 specification, or "new in Stage 2"), screenshots
 of it running in the GUI and in the CLI, how it is implemented, and what changed from the requirement and why.
 The screenshots are frames from the two demonstration videos, recorded on my Mac with the fake demo data and my real
-API key: [Video A (GUI)](https://youtu.be/VF4bBqEF96I) and [Video B (CLI)](https://youtu.be/kkj3KK_1WIg). The same
+API key: [Video A (GUI)](https://youtu.be/VF4bBqEF96I) and [Video B (CLI)](https://youtu.be/kkj3KK_1WIg). [Video C](https://youtu.be/auhjH8u_IQE) completes five tasks in the GUI and then in the CLI and shows the standalone agent. The same
 content is Appendix C of the [Stage 2 report](stage2-report.pdf).
 
 **Changes that apply to every feature.** The Stage 1 design sketched a tabbed main window with 7 views; the GUI now
@@ -473,5 +473,7 @@ whole file as one task, calls `MapleCfoFacade.runAgentTask` (the agent's multi-s
 calls), and prints the answer, the tools used, whether every amount was checked, and the proposed changes, which are
 applied only with `-confirm`. Options: `-LLMAPI`, `-offline`, `-model`, `-max-steps`, `-json`, `-output`, `-confirm`,
 `--db`; see the README. All of them reuse the same commands and facade as typed input, so the results are the same.
+
+**Video.** [Video C, standalone agent at 5:10](https://youtu.be/auhjH8u_IQE?t=310) and the other input methods from 3:58.
 
 **Differences from the original requirement.** Added after the instructor's feedback; nothing from Stage 1 was removed.

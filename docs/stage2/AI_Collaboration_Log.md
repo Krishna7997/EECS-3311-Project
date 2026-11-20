@@ -476,7 +476,7 @@ Lines marked ✎ were drafted from the session record and confirmed by me before
 - **AI Contribution:** `TaskMode` and root options `-input`, `-LLMAPI`, `-offline`, `-model`, `-max-steps`, `-json`, `-output`, `-confirm`; `MapleCfoFacade.runAgentTask`; `AppConfig.with`; sample task files in `sample-data/tasks`; README section with every option and examples; 6 new tests (294 total). `docs/stage2/features.md` and report Appendix C with GUI and CLI screenshots (frames from the demo videos) for all 19 features. A task video that shows the same tasks in the GUI and then in the CLI.
 - **Decisions made while coding:** The task file is one task for the agent's multi-step loop; proposed changes are only listed unless `-confirm` is given, keeping the rule that nothing changes without the user's OK; `-LLMAPI` fails clearly without a key instead of silently using demo mode.
 - **Human Contribution:** ✎ Forwarded the instructor's requirements and decided to cover all three.
-- **Outcome:** ✎ Committed and pushed before Nov 24. Tests pass.
+- **Outcome:** ✎ Committed and pushed before Nov 24. Tests pass. Task video (GUI, then CLI): https://youtu.be/auhjH8u_IQE
 - **Commit:** Standalone agent: java -jar maplecfo.jar -LLMAPI -input task.txt; feature documentation
 
 ## 4. Where the AI's work needed human correction

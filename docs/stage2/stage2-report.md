@@ -561,7 +561,7 @@ Full testing and the KUMA agent validation follow in Stage 3.
 
 ### 7.1 Video index
 
-Video A (GUI, 6:25): https://youtu.be/VF4bBqEF96I · Video B (CLI, 4:10): https://youtu.be/kkj3KK_1WIg · Both are unlisted on YouTube and open
+Video A (GUI, 6:25): https://youtu.be/VF4bBqEF96I · Video B (CLI, 4:10): https://youtu.be/kkj3KK_1WIg · Video C (tasks, GUI then CLI, 6:13): https://youtu.be/auhjH8u_IQE (Section 7.1b) · Both are unlisted on YouTube and open
 without an access request. Each link below starts at the feature's segment. Every segment shows the feature ID and
 name, how it is started, the input, the result, and a caption saying what it does and where the AI is involved; error
 cases are included where they exist (A7, B5, B10). Both videos were recorded on my Mac with the fake demo data and my
@@ -592,6 +592,32 @@ separate file, not part of the app); in the CLI video a helper script types each
 | Demo mode (no API key) | - | [B15 3:58](https://youtu.be/kkj3KK_1WIg?t=238) |
 
 
+
+### 7.1b Task demo: GUI, then CLI (Video C)
+
+Video C (6:13): https://youtu.be/auhjH8u_IQE · unlisted on YouTube. As the instructor asked, it shows how to complete a task in the GUI and
+then the same task in the CLI, for five tasks, and then the CLI input methods and the standalone agent
+(`java -jar target/maplecfo.jar -LLMAPI -input task.txt`). Part 1 reuses segments of Videos A and B; Part 2 is a new
+screen recording of my Terminal with my real API key.
+
+| Start | Segment |
+|---|---|
+| [0:00](https://youtu.be/auhjH8u_IQE?t=0) | Intro |
+| [0:03](https://youtu.be/auhjH8u_IQE?t=3) | Task 1: Import a bank CSV (GUI) |
+| [0:29](https://youtu.be/auhjH8u_IQE?t=29) | Task 1: Import a bank CSV (CLI) |
+| [0:42](https://youtu.be/auhjH8u_IQE?t=42) | Task 2: Check budgets and set one (GUI) |
+| [1:10](https://youtu.be/auhjH8u_IQE?t=70) | Task 2: Check budgets and set one (CLI) |
+| [1:30](https://youtu.be/auhjH8u_IQE?t=90) | Task 3: Can I afford a $1,500 laptop? (GUI) |
+| [1:54](https://youtu.be/auhjH8u_IQE?t=114) | Task 3: Can I afford a $1,500 laptop? (CLI) |
+| [2:13](https://youtu.be/auhjH8u_IQE?t=133) | Task 4: Ask the AI CFO (GUI) |
+| [2:50](https://youtu.be/auhjH8u_IQE?t=170) | Task 4: Ask the AI CFO (CLI) |
+| [3:27](https://youtu.be/auhjH8u_IQE?t=207) | Task 5: Monthly report (GUI) |
+| [3:44](https://youtu.be/auhjH8u_IQE?t=224) | Task 5: Monthly report (CLI) |
+| [3:58](https://youtu.be/auhjH8u_IQE?t=238) | CLI input: a script file |
+| [4:24](https://youtu.be/auhjH8u_IQE?t=264) | CLI input: a question file with JSON output |
+| [4:52](https://youtu.be/auhjH8u_IQE?t=292) | CLI input: standard input |
+| [5:10](https://youtu.be/auhjH8u_IQE?t=310) | Standalone agent: java -jar maplecfo.jar -LLMAPI -input task.txt |
+| [5:33](https://youtu.be/auhjH8u_IQE?t=333) | Local HTTP API |
 
 ### 7.2 Screenshots of the agent running
 
@@ -1167,6 +1193,8 @@ whole file as one task, calls `MapleCfoFacade.runAgentTask` (the agent's multi-s
 calls), and prints the answer, the tools used, whether every amount was checked, and the proposed changes, which are
 applied only with `-confirm`. Options: `-LLMAPI`, `-offline`, `-model`, `-max-steps`, `-json`, `-output`, `-confirm`,
 `--db`; see the README. All of them reuse the same commands and facade as typed input, so the results are the same.
+
+**Video.** [Video C, standalone agent at 5:10](https://youtu.be/auhjH8u_IQE?t=310) and the other input methods from 3:58.
 
 **Differences from the original requirement.** Added after the instructor's feedback; nothing from Stage 1 was removed.
 
