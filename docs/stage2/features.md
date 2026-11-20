@@ -20,11 +20,11 @@ HTTP API and the standalone `-input task.txt` mode), described at the end of thi
 
 **In action (GUI).**
 
-![](screenshots/features/F01-gui.jpg)
+![](screenshots/F01-gui.jpg)
 
 **In action (CLI).**
 
-![](screenshots/features/F01-cli.jpg)
+![](screenshots/F01-cli.jpg)
 
 **How it is implemented.** The user picks a file (GUI) or runs `import file -a chequing` (CLI). `MapleCfoFacade.importTransactionsAuto` asks `TransactionService.detectProfile` which saved `ColumnMapping` fits the first row, then `importFrom` creates a `CsvTransactionAdapter` for that mapping (Adapter: any bank layout becomes `Transaction` objects). Each row gets a fingerprint; rows already stored are counted as duplicates. New rows are categorized (F02), saved through `TransactionRepository`, and a `TRANSACTIONS_IMPORTED` event is published, so budgets, balances and contribution detection update themselves (Observer). The `ImportResult` (imported, duplicates, rejected rows with reasons) is shown.
 
@@ -44,11 +44,11 @@ Classes: `TransactionService` (import, duplicates, events); `CsvTransactionAdapt
 
 **In action (GUI).**
 
-![](screenshots/features/F02-gui.jpg)
+![](screenshots/F02-gui.jpg)
 
 **In action (CLI).**
 
-![](screenshots/features/F02-cli.jpg)
+![](screenshots/F02-cli.jpg)
 
 **How it is implemented.** `CategorizationService` runs its strategies in order: `RuleBasedCategorizer` (learned rules first, then built-in keywords; the longest keyword wins), then `LlmCategorizer`, which accepts the AI's answer only when it is exactly one category name. A correction runs a `RecategorizeCommand` through `CommandHistory` (undoable) and saves a learned rule.
 
@@ -66,11 +66,11 @@ Classes: `CategorizationService` (ordered chain); `RuleBasedCategorizer` + `Defa
 
 **In action (GUI).**
 
-![](screenshots/features/F03-gui.jpg)
+![](screenshots/F03-gui.jpg)
 
 **In action (CLI).**
 
-![](screenshots/features/F03-cli.jpg)
+![](screenshots/F03-cli.jpg)
 
 **How it is implemented.** `AccountService.buildAccountTree` builds groups (cash, registered, other, debts) of `Account` leaves; `getValue` on the root sums the tree, with liabilities negative (Composite). `NetWorthService` stores snapshots.
 
@@ -90,11 +90,11 @@ Classes: `Account`, `AccountGroup`, `AssetComponent`; `AccountService`; `NetWort
 
 **In action (GUI).**
 
-![](screenshots/features/F04-gui.jpg)
+![](screenshots/F04-gui.jpg)
 
 **In action (CLI).**
 
-![](screenshots/features/F04-cli.jpg)
+![](screenshots/F04-cli.jpg)
 
 **How it is implemented.** `SetBudgetCommand` saves a `Budget`. `BudgetService` listens to import and recategorize events, recomputes `BudgetStatus` and publishes `BUDGET_WARNING` (80%) and `BUDGET_EXCEEDED` (100%) once; `AlertService` turns events into messages.
 
@@ -112,11 +112,11 @@ Classes: `BudgetService` (listens to imports, 80%/100% alerts); `SetBudgetComman
 
 **In action (GUI).**
 
-![](screenshots/features/F05-gui.jpg)
+![](screenshots/F05-gui.jpg)
 
 **In action (CLI).**
 
-![](screenshots/features/F05-cli.jpg)
+![](screenshots/F05-cli.jpg)
 
 **How it is implemented.** `RecurringChargeDetector` groups 12 months of expenses by normalised merchant, checks that the gaps fit weekly, monthly or yearly (plus or minus 3 days), flags a price increase (latest charge or a step from one stable price to a higher one), labels variable bills, rolls the next date forward and drops charges that missed two dates.
 
@@ -136,11 +136,11 @@ Classes: `RecurringChargeDetector`; `RecurringCharge`. Key methods: `detect(txs,
 
 **In action (GUI).**
 
-![](screenshots/features/F06-gui.jpg)
+![](screenshots/F06-gui.jpg)
 
 **In action (CLI).**
 
-![](screenshots/features/F06-cli.jpg)
+![](screenshots/F06-cli.jpg)
 
 **How it is implemented.** `RegisteredAccountService.computeRoom` loads the profile and the CRA limits (`LimitsService`), then applies the rules for each account type (TFSA room since age 18 with withdrawals returned on January 1, RRSP limit from the Notice of Assessment with the $2,000 allowance, FHSA $8,000/year with carry-forward, HBP/LLP that use no room). The contribution form calls `previewContribution` on every keystroke, which has no side effects.
 
@@ -161,11 +161,11 @@ Classes: `RegisteredAccountService`; `ContributionLimits`; `ContributionRoom`; `
 
 **In action (GUI).**
 
-![](screenshots/features/F07-gui.jpg)
+![](screenshots/F07-gui.jpg)
 
 **In action (CLI).**
 
-![](screenshots/features/F07-cli.jpg)
+![](screenshots/F07-cli.jpg)
 
 **How it is implemented.** `FireInputs` validates the inputs; `FireCalculator.project` computes the target (spending / withdrawal rate, or the user's own target), simulates each year, adds what-if scenarios, the Coast FIRE number and, when a retirement age is given, the yearly saving needed (annuity formula).
 
@@ -185,11 +185,11 @@ Classes: `FireCalculator`; `FireInputs`; `FireProjection`. Key methods: `project
 
 **In action (GUI).**
 
-![](screenshots/features/F08-gui.jpg)
+![](screenshots/F08-gui.jpg)
 
 **In action (CLI).**
 
-![](screenshots/features/F08-cli.jpg)
+![](screenshots/F08-cli.jpg)
 
 **How it is implemented.** `DebtPayoffPlanner` orders debts with the chosen `PayoffStrategy` (avalanche: highest rate first; snowball: smallest balance first) and simulates month by month.
 
@@ -207,11 +207,11 @@ Classes: `DebtPayoffPlanner`; `PayoffStrategy`, `AvalancheStrategy`, `SnowballSt
 
 **In action (GUI).**
 
-![](screenshots/features/F09-gui.jpg)
+![](screenshots/F09-gui.jpg)
 
 **In action (CLI).**
 
-![](screenshots/features/F09-cli.jpg)
+![](screenshots/F09-cli.jpg)
 
 **How it is implemented.** `CashFlowForecaster` averages income, spending and registered transfers over the last complete months. `GoalService.forecast` shares the monthly surplus between goals; `AffordabilityAnalyzer` adds cash, expected savings and a one-month buffer and returns YES / TIGHT / NO / INSUFFICIENT_DATA.
 
@@ -231,11 +231,11 @@ Classes: `GoalService`; `CashFlowForecaster`; `GoalForecast`; `CreateGoalCommand
 
 **In action (GUI).**
 
-![](screenshots/features/F10-gui.jpg)
+![](screenshots/F10-gui.jpg)
 
 **In action (CLI).**
 
-![](screenshots/features/F10-cli.jpg)
+![](screenshots/F10-cli.jpg)
 
 **How it is implemented.** `CfoAgent.handle` builds the prompt (`PromptBuilder`), sends it with the tool schemas through `LlmClient`, runs the requested tools through `ToolRegistry` (each tool validates its arguments in `AbstractFinanceTool.execute`, Template Method), and loops until the model answers. `ResponseValidator` checks every amount; if one is not in a tool result the model gets one correction round, otherwise the answer is flagged. A `propose_action` call stores a `SetBudgetCommand` in `PendingActionStore` until the user confirms.
 
@@ -253,11 +253,11 @@ Classes: `CfoAgent`; `ToolRegistry`; `AbstractFinanceTool` + 12 tools; `PromptBu
 
 **In action (GUI).**
 
-![](screenshots/features/F11-gui.jpg)
+![](screenshots/F11-gui.jpg)
 
 **In action (CLI).**
 
-![](screenshots/features/F11-cli.jpg)
+![](screenshots/F11-cli.jpg)
 
 **How it is implemented.** `CashFlowForecaster` averages income, spending and registered transfers over the last complete months. `GoalService.forecast` shares the monthly surplus between goals; `AffordabilityAnalyzer` adds cash, expected savings and a one-month buffer and returns YES / TIGHT / NO / INSUFFICIENT_DATA.
 
@@ -277,11 +277,11 @@ Classes: `AffordabilityAnalyzer`; `AffordabilityResult`; `CashFlowForecaster`. K
 
 **In action (GUI).**
 
-![](screenshots/features/F12-gui.jpg)
+![](screenshots/F12-gui.jpg)
 
 **In action (CLI).**
 
-![](screenshots/features/F12-cli.jpg)
+![](screenshots/F12-cli.jpg)
 
 **How it is implemented.** `ReportService` computes income, spending by category, budgets, recurring costs and price increases for a month; `ReportSummarizer` asks the AI for a short summary and accepts it only if its numbers match the report, otherwise it uses a template.
 
@@ -299,11 +299,11 @@ Classes: `ReportService`; `ReportSummarizer` (AI text checked against the figure
 
 **In action (GUI).**
 
-![](screenshots/features/F13-gui.jpg)
+![](screenshots/F13-gui.jpg)
 
 **In action (CLI).**
 
-![](screenshots/features/F13-cli.jpg)
+![](screenshots/F13-cli.jpg)
 
 **How it is implemented.** `ImportFolderWatcher` (Java `WatchService`) waits until a new file stops growing, detects its format, picks the account from the file name and imports it. `BalanceSyncService` reads the running balance and updates the account and linked debt. `ReminderService` raises the monthly check-in and "no import in 30 days" reminders.
 
@@ -323,13 +323,13 @@ Classes: `ImportFolderWatcher`; `BalanceSyncService`; `ReminderService`; `Settin
 
 **In action (GUI).**
 
-![](screenshots/features/F14-gui.jpg)
+![](screenshots/F14-gui.jpg)
 
-![](screenshots/features/F14b-gui.jpg)
+![](screenshots/F14b-gui.jpg)
 
 **In action (CLI).**
 
-![](screenshots/features/F14-cli.jpg)
+![](screenshots/F14-cli.jpg)
 
 **How it is implemented.** `ContributionDetector` listens to imports and proposes a `RecordContributionCommand` for each transfer that names exactly one of TFSA/RRSP/FHSA; on confirmation the room and the account balance both change. `RrspRoomEstimator` estimates RRSP room from a year of pay deposits (scaled for a partial year, minus the pension adjustment).
 
@@ -349,11 +349,11 @@ Classes: `ContributionDetector`; `RecordContributionCommand` (also moves money i
 
 **In action (GUI).**
 
-![](screenshots/features/F15-gui.jpg)
+![](screenshots/F15-gui.jpg)
 
 **In action (CLI).**
 
-![](screenshots/features/F15-cli.jpg)
+![](screenshots/F15-cli.jpg)
 
 **How it is implemented.** On start `LimitsService.refreshIfStale` tries `RemoteLimitsProvider` (GitHub, at most weekly), checks the data with `LimitsValidator` and caches it (`LimitsCache`), falling back to the bundled JSON. The weekly GitHub Actions job runs `LimitsUpdateJob`, which scrapes the CRA pages, validates the numbers and opens a pull request or, on a problem, an issue (`GitHubIssueNotifier`).
 
@@ -373,11 +373,11 @@ Classes: `LimitsService`; `RemoteLimitsProvider`, `BundledLimitsProvider`, `Limi
 
 **In action (GUI).**
 
-![](screenshots/features/F16-gui.jpg)
+![](screenshots/F16-gui.jpg)
 
 **In action (CLI).**
 
-![](screenshots/features/F16-cli.jpg)
+![](screenshots/F16-cli.jpg)
 
 **How it is implemented.** When no format fits, `AiFormatReader.propose` sends the first 8 lines to the model, turns the JSON reply into a `ColumnMapping` (invalid answers are rejected), and test-reads the whole file with `CsvTransactionAdapter`. The user sees a preview and the counts of rows read and rejected; only then is the format saved and the file imported (`saveFormatAndImport`).
 
@@ -395,11 +395,11 @@ Classes: `AiFormatReader` (AI proposes a mapping; Java builds and test-reads it)
 
 **In action (GUI).**
 
-![](screenshots/features/F17-gui.jpg)
+![](screenshots/F17-gui.jpg)
 
 **In action (CLI).**
 
-![](screenshots/features/F17-cli.jpg)
+![](screenshots/F17-cli.jpg)
 
 **How it is implemented.** `MonthlyReviewService.review` gives `CfoAgent.runTask` an instruction; the agent calls `spending_summary`, `budget_status`, `recurring_charges`, `goal_forecast`, `contribution_room` and `suggest_budgets` (`BudgetPlanner`: three-month average rounded up to $10), proposes up to five budgets with `propose_action`, and writes a to-do list. Each proposal is confirmed or dismissed separately (see SD15).
 
@@ -417,11 +417,11 @@ Classes: `MonthlyReviewService`; `CfoAgent.runTask`; `BudgetPlanner`; `BudgetSug
 
 **In action (GUI).**
 
-![](screenshots/features/F18-gui.jpg)
+![](screenshots/F18-gui.jpg)
 
 **In action (CLI).**
 
-![](screenshots/features/F18-cli.jpg)
+![](screenshots/F18-cli.jpg)
 
 **How it is implemented.** `TransactionQueryParser.parse` asks the model to fill the fields of a `TransactionFilter`; `fromJson` checks each one (real dates, known accounts and categories, sensible amounts) and lists what it ignored. The GUI shows the result in the normal filter controls, so the user can see and change it.
 
@@ -439,11 +439,11 @@ Classes: `TransactionQueryParser` (AI fills filter fields; Java checks them); `T
 
 **In action (GUI).**
 
-![](screenshots/features/F19-gui.jpg)
+![](screenshots/F19-gui.jpg)
 
 **In action (CLI).**
 
-![](screenshots/features/F19-cli.jpg)
+![](screenshots/F19-cli.jpg)
 
 **How it is implemented.** `ExtraMoneyPlanner.plan` splits the amount in a fixed educational order (debts at 8% or more, an emergency fund of three months of spending, FHSA, TFSA, RRSP, cheaper debt) using the user's own debts, cash, spending and room. The GUI shows the split at once; `explainExtraMoney` asks the agent to explain it through `ExtraMoneyTool`.
 
@@ -463,7 +463,7 @@ and a standalone version of the agent must run directly from a terminal, for exa
 **In action.** The `run` and `ask --file --json` modes (a test run in demo mode, without an API key, so the answers come
 from the fixed rules):
 
-![](screenshots/cli-06-input-from-files.png)
+![](screenshots/cli-input-from-files.png)
 
 **How it is implemented.** `InputCommands` adds `run <file|->` (one command per line, in one session so `confirm`
 and `undo` work across lines), `ask --file <file> --json` and `ask -` (questions from a file or standard input, one

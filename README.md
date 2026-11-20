@@ -11,8 +11,7 @@ EECS3311 Software Design (Fall 2026) course project by Krishna Patel.
 | 💻 CLI demo (all 19 features, 4:10) | https://youtu.be/kkj3KK_1WIg |
 | 🔁 Task demo: the same tasks in the GUI, then in the CLI, plus CLI input and the standalone agent (6:13) | https://youtu.be/auhjH8u_IQE |
 | 📄 Stage 2 report (feature-by-feature video links in Section 7) | [stage2-report.pdf](docs/stage2/stage2-report.pdf) |
-| 🖼️ Screenshots of the agent running (GUI and CLI) | [docs/stage2/screenshots](docs/stage2/screenshots) · report Section 7.2 |
-| 📅 Weekly commit report (code commits per period, with links) | [weekly-commits.md](docs/stage2/weekly-commits.md) · [PDF](docs/stage2/weekly-commits.pdf) |
+| 🖼️ Every feature: requirement, GUI and CLI screenshots, implementation, changes | [features.md](docs/stage2/features.md) (also report Appendix C) |
 
 ## What it does
 - 📥 Imports bank CSVs and categorizes transactions, using rules first and AI for the rest
@@ -220,7 +219,7 @@ Java 21 · JavaFX (GUI) · picocli (CLI) · SQLite · Anthropic Claude API · Gi
 | Stage | Status |
 |---|---|
 | 1: Design | ✅ Done |
-| 2: Build with AI | ✅ Done: all 19 features built (GUI + CLI). [Stage 2 report](docs/stage2/stage2-report.pdf) · [GUI video](https://youtu.be/VF4bBqEF96I) · [CLI video](https://youtu.be/kkj3KK_1WIg) · [task video](https://youtu.be/auhjH8u_IQE) · [video scripts](docs/stage2/Video_Scripts.md) · [AI collaboration log](docs/stage2/AI_Collaboration_Log.md) |
+| 2: Build with AI | ✅ Done: all 19 features built (GUI + CLI). [Stage 2 report](docs/stage2/stage2-report.pdf) · [GUI video](https://youtu.be/VF4bBqEF96I) · [CLI video](https://youtu.be/kkj3KK_1WIg) · [task video](https://youtu.be/auhjH8u_IQE) · [AI collaboration log](docs/stage2/AI_Collaboration_Log.md) |
 | 3: Testing (JUnit + KUMA) | ⏳ |
 
 > *Educational project: MapleCFO provides financial information, not professional financial advice.*

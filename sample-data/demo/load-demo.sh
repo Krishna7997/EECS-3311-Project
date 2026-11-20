@@ -14,7 +14,7 @@ DEMO=sample-data/demo
 JAR=target/maplecfo.jar
 export MAPLECFO_DB="$HOME/.maplecfo/demo.db"
 unset MAPLECFO_INBOX
-INBOX="$HOME/MapleCFO-demo-inbox"
+INBOX="$HOME/.maplecfo/demo-inbox"
 
 [ -f "$JAR" ] || mvn -q -DskipTests package
 if [ -f "$MAPLECFO_DB" ]; then
