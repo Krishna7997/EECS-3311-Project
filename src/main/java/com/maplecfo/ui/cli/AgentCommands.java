@@ -17,28 +17,47 @@ final class AgentCommands {
     private AgentCommands() {
     }
 
-    @Command(name = "ask", description = "Ask the AI CFO a question, e.g. ask How much TFSA room do I have? (F10)")
+    @Command(name = "ask", description = {"Ask the AI CFO a question, e.g. ask How much TFSA room do I have? (F10)",
+            "Questions can also come from a file (--file questions.txt, one question per line) or from standard "
+            + "input (ask -). Add --json for machine-readable output (one JSON object per question)."})
     static class AskCmd implements Callable<Integer> {
         @CommandLine.ParentCommand MapleCfoCli root;
         @CommandLine.Spec CommandLine.Model.CommandSpec spec;
-        @Parameters(arity = "1..*", description = "Your question") List<String> words;
+        @Parameters(arity = "0..*", description = "Your question, or - to read it from standard input") List<String> words;
+        @CommandLine.Option(names = {"-f", "--file"}, description = "File with one question per line (# starts a comment); - reads standard input")
+        String file;
+        @CommandLine.Option(names = "--json", description = "Print each answer as one line of JSON") boolean json;
 
         @Override
-        public Integer call() {
+        public Integer call() throws java.io.IOException {
             PrintWriter out = spec.commandLine().getOut();
-            if (root.facade().getLlm().isMock()) {
+            List<String> questions = InputCommands.questions(words, file);
+            if (questions.isEmpty()) {
+                throw new IllegalArgumentException("Give a question, e.g. ask How much TFSA room do I have?, "
+                        + "or use --file questions.txt or ask - with standard input.");
+            }
+            if (!json && root.facade().getLlm().isMock()) {
                 out.println("(Demo mode: no API key in .env, using the offline mock model.)");
             }
-            AgentResponse r = root.facade().askCfo(String.join(" ", words));
-            out.println(r.answer());
-            if (!r.toolsUsed().isEmpty()) {
-                out.println("  [tools used: " + String.join(", ", r.toolsUsed()) + "]");
+            for (String q : questions) {
+                AgentResponse r = root.facade().askCfo(q);
+                if (json) {
+                    out.println(InputCommands.toJson(root, q, r));
+                    out.flush();
+                    continue;
+                }
+                if (questions.size() > 1) out.println("Q: " + q);
+                out.println(r.answer());
+                if (!r.toolsUsed().isEmpty()) {
+                    out.println("  [tools used: " + String.join(", ", r.toolsUsed()) + "]");
+                }
+                if (r.hasPendingAction()) {
+                    out.println("  To apply this change type: confirm " + r.pendingActionId()
+                            + "   (or: dismiss " + r.pendingActionId() + ")");
+                }
+                if (questions.size() > 1) out.println();
             }
-            if (r.hasPendingAction()) {
-                out.println("  To apply this change type: confirm " + r.pendingActionId()
-                        + "   (or: dismiss " + r.pendingActionId() + ")");
-            }
-            root.printNewAlerts(out);
+            if (!json) root.printNewAlerts(out);
             return 0;
         }
     }

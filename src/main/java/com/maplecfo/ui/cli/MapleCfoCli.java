@@ -50,6 +50,8 @@ import java.util.concurrent.Callable;
                 AgentCommands.DismissCmd.class,
                 AgentCommands.AiStatusCmd.class,
                 AgentCommands.ReviewCmd.class,
+                InputCommands.RunCmd.class,
+                InputCommands.ServeCmd.class,
                 AutomationCommands.WatchCmd.class,
                 AutomationCommands.RemindersCmd.class,
                 AutomationCommands.InboxCmd.class,
@@ -114,6 +116,11 @@ public class MapleCfoCli implements Callable<Integer> {
     /** Lets tests run the CLI against an in-memory or temporary setup. */
     void useFacade(MapleCfoFacade f) {
         this.facade = f;
+    }
+
+    /** A script or server session behaves like the interactive mode (proposals and undo last for the session). */
+    void markInteractive() {
+        this.interactive = true;
     }
 
     CliRenderer renderer() {

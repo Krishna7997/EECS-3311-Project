@@ -1,0 +1,6 @@
+# Questions for the AI CFO, one per line:
+#   java -jar target/maplecfo.jar ask --file sample-data/cli/questions.txt --json
+How much did I spend on dining in October 2026?
+How much TFSA room do I have?
+Can I afford a $1,500 laptop by March 2027?
+Which debt should I pay off first?

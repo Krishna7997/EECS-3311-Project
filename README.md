@@ -10,6 +10,7 @@ EECS3311 Software Design (Fall 2026) course project by Krishna Patel.
 | 🎬 GUI demo (all 19 features, 6:25) | https://youtu.be/VF4bBqEF96I |
 | 💻 CLI demo (all 19 features, 4:10) | https://youtu.be/kkj3KK_1WIg |
 | 📄 Stage 2 report (feature-by-feature video links in Section 7) | [stage2-report.pdf](docs/stage2/stage2-report.pdf) |
+| 🖼️ Screenshots of the agent running (GUI and CLI) | [docs/stage2/screenshots](docs/stage2/screenshots) · report Section 7.2 |
 | 📅 Weekly commit report (code commits per period, with links) | [weekly-commits.md](docs/stage2/weekly-commits.md) · [PDF](docs/stage2/weekly-commits.pdf) |
 
 ## What it does
@@ -132,6 +133,22 @@ java -jar target/maplecfo.jar checkin                          # the monthly che
 java -jar target/maplecfo.jar limits refresh --force
 ```
 Changes the AI (or the contribution detector) proposes are only applied after `confirm <id>`; use interactive mode or the GUI for that, because proposals live only while the app is open.
+
+### CLI input from a file, standard input or an API
+Besides typing commands, the CLI accepts its input in four other ways. All of them run the same commands through the
+same facade, so the results are the same as when typed (useful for scripts and for the Stage 3 tests).
+
+| Input | Example |
+|---|---|
+| Command arguments | `java -jar target/maplecfo.jar budget status -m 2026-10` |
+| A script file, one command per line (`#` = comment; one session, so `confirm` and `undo` work across lines) | `java -jar target/maplecfo.jar run sample-data/cli/demo-script.txt` |
+| Standard input (a script, or questions) | `cat my-commands.txt \| java -jar target/maplecfo.jar run -`<br>`echo "How much TFSA room do I have?" \| java -jar target/maplecfo.jar ask -`<br>`java -jar target/maplecfo.jar < my-commands.txt` (interactive mode reading a file) |
+| A file of questions for the AI, with JSON output (one JSON object per line) | `java -jar target/maplecfo.jar ask --file sample-data/cli/questions.txt --json` |
+| A local HTTP API (127.0.0.1 only) | `java -jar target/maplecfo.jar serve --port 8080`, then:<br>`curl localhost:8080/health`<br>`curl -X POST localhost:8080/ask -d '{"question":"How much TFSA room do I have?"}'`<br>`curl -X POST localhost:8080/command -d '{"command":"budget status -m 2026-10"}'` |
+
+`run` exits with code 1 if any command failed (add `--stop-on-error` to stop at the first one). The JSON from `ask --json`
+and `/ask` has `question`, `answer`, `toolsUsed`, `grounded` (every dollar amount matched the tool results),
+`proposedActions`, `demoMode` and `model`.
 
 ### Local configuration (API key)
 ```

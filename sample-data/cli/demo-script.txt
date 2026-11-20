@@ -1,0 +1,12 @@
+# MapleCFO command script: run it with
+#   java -jar target/maplecfo.jar run sample-data/cli/demo-script.txt
+# Every line is one CLI command. Lines starting with # are comments.
+# All lines share one session, so "confirm" and "undo" work across lines.
+import sample-data/td_chequing_sample.csv -a chequing -p "TD bank account"
+profile set --birth-year 2001 --resident-since 2001 --rrsp-limit 5200 --fhsa-opened 2025
+debt add "RBC Visa" --balance 1850 --apr 20.99 --min 55
+budget set dining 150 -m 2026-10
+budget status -m 2026-10
+ask How much did I spend on dining last month?
+undo
+budget status -m 2026-10
