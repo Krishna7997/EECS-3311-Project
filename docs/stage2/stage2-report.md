@@ -18,7 +18,9 @@ when could I retire early, which debt should I pay first, can I afford this, and
 small snippets are sent to the AI model: unknown merchant names, the first lines of an unknown CSV, chat questions with
 their tool results, and summary figures.
 
-**Interfaces.** A JavaFX GUI (13 pages, AtlantaFX theme) and a picocli CLI (one-shot commands and an interactive mode).
+**Interfaces.** A JavaFX GUI (13 pages, AtlantaFX theme) and a picocli CLI. The CLI takes its input as command
+arguments, in an interactive mode, from a script file or standard input (`run`), from a file of questions with JSON
+output (`ask --file --json`) and through a local HTTP API (`serve`); see the README and Section 7.2.
 Both use the same `MapleCfoFacade`, so every feature works in both.
 
 **AI / LLM integration.** Anthropic Claude through the `LlmClient` interface (`ClaudeClientAdapter`; model
@@ -37,14 +39,14 @@ Without an API key the app runs in a clearly labelled **demo mode** (`MockLlmCli
 installed and tried offline. Demo mode is a fallback, not the AI feature: the videos use the real model.
 
 **Status.** All 15 Stage 1 features are implemented and working, and four new AI features were added (F16-F19), for 19
-features in total. 280 JUnit tests pass. 8 design patterns from the course are implemented (Section 3). Limitations
+features in total. 288 JUnit tests pass. 8 design patterns from the course are implemented (Section 3). Limitations
 are listed honestly in Section 6.4.
 
 | | Count |
 |---|---|
 | Features (Stage 1 + new) | 15 + 4 = 19 |
-| Java source files (main) | 200 in 21 packages |
-| JUnit tests | 280 (all passing), 32 test classes |
+| Java source files (main) | 201 in 21 packages |
+| JUnit tests | 288 (all passing), 40 test classes |
 | Line coverage (JaCoCo) | 59.7% overall, 89.7% excluding the JavaFX GUI package |
 | Code commits Oct 20-26 / Oct 27-Nov 2 / Nov 3-9 | 5 / 7 / 28 |
 
@@ -278,6 +280,7 @@ Original design → implemented change → reason → impact.
 | F15 (pattern detail) | `EmailNotifier` sends failure emails | `GitHubIssueNotifier` + `ConsoleNotifier`; bot opens a pull request instead of committing | An SMTP password in CI is a security risk; a PR lets a human review new limits | SD13 updated; no secrets needed |
 | GUI | Tabbed main window with 7 views | Sidebar with 13 pages, Home checklist, in-window pop-ups (AtlantaFX `ModalPane`), live checks | Krishna found the first GUI hard to use and dated | Class diagram 6/8 redrawn |
 | Agent | One proposal per answer, 6 steps | `runTask` with more steps for long tasks; list of proposals; memory not used for tasks | Needed by F17 | Class diagram 5/8 |
+| CLI input | Commands as arguments and an interactive mode | Also a script file or standard input (`run`), a question file or standard input with JSON output (`ask --file --json`, `ask -`) and a local HTTP API (`serve`: `/health`, `/ask`, `/command`) in `InputCommands` | Instructor feedback (Nov 2026): the CLI must accept input from a file, standard input or an API; the Stage 3 tests will drive the agent this way | Same commands and facade, so results match typed input; 8 new tests |
 | Persistence | Schema fixed | `DatabaseManager` adds new columns to old databases | New fields (pension adjustment) must not break existing data | Migration test |
 
 No Stage 1 feature or pattern was removed.
@@ -312,7 +315,7 @@ end user: a sidebar with grouped pages instead of tabs, a Home page with a check
 pop-ups inside the window, live checks while typing (for example the over-contribution warning), plain-English
 labels and messages, and the option to ask questions in plain language.
 
-The full log (40 entries) is in
+The full log (41 entries) is in
 [`docs/stage2/AI_Collaboration_Log.md`](https://github.com/Krishna7997/EECS-3311-Project/blob/main/docs/stage2/AI_Collaboration_Log.md).
 
 ### 5.3 Representative interactions
@@ -430,7 +433,8 @@ CRA rules instead of the simplified Stage 1 ones; and checked that every amount 
 
 ### 6.1 Weekly commit summary
 
-The full per-period list, including documentation commits, is in [`docs/stage2/weekly-commits.md`](https://github.com/Krishna7997/EECS-3311-Project/blob/main/docs/stage2/weekly-commits.md). Only commits that change implementation or test code are counted (documentation-only commits such as the README,
+The full per-period list, including documentation commits, is in [`docs/stage2/weekly-commits.md`](https://github.com/Krishna7997/EECS-3311-Project/blob/main/docs/stage2/weekly-commits.md). After the deadline, following the instructor's email, the CLI input methods (Section 4, "CLI input") and the
+screenshots (Section 7.2) were added before Nov 24; those commits are outside the three periods and are not counted. Only commits that change implementation or test code are counted (documentation-only commits such as the README,
 the AI log and the UML are not). Every commit was pushed during its period.
 
 | Period | Code commits | Minimum |
@@ -496,7 +500,7 @@ the AI log and the UML are not). Every commit was pushed during its period.
 
 ### 6.2 Checks performed
 
-- **Automated tests:** 280 JUnit 5 tests in 32 classes, all passing (`mvn test`). They cover the domain rules, every
+- **Automated tests:** 288 JUnit 5 tests in 40 classes, all passing (`mvn test`). They cover the domain rules, every
   calculator with exact expected values (FIRE, debt, room, affordability, goals), import (duplicates, bad rows,
   format detection), categorization, events and undo/redo, SQLite repositories and migration, every agent tool and its
   argument validation, the agent loop with scripted model replies (tool use, grounding check, correction round,
@@ -551,6 +555,8 @@ Full testing and the KUMA agent validation follow in Stage 3.
 
 ## 7. Demonstration index
 
+### 7.1 Video index
+
 Video A (GUI, 6:25): https://youtu.be/VF4bBqEF96I · Video B (CLI, 4:10): https://youtu.be/kkj3KK_1WIg · Both are unlisted on YouTube and open
 without an access request. Each link below starts at the feature's segment. Every segment shows the feature ID and
 name, how it is started, the input, the result, and a caption saying what it does and where the AI is involved; error
@@ -581,6 +587,76 @@ separate file, not part of the app); in the CLI video a helper script types each
 | F19 Where extra money could go | [A12 3:27](https://youtu.be/VF4bBqEF96I?t=207) | [B8 1:44](https://youtu.be/kkj3KK_1WIg?t=104) |
 | Demo mode (no API key) | - | [B15 3:58](https://youtu.be/kkj3KK_1WIg?t=238) |
 
+
+
+### 7.2 Screenshots of the agent running
+
+The screenshots below are frames from the two demonstration videos, recorded on my Mac with the demo data and my real
+API key, except the last one (noted). The files are in `docs/stage2/screenshots/`.
+
+![](screenshots/gui-01-home-needs-attention.png)
+
+*GUI, Home (F13, F14): the November bank files were picked up from the watched folder; the detected TFSA and FHSA contributions wait in "Needs your attention" until confirmed.*
+
+![](screenshots/gui-02-ai-reads-bank-format.png)
+
+*GUI, F16: the AI proposed how to read an unknown bank's CSV; Java test-read the whole file (3 rows OK) before anything is saved.*
+
+![](screenshots/gui-03-ai-transaction-search.png)
+
+*GUI, F18: "Uber Eats over $30 in October" turned into filters by the AI (banner: understood by the AI); Java ran the search.*
+
+![](screenshots/gui-04-budgets.png)
+
+*GUI, F04: October budgets with over-limit alerts.*
+
+![](screenshots/gui-05-extra-money-ai.png)
+
+*GUI, F19: Java split $3,000 (card debt first, then FHSA); the AI explanation is shown below the split.*
+
+![](screenshots/gui-06-registered-room.png)
+
+*GUI, F06: TFSA, RRSP and FHSA room from the CRA rules and the contribution history.*
+
+![](screenshots/gui-07-fire.png)
+
+*GUI, F07: FIRE plan with my own target and retirement age.*
+
+![](screenshots/gui-08-ai-chat.png)
+
+*GUI, F10: the AI agent answers from tool results (listed under each answer) and proposes a budget change that waits for Confirm. The second answer also shows the grounding check at work: the agent says that figures in an earlier reply did not come from a tool.*
+
+![](screenshots/gui-09-monthly-report.png)
+
+*GUI, F12: monthly report with a summary written by the AI and checked against the figures.*
+
+![](screenshots/gui-10-ai-monthly-review.png)
+
+*GUI, F17: the AI monthly review with proposed budgets for November, each with Confirm / Dismiss.*
+
+![](screenshots/cli-01-ai-reads-bank-format.png)
+
+*CLI, F16: learn-format shows the AI's reading and a test read; --save imports the file.*
+
+![](screenshots/cli-02-ai-transaction-search.png)
+
+*CLI, F18: tx find with a plain-English question.*
+
+![](screenshots/cli-03-fire.png)
+
+*CLI, F07: fire --mine with a target and retirement age, and the error for an impossible age.*
+
+![](screenshots/cli-04-ai-chat-and-review.png)
+
+*CLI, F10 and F17 in interactive mode: ask, review, confirm A1, undo.*
+
+![](screenshots/cli-05-monthly-report.png)
+
+*CLI, F12: monthly report with the AI summary (written by claude-haiku-5-5).*
+
+![](screenshots/cli-06-input-from-files.png)
+
+*CLI input from files: run executes a script of commands in one session (undo works across lines) and ask --file ... --json answers a file of questions as JSON lines. This one is a test run in demo mode (no API key), so the answers come from the offline rules.*
 
 ---
 

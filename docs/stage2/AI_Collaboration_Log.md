@@ -409,7 +409,7 @@ Lines marked ✎ were drafted from the session record and confirmed by me before
 - **Input/Instruction:** Krishna: introduce more AI features / use AI to drive things. Chose all four proposed features.
 - **AI Contribution:** AiFormatReader: the LLM reads the first 8 lines and returns the columns as JSON; Java builds a ColumnMapping (rejects invalid answers), test-reads the whole file and shows a preview. Saved only when the user accepts. GUI button in the import dialog; CLI learn-format. 6 tests.
 - **Decisions made while coding:** The AI never imports directly: a wrong date format shows up as rejected rows in the preview and the format is not saved.
-- **Human Contribution:** ✎ 
+- **Human Contribution:** ✎ Chose this feature as one of the four new AI features. On Nov 7 I ran learn-format with my own API key on the unknown-bank sample and checked the AI's columns and the preview.
 - **Outcome:** ✎ Committed Nov 6 (f76b1dc). Tests pass.
 - **Commit:** F16 AI reads an unknown bank CSV format
 
@@ -420,7 +420,7 @@ Lines marked ✎ were drafted from the session record and confirmed by me before
 - **Input/Instruction:** Same request (more AI features).
 - **AI Contribution:** TransactionQueryParser: the LLM fills in the filter fields as JSON; Java checks each one (real dates, known categories/accounts, sensible amounts) and reports what it ignored. The answer fills the visible filter controls. Keyword rules in demo mode. GUI ask box; CLI tx find. 5 tests.
 - **Decisions made while coding:** The search itself stays the deterministic TransactionFilter; the AI only translates the question.
-- **Human Contribution:** ✎ 
+- **Human Contribution:** ✎ Chose this feature. On Nov 7 I ran `tx find uber eats over 30 in october` with my own API key and checked that the filters it understood were right.
 - **Outcome:** ✎ Committed Nov 6 (1b9f20b). Tests pass.
 - **Commit:** F18 find transactions by asking in plain English
 
@@ -431,7 +431,7 @@ Lines marked ✎ were drafted from the session record and confirmed by me before
 - **Input/Instruction:** Same request (more AI features).
 - **AI Contribution:** ExtraMoneyPlanner (Java): high-interest debt, 3-month emergency fund, FHSA, TFSA, RRSP, then low-interest debt, with amounts and reasons; extra_money_plan tool; the agent explains it. GUI card on 'Can I afford it?'; CLI extra. 5 tests.
 - **Decisions made while coding:** All amounts are computed in Java; the order is labelled as common education, not advice.
-- **Human Contribution:** ✎ 
+- **Human Contribution:** ✎ Chose this feature. On Nov 7 I ran `extra 3000` with my own API key and checked the split (card debt first, then FHSA) and the explanation.
 - **Outcome:** ✎ Committed Nov 6 (5ef8658). Tests pass.
 - **Commit:** F19 where to put extra money
 
@@ -442,7 +442,7 @@ Lines marked ✎ were drafted from the session record and confirmed by me before
 - **Input/Instruction:** Same request (more AI features).
 - **AI Contribution:** MonthlyReviewService runs a multi-step agent task (up to 10 steps): spending, budgets, recurring, goals, room, suggest_budgets, then up to 5 propose_action calls and a to-do list. BudgetPlanner/suggest_budgets tool computes 3-month averages rounded up to $10. CfoAgent now tracks several proposals per answer. GUI review pop-up with Confirm/Dismiss per budget; Home check-in step; CLI review. 3 tests (273 total).
 - **Decisions made while coding:** Fixed-order fallback in demo mode uses the same tools. Proposals never apply without confirmation.
-- **Human Contribution:** ✎ 
+- **Human Contribution:** ✎ Chose this feature. On Nov 7 I ran the review with my own API key; its answer said the rent "rises" although it had already gone up, which I reported and which was fixed (560cc56).
 - **Outcome:** ✎ Committed Nov 6 (f9070e6). Tests pass.
 - **Commit:** F17 AI monthly review with proposed budgets
 
@@ -453,9 +453,20 @@ Lines marked ✎ were drafted from the session record and confirmed by me before
 - **Input/Instruction:** Krishna: in FIRE make it possible to change the target, and anything else you recommend.
 - **AI Contribution:** FireInputs gained an optional own target and target age; FireCalculator adds the yearly saving needed for a target age (annuity formula), the Coast FIRE number, what the target lets you spend, and return scenarios 1 point lower/higher. GUI: 'Use my numbers' (investment accounts + 12 x average cash flow), advanced section (target, retire-at age, return %, withdrawal %), target line on the chart, last plan remembered. CLI fire --mine --target --retire-at. Agent tool accepts target_amount/target_age. 6 new tests (279 total).
 - **Decisions made while coding:** Return and withdrawal rate stay within the Stage 1 validation ranges; a custom target that pays for less than planned spending shows a warning.
-- **Human Contribution:** ✎ 
+- **Human Contribution:** ✎ Asked for this change (my own target and any other options worth adding) and checked the new plan in the GUI.
 - **Outcome:** ✎ Committed Nov 6 (4666a5d). Tests pass.
 - **Commit:** F07 FIRE: own target, target age, editable return and withdrawal rate, coast FIRE, use my numbers
+
+### 41. Instructor feedback: CLI input from files, standard input and an API; screenshots
+
+- **Date:** 2026-11-20
+- **Task:** Act on the instructor's email about Stage 2 (CLI must accept input from a file, standard input, an API call or similar; screenshots of the agent running in the report; demo videos of GUI and CLI).
+- **Input/Instruction:** Krishna shared the email and asked what was missing.
+- **AI Contribution:** New `InputCommands`: `run <file|->` runs a script of commands in one session (comments, exit code, --stop-on-error); `ask --file questions.txt --json` and `ask -` read questions from a file or standard input and can print one JSON object per answer (answer, tools used, grounded, proposed actions, model); `serve --port 8080` starts a local HTTP API (GET /health, POST /ask, POST /command, 127.0.0.1 only). Sample `sample-data/cli/demo-script.txt` and `questions.txt`. 8 new tests (288 total). README section and report screenshots taken from the two demo videos.
+- **Decisions made while coding:** All new input paths reuse the same picocli commands and facade, so results match typed commands; the API binds to localhost only and refuses run/serve/gui; JSON output is meant for the Stage 3 tests.
+- **Human Contribution:** ✎ Shared the instructor's email, decided to add all input methods, and checked the new commands on my Mac.
+- **Outcome:** ✎ Committed and pushed before the Nov 24 deadline. Tests pass.
+- **Commit:** CLI input from a file, standard input and a local HTTP API; screenshots in the report
 
 ## 4. Where the AI's work needed human correction
 
@@ -499,6 +510,6 @@ Lines marked ✎ were drafted from the session record and confirmed by me before
 |---|---|---|
 | Oct 20–26 | 5 | 0ca6048 Maven project and Money; a2ff9b2 Domain model; 5051cb3 F07 FIRE; a369c1b F08 debt planner; db01f84 F05 recurring charges |
 | Oct 27–Nov 2 | 7 | 7c29fe5 F06 room + EventBus; 1904991 F04 budgets; 4e43342 Command undo/redo; 395b727 F02 rules; 7643cbb F01 CSV import; 0c503e2 SQLite; 0d2ae51 Facade + CLI |
-| Nov 3–9 | 26 | e832174 LLM layer + F05 fixes; 439f701 F10 agent; e494302 F02 AI + F12 report; c4d5af8 F03 + F09; b925d3a F11; 06d505b GUI part 1; fd9a000 GUI part 2; 05e7ee7 F13 + F14; fc1ab76 F15; 7efe645 README; 5f45d8a More tests; 63a6ed7 GUI redesign; 8535411 Format detection; 60d6ae5 GUI UX rework; ada881a Money flow + check-in; 921f649 In-window pop-ups; 6f536e4 Activity + allowance; 3ec76b8 Withdrawals clear excess; a985778 HBP/LLP, filters; f7058dd Demo dataset; f76b1dc F16; 1b9f20b F18; 5ef8658 F19; f9070e6 F17; 4666a5d FIRE options; (Nov 7) Logo / app icon |
+| Nov 3–9 | 28 | e832174 LLM layer + F05 fixes; 439f701 F10 agent; e494302 F02 AI + F12 report; c4d5af8 F03 + F09; b925d3a F11; 06d505b GUI part 1; fd9a000 GUI part 2; 05e7ee7 F13 + F14; fc1ab76 F15; 7efe645 README; 5f45d8a More tests; 63a6ed7 GUI redesign; 8535411 Format detection; 60d6ae5 GUI UX rework; ada881a Money flow + check-in; 921f649 In-window pop-ups; 6f536e4 Activity + allowance; 3ec76b8 Withdrawals clear excess; a985778 HBP/LLP, filters; f7058dd Demo dataset; f76b1dc F16; 1b9f20b F18; 5ef8658 F19; f9070e6 F17; 4666a5d FIRE options; (Nov 7) Logo / app icon; e4aff8a logo; 8eb9bb2 logo removed; 560cc56 F17 fix; 5f3de3d F05 fix |
 
-Test count grew from 8 (first commit) to 279; the build is `mvn test` / `mvn package`.
+Test count grew from 8 (first commit) to 288; the build is `mvn test` / `mvn package`.
